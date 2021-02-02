@@ -1,0 +1,17 @@
+{
+  "projectName": "cttfrontend",
+  "version": "3.0",
+  "frontend": "javascript",
+  "javascript": {
+    "framework": "angular",
+    "config": {
+      "SourceDir": "src",
+      "DistributionDir": "dist/ctt-frontend",
+      "BuildCommand": "npm run-script build",
+      "StartCommand": "ng serve"
+    }
+  },
+  "providers": [
+    "awscloudformation"
+  ]
+}
