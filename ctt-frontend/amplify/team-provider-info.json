@@ -10,6 +10,11 @@
       "StackName": "amplify-cttfrontend-dev-150213",
       "StackId": "arn:aws:cloudformation:us-east-1:356962203731:stack/amplify-cttfrontend-dev-150213/425f1c40-655f-11eb-9787-12305fa4f4bd",
       "AmplifyAppId": "d29764zb1c1ba0"
+    },
+    "categories": {
+      "auth": {
+        "cttfrontendf69ef296": {}
+      }
     }
   }
 }
