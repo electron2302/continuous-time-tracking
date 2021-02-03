@@ -4,18 +4,20 @@ import { ModelInit, MutableModel, PersistentModelConstructor } from "@aws-amplif
 
 
 
-export declare class Task {
+export declare class Category {
   readonly id: string;
-  readonly title: string;
-  readonly description?: string;
-  readonly status?: string;
-  constructor(init: ModelInit<Task>);
-  static copyOf(source: Task, mutator: (draft: MutableModel<Task>) => MutableModel<Task> | void): Task;
+  readonly name: string;
+  readonly color: string;
+  readonly reminderInterval: number;
+  readonly activities?: (Activity | null)[];
+  constructor(init: ModelInit<Category>);
+  static copyOf(source: Category, mutator: (draft: MutableModel<Category>) => MutableModel<Category> | void): Category;
 }
 
-export declare class PrivateNote {
+export declare class Activity {
   readonly id: string;
-  readonly content: string;
-  constructor(init: ModelInit<PrivateNote>);
-  static copyOf(source: PrivateNote, mutator: (draft: MutableModel<PrivateNote>) => MutableModel<PrivateNote> | void): PrivateNote;
+  readonly categoryID: string;
+  readonly from: string;
+  constructor(init: ModelInit<Activity>);
+  static copyOf(source: Activity, mutator: (draft: MutableModel<Activity>) => MutableModel<Activity> | void): Activity;
 }

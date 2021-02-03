@@ -1,7 +1,7 @@
 export const schema = {
     "models": {
-        "Task": {
-            "name": "Task",
+        "Category": {
+            "name": "Category",
             "fields": {
                 "id": {
                     "name": "id",
@@ -10,102 +10,44 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
-                "title": {
-                    "name": "title",
+                "name": {
+                    "name": "name",
                     "isArray": false,
                     "type": "String",
                     "isRequired": true,
                     "attributes": []
                 },
-                "description": {
-                    "name": "description",
+                "color": {
+                    "name": "color",
                     "isArray": false,
                     "type": "String",
-                    "isRequired": false,
+                    "isRequired": true,
                     "attributes": []
                 },
-                "status": {
-                    "name": "status",
+                "reminderInterval": {
+                    "name": "reminderInterval",
                     "isArray": false,
-                    "type": "String",
-                    "isRequired": false,
+                    "type": "Int",
+                    "isRequired": true,
                     "attributes": []
-                }
-            },
-            "syncable": true,
-            "pluralName": "Tasks",
-            "attributes": [
-                {
-                    "type": "model",
-                    "properties": {}
                 },
-                {
-                    "type": "auth",
-                    "properties": {
-                        "rules": [
-                            {
-                                "groupClaim": "cognito:groups",
-                                "provider": "userPools",
-                                "allow": "groups",
-                                "groups": [
-                                    "Managers"
-                                ],
-                                "queries": null,
-                                "mutations": [
-                                    "create",
-                                    "update",
-                                    "delete"
-                                ],
-                                "operations": [
-                                    "create",
-                                    "update",
-                                    "delete"
-                                ]
-                            },
-                            {
-                                "groupClaim": "cognito:groups",
-                                "provider": "userPools",
-                                "allow": "groups",
-                                "groups": [
-                                    "Employees"
-                                ],
-                                "queries": [
-                                    "get",
-                                    "list"
-                                ],
-                                "mutations": null,
-                                "operations": [
-                                    "create",
-                                    "update",
-                                    "delete",
-                                    "read"
-                                ]
-                            }
-                        ]
+                "activities": {
+                    "name": "activities",
+                    "isArray": true,
+                    "type": {
+                        "model": "Activity"
+                    },
+                    "isRequired": false,
+                    "attributes": [],
+                    "isArrayNullable": true,
+                    "association": {
+                        "connectionType": "HAS_MANY",
+                        "associatedWith": "categoryID"
                     }
                 }
-            ]
-        },
-        "PrivateNote": {
-            "name": "PrivateNote",
-            "fields": {
-                "id": {
-                    "name": "id",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": true,
-                    "attributes": []
-                },
-                "content": {
-                    "name": "content",
-                    "isArray": false,
-                    "type": "String",
-                    "isRequired": true,
-                    "attributes": []
-                }
             },
             "syncable": true,
-            "pluralName": "PrivateNotes",
+            "pluralName": "Categories",
             "attributes": [
                 {
                     "type": "model",
@@ -131,9 +73,72 @@ export const schema = {
                     }
                 }
             ]
+        },
+        "Activity": {
+            "name": "Activity",
+            "fields": {
+                "id": {
+                    "name": "id",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "categoryID": {
+                    "name": "categoryID",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "from": {
+                    "name": "from",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": true,
+                    "attributes": []
+                }
+            },
+            "syncable": true,
+            "pluralName": "Activities",
+            "attributes": [
+                {
+                    "type": "model",
+                    "properties": {}
+                },
+                {
+                    "type": "key",
+                    "properties": {
+                        "name": "byCategory",
+                        "fields": [
+                            "categoryID",
+                            "from"
+                        ]
+                    }
+                },
+                {
+                    "type": "auth",
+                    "properties": {
+                        "rules": [
+                            {
+                                "provider": "userPools",
+                                "ownerField": "owner",
+                                "allow": "owner",
+                                "identityClaim": "cognito:username",
+                                "operations": [
+                                    "create",
+                                    "update",
+                                    "delete",
+                                    "read"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ]
         }
     },
     "enums": {},
     "nonModels": {},
-    "version": "74f86a743bb968e2f35fb3eb0071ffa5"
+    "version": "b09586faebcddf0365700c68516a355c"
 };

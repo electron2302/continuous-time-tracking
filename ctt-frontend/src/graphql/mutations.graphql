@@ -1,59 +1,28 @@
 # this is an auto generated file. This will be overwritten
-mutation CreateTask(
-  $input: CreateTaskInput!
-  $condition: ModelTaskConditionInput
+mutation CreateCategory(
+  $input: CreateCategoryInput!
+  $condition: ModelCategoryConditionInput
 ) {
-  createTask(input: $input, condition: $condition) {
+  createCategory(input: $input, condition: $condition) {
     id
-    title
-    description
-    status
-    _version
-    _deleted
-    _lastChangedAt
-    createdAt
-    updatedAt
-  }
-}
-mutation UpdateTask(
-  $input: UpdateTaskInput!
-  $condition: ModelTaskConditionInput
-) {
-  updateTask(input: $input, condition: $condition) {
-    id
-    title
-    description
-    status
-    _version
-    _deleted
-    _lastChangedAt
-    createdAt
-    updatedAt
-  }
-}
-mutation DeleteTask(
-  $input: DeleteTaskInput!
-  $condition: ModelTaskConditionInput
-) {
-  deleteTask(input: $input, condition: $condition) {
-    id
-    title
-    description
-    status
-    _version
-    _deleted
-    _lastChangedAt
-    createdAt
-    updatedAt
-  }
-}
-mutation CreatePrivateNote(
-  $input: CreatePrivateNoteInput!
-  $condition: ModelPrivateNoteConditionInput
-) {
-  createPrivateNote(input: $input, condition: $condition) {
-    id
-    content
+    name
+    color
+    reminderInterval
+    activities {
+      items {
+        id
+        categoryID
+        from
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+        owner
+      }
+      nextToken
+      startedAt
+    }
     _version
     _deleted
     _lastChangedAt
@@ -62,13 +31,30 @@ mutation CreatePrivateNote(
     owner
   }
 }
-mutation UpdatePrivateNote(
-  $input: UpdatePrivateNoteInput!
-  $condition: ModelPrivateNoteConditionInput
+mutation UpdateCategory(
+  $input: UpdateCategoryInput!
+  $condition: ModelCategoryConditionInput
 ) {
-  updatePrivateNote(input: $input, condition: $condition) {
+  updateCategory(input: $input, condition: $condition) {
     id
-    content
+    name
+    color
+    reminderInterval
+    activities {
+      items {
+        id
+        categoryID
+        from
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+        owner
+      }
+      nextToken
+      startedAt
+    }
     _version
     _deleted
     _lastChangedAt
@@ -77,13 +63,78 @@ mutation UpdatePrivateNote(
     owner
   }
 }
-mutation DeletePrivateNote(
-  $input: DeletePrivateNoteInput!
-  $condition: ModelPrivateNoteConditionInput
+mutation DeleteCategory(
+  $input: DeleteCategoryInput!
+  $condition: ModelCategoryConditionInput
 ) {
-  deletePrivateNote(input: $input, condition: $condition) {
+  deleteCategory(input: $input, condition: $condition) {
     id
-    content
+    name
+    color
+    reminderInterval
+    activities {
+      items {
+        id
+        categoryID
+        from
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+        owner
+      }
+      nextToken
+      startedAt
+    }
+    _version
+    _deleted
+    _lastChangedAt
+    createdAt
+    updatedAt
+    owner
+  }
+}
+mutation CreateActivity(
+  $input: CreateActivityInput!
+  $condition: ModelActivityConditionInput
+) {
+  createActivity(input: $input, condition: $condition) {
+    id
+    categoryID
+    from
+    _version
+    _deleted
+    _lastChangedAt
+    createdAt
+    updatedAt
+    owner
+  }
+}
+mutation UpdateActivity(
+  $input: UpdateActivityInput!
+  $condition: ModelActivityConditionInput
+) {
+  updateActivity(input: $input, condition: $condition) {
+    id
+    categoryID
+    from
+    _version
+    _deleted
+    _lastChangedAt
+    createdAt
+    updatedAt
+    owner
+  }
+}
+mutation DeleteActivity(
+  $input: DeleteActivityInput!
+  $condition: ModelActivityConditionInput
+) {
+  deleteActivity(input: $input, condition: $condition) {
+    id
+    categoryID
+    from
     _version
     _deleted
     _lastChangedAt

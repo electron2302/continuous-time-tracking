@@ -1,17 +1,16 @@
-type Task
-  @model
-  @auth(
-    rules: [
-      { allow: groups, groups: ["Managers"], queries: null, mutations: [create, update, delete] }
-      { allow: groups, groups: ["Employees"], queries: [get, list], mutations: null }
-    ]
-  ) {
+type Category @model @auth(rules: [{ allow: owner }]) {
   id: ID!
-  title: String!
-  description: String
-  status: String
+  name: String!
+  color: String!
+  reminderInterval: Int!
+  activities: [Activity] @connection(keyName: "byCategory", fields: ["id"])
 }
-type PrivateNote @model @auth(rules: [{ allow: owner }]) {
+
+type Activity
+  @model
+  @auth(rules: [{ allow: owner }])
+  @key(name: "byCategory", fields: ["categoryID", "from"]) {
   id: ID!
-  content: String!
+  categoryID: ID!
+  from: AWSDateTime!
 }
