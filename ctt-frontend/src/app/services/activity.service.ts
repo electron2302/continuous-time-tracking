@@ -59,7 +59,7 @@ export interface ActivityService {
 
   /**
    * Get all activities between from and to. 
-   * And filtilter the cativities relating to the category, 
+   * And filter the activities relating to the category, 
    * if it is provided.
    * 
    * @param from, the included start time.
