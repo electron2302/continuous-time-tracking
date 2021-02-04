@@ -1,11 +1,11 @@
 # this is an auto generated file. This will be overwritten
-query SyncTasks(
-  $filter: ModelTaskFilterInput
+query SyncCategories(
+  $filter: ModelCategoryFilterInput
   $limit: Int
   $nextToken: String
   $lastSync: AWSTimestamp
 ) {
-  syncTasks(
+  syncCategories(
     filter: $filter
     limit: $limit
     nextToken: $nextToken
@@ -13,68 +13,13 @@ query SyncTasks(
   ) {
     items {
       id
-      title
-      description
-      status
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-    }
-    nextToken
-    startedAt
-  }
-}
-query GetTask($id: ID!) {
-  getTask(id: $id) {
-    id
-    title
-    description
-    status
-    _version
-    _deleted
-    _lastChangedAt
-    createdAt
-    updatedAt
-  }
-}
-query ListTasks(
-  $filter: ModelTaskFilterInput
-  $limit: Int
-  $nextToken: String
-) {
-  listTasks(filter: $filter, limit: $limit, nextToken: $nextToken) {
-    items {
-      id
-      title
-      description
-      status
-      _version
-      _deleted
-      _lastChangedAt
-      createdAt
-      updatedAt
-    }
-    nextToken
-    startedAt
-  }
-}
-query SyncPrivateNotes(
-  $filter: ModelPrivateNoteFilterInput
-  $limit: Int
-  $nextToken: String
-  $lastSync: AWSTimestamp
-) {
-  syncPrivateNotes(
-    filter: $filter
-    limit: $limit
-    nextToken: $nextToken
-    lastSync: $lastSync
-  ) {
-    items {
-      id
-      content
+      name
+      color
+      reminderInterval
+      activities {
+        nextToken
+        startedAt
+      }
       _version
       _deleted
       _lastChangedAt
@@ -86,10 +31,27 @@ query SyncPrivateNotes(
     startedAt
   }
 }
-query GetPrivateNote($id: ID!) {
-  getPrivateNote(id: $id) {
+query GetCategory($id: ID!) {
+  getCategory(id: $id) {
     id
-    content
+    name
+    color
+    reminderInterval
+    activities {
+      items {
+        id
+        categoryID
+        from
+        _version
+        _deleted
+        _lastChangedAt
+        createdAt
+        updatedAt
+        owner
+      }
+      nextToken
+      startedAt
+    }
     _version
     _deleted
     _lastChangedAt
@@ -98,15 +60,82 @@ query GetPrivateNote($id: ID!) {
     owner
   }
 }
-query ListPrivateNotes(
-  $filter: ModelPrivateNoteFilterInput
+query ListCategorys(
+  $filter: ModelCategoryFilterInput
   $limit: Int
   $nextToken: String
 ) {
-  listPrivateNotes(filter: $filter, limit: $limit, nextToken: $nextToken) {
+  listCategorys(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
       id
-      content
+      name
+      color
+      reminderInterval
+      activities {
+        nextToken
+        startedAt
+      }
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+      owner
+    }
+    nextToken
+    startedAt
+  }
+}
+query SyncActivities(
+  $filter: ModelActivityFilterInput
+  $limit: Int
+  $nextToken: String
+  $lastSync: AWSTimestamp
+) {
+  syncActivities(
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+    lastSync: $lastSync
+  ) {
+    items {
+      id
+      categoryID
+      from
+      _version
+      _deleted
+      _lastChangedAt
+      createdAt
+      updatedAt
+      owner
+    }
+    nextToken
+    startedAt
+  }
+}
+query GetActivity($id: ID!) {
+  getActivity(id: $id) {
+    id
+    categoryID
+    from
+    _version
+    _deleted
+    _lastChangedAt
+    createdAt
+    updatedAt
+    owner
+  }
+}
+query ListActivitys(
+  $filter: ModelActivityFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listActivitys(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      categoryID
+      from
       _version
       _deleted
       _lastChangedAt

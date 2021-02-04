@@ -9,21 +9,21 @@ export interface SubscriptionResponse<T> {
   value: GraphQLResult<T>;
 }
 
-export type CreateTaskInput = {
+export type CreateCategoryInput = {
   id?: string | null;
-  title: string;
-  description?: string | null;
-  status?: string | null;
+  name: string;
+  color: string;
+  reminderInterval: number;
   _version?: number | null;
 };
 
-export type ModelTaskConditionInput = {
-  title?: ModelStringInput | null;
-  description?: ModelStringInput | null;
-  status?: ModelStringInput | null;
-  and?: Array<ModelTaskConditionInput | null> | null;
-  or?: Array<ModelTaskConditionInput | null> | null;
-  not?: ModelTaskConditionInput | null;
+export type ModelCategoryConditionInput = {
+  name?: ModelStringInput | null;
+  color?: ModelStringInput | null;
+  reminderInterval?: ModelIntInput | null;
+  and?: Array<ModelCategoryConditionInput | null> | null;
+  or?: Array<ModelCategoryConditionInput | null> | null;
+  not?: ModelCategoryConditionInput | null;
 };
 
 export type ModelStringInput = {
@@ -65,51 +65,44 @@ export type ModelSizeInput = {
   between?: Array<number | null> | null;
 };
 
-export type UpdateTaskInput = {
+export type ModelIntInput = {
+  ne?: number | null;
+  eq?: number | null;
+  le?: number | null;
+  lt?: number | null;
+  ge?: number | null;
+  gt?: number | null;
+  between?: Array<number | null> | null;
+  attributeExists?: boolean | null;
+  attributeType?: ModelAttributeTypes | null;
+};
+
+export type UpdateCategoryInput = {
   id: string;
-  title?: string | null;
-  description?: string | null;
-  status?: string | null;
+  name?: string | null;
+  color?: string | null;
+  reminderInterval?: number | null;
   _version?: number | null;
 };
 
-export type DeleteTaskInput = {
+export type DeleteCategoryInput = {
   id?: string | null;
   _version?: number | null;
 };
 
-export type CreatePrivateNoteInput = {
+export type CreateActivityInput = {
   id?: string | null;
-  content: string;
+  categoryID: string;
+  from: string;
   _version?: number | null;
 };
 
-export type ModelPrivateNoteConditionInput = {
-  content?: ModelStringInput | null;
-  and?: Array<ModelPrivateNoteConditionInput | null> | null;
-  or?: Array<ModelPrivateNoteConditionInput | null> | null;
-  not?: ModelPrivateNoteConditionInput | null;
-};
-
-export type UpdatePrivateNoteInput = {
-  id: string;
-  content?: string | null;
-  _version?: number | null;
-};
-
-export type DeletePrivateNoteInput = {
-  id?: string | null;
-  _version?: number | null;
-};
-
-export type ModelTaskFilterInput = {
-  id?: ModelIDInput | null;
-  title?: ModelStringInput | null;
-  description?: ModelStringInput | null;
-  status?: ModelStringInput | null;
-  and?: Array<ModelTaskFilterInput | null> | null;
-  or?: Array<ModelTaskFilterInput | null> | null;
-  not?: ModelTaskFilterInput | null;
+export type ModelActivityConditionInput = {
+  categoryID?: ModelIDInput | null;
+  from?: ModelStringInput | null;
+  and?: Array<ModelActivityConditionInput | null> | null;
+  or?: Array<ModelActivityConditionInput | null> | null;
+  not?: ModelActivityConditionInput | null;
 };
 
 export type ModelIDInput = {
@@ -128,57 +121,60 @@ export type ModelIDInput = {
   size?: ModelSizeInput | null;
 };
 
-export type ModelPrivateNoteFilterInput = {
+export type UpdateActivityInput = {
+  id: string;
+  categoryID?: string | null;
+  from?: string | null;
+  _version?: number | null;
+};
+
+export type DeleteActivityInput = {
+  id?: string | null;
+  _version?: number | null;
+};
+
+export type ModelCategoryFilterInput = {
   id?: ModelIDInput | null;
-  content?: ModelStringInput | null;
-  and?: Array<ModelPrivateNoteFilterInput | null> | null;
-  or?: Array<ModelPrivateNoteFilterInput | null> | null;
-  not?: ModelPrivateNoteFilterInput | null;
+  name?: ModelStringInput | null;
+  color?: ModelStringInput | null;
+  reminderInterval?: ModelIntInput | null;
+  and?: Array<ModelCategoryFilterInput | null> | null;
+  or?: Array<ModelCategoryFilterInput | null> | null;
+  not?: ModelCategoryFilterInput | null;
 };
 
-export type CreateTaskMutation = {
-  __typename: "Task";
-  id: string;
-  title: string;
-  description: string | null;
-  status: string | null;
-  _version: number;
-  _deleted: boolean | null;
-  _lastChangedAt: number;
-  createdAt: string;
-  updatedAt: string;
+export type ModelActivityFilterInput = {
+  id?: ModelIDInput | null;
+  categoryID?: ModelIDInput | null;
+  from?: ModelStringInput | null;
+  and?: Array<ModelActivityFilterInput | null> | null;
+  or?: Array<ModelActivityFilterInput | null> | null;
+  not?: ModelActivityFilterInput | null;
 };
 
-export type UpdateTaskMutation = {
-  __typename: "Task";
+export type CreateCategoryMutation = {
+  __typename: "Category";
   id: string;
-  title: string;
-  description: string | null;
-  status: string | null;
-  _version: number;
-  _deleted: boolean | null;
-  _lastChangedAt: number;
-  createdAt: string;
-  updatedAt: string;
-};
-
-export type DeleteTaskMutation = {
-  __typename: "Task";
-  id: string;
-  title: string;
-  description: string | null;
-  status: string | null;
-  _version: number;
-  _deleted: boolean | null;
-  _lastChangedAt: number;
-  createdAt: string;
-  updatedAt: string;
-};
-
-export type CreatePrivateNoteMutation = {
-  __typename: "PrivateNote";
-  id: string;
-  content: string;
+  name: string;
+  color: string;
+  reminderInterval: number;
+  activities: {
+    __typename: "ModelActivityConnection";
+    items: Array<{
+      __typename: "Activity";
+      id: string;
+      categoryID: string;
+      from: string;
+      _version: number;
+      _deleted: boolean | null;
+      _lastChangedAt: number;
+      createdAt: string;
+      updatedAt: string;
+      owner: string | null;
+    } | null> | null;
+    nextToken: string | null;
+    startedAt: number | null;
+  } | null;
   _version: number;
   _deleted: boolean | null;
   _lastChangedAt: number;
@@ -187,10 +183,29 @@ export type CreatePrivateNoteMutation = {
   owner: string | null;
 };
 
-export type UpdatePrivateNoteMutation = {
-  __typename: "PrivateNote";
+export type UpdateCategoryMutation = {
+  __typename: "Category";
   id: string;
-  content: string;
+  name: string;
+  color: string;
+  reminderInterval: number;
+  activities: {
+    __typename: "ModelActivityConnection";
+    items: Array<{
+      __typename: "Activity";
+      id: string;
+      categoryID: string;
+      from: string;
+      _version: number;
+      _deleted: boolean | null;
+      _lastChangedAt: number;
+      createdAt: string;
+      updatedAt: string;
+      owner: string | null;
+    } | null> | null;
+    nextToken: string | null;
+    startedAt: number | null;
+  } | null;
   _version: number;
   _deleted: boolean | null;
   _lastChangedAt: number;
@@ -199,10 +214,29 @@ export type UpdatePrivateNoteMutation = {
   owner: string | null;
 };
 
-export type DeletePrivateNoteMutation = {
-  __typename: "PrivateNote";
+export type DeleteCategoryMutation = {
+  __typename: "Category";
   id: string;
-  content: string;
+  name: string;
+  color: string;
+  reminderInterval: number;
+  activities: {
+    __typename: "ModelActivityConnection";
+    items: Array<{
+      __typename: "Activity";
+      id: string;
+      categoryID: string;
+      from: string;
+      _version: number;
+      _deleted: boolean | null;
+      _lastChangedAt: number;
+      createdAt: string;
+      updatedAt: string;
+      owner: string | null;
+    } | null> | null;
+    nextToken: string | null;
+    startedAt: number | null;
+  } | null;
   _version: number;
   _deleted: boolean | null;
   _lastChangedAt: number;
@@ -211,61 +245,58 @@ export type DeletePrivateNoteMutation = {
   owner: string | null;
 };
 
-export type SyncTasksQuery = {
-  __typename: "ModelTaskConnection";
-  items: Array<{
-    __typename: "Task";
-    id: string;
-    title: string;
-    description: string | null;
-    status: string | null;
-    _version: number;
-    _deleted: boolean | null;
-    _lastChangedAt: number;
-    createdAt: string;
-    updatedAt: string;
-  } | null> | null;
-  nextToken: string | null;
-  startedAt: number | null;
-};
-
-export type GetTaskQuery = {
-  __typename: "Task";
+export type CreateActivityMutation = {
+  __typename: "Activity";
   id: string;
-  title: string;
-  description: string | null;
-  status: string | null;
+  categoryID: string;
+  from: string;
   _version: number;
   _deleted: boolean | null;
   _lastChangedAt: number;
   createdAt: string;
   updatedAt: string;
+  owner: string | null;
 };
 
-export type ListTasksQuery = {
-  __typename: "ModelTaskConnection";
-  items: Array<{
-    __typename: "Task";
-    id: string;
-    title: string;
-    description: string | null;
-    status: string | null;
-    _version: number;
-    _deleted: boolean | null;
-    _lastChangedAt: number;
-    createdAt: string;
-    updatedAt: string;
-  } | null> | null;
-  nextToken: string | null;
-  startedAt: number | null;
+export type UpdateActivityMutation = {
+  __typename: "Activity";
+  id: string;
+  categoryID: string;
+  from: string;
+  _version: number;
+  _deleted: boolean | null;
+  _lastChangedAt: number;
+  createdAt: string;
+  updatedAt: string;
+  owner: string | null;
 };
 
-export type SyncPrivateNotesQuery = {
-  __typename: "ModelPrivateNoteConnection";
+export type DeleteActivityMutation = {
+  __typename: "Activity";
+  id: string;
+  categoryID: string;
+  from: string;
+  _version: number;
+  _deleted: boolean | null;
+  _lastChangedAt: number;
+  createdAt: string;
+  updatedAt: string;
+  owner: string | null;
+};
+
+export type SyncCategoriesQuery = {
+  __typename: "ModelCategoryConnection";
   items: Array<{
-    __typename: "PrivateNote";
+    __typename: "Category";
     id: string;
-    content: string;
+    name: string;
+    color: string;
+    reminderInterval: number;
+    activities: {
+      __typename: "ModelActivityConnection";
+      nextToken: string | null;
+      startedAt: number | null;
+    } | null;
     _version: number;
     _deleted: boolean | null;
     _lastChangedAt: number;
@@ -277,10 +308,29 @@ export type SyncPrivateNotesQuery = {
   startedAt: number | null;
 };
 
-export type GetPrivateNoteQuery = {
-  __typename: "PrivateNote";
+export type GetCategoryQuery = {
+  __typename: "Category";
   id: string;
-  content: string;
+  name: string;
+  color: string;
+  reminderInterval: number;
+  activities: {
+    __typename: "ModelActivityConnection";
+    items: Array<{
+      __typename: "Activity";
+      id: string;
+      categoryID: string;
+      from: string;
+      _version: number;
+      _deleted: boolean | null;
+      _lastChangedAt: number;
+      createdAt: string;
+      updatedAt: string;
+      owner: string | null;
+    } | null> | null;
+    nextToken: string | null;
+    startedAt: number | null;
+  } | null;
   _version: number;
   _deleted: boolean | null;
   _lastChangedAt: number;
@@ -289,12 +339,19 @@ export type GetPrivateNoteQuery = {
   owner: string | null;
 };
 
-export type ListPrivateNotesQuery = {
-  __typename: "ModelPrivateNoteConnection";
+export type ListCategorysQuery = {
+  __typename: "ModelCategoryConnection";
   items: Array<{
-    __typename: "PrivateNote";
+    __typename: "Category";
     id: string;
-    content: string;
+    name: string;
+    color: string;
+    reminderInterval: number;
+    activities: {
+      __typename: "ModelActivityConnection";
+      nextToken: string | null;
+      startedAt: number | null;
+    } | null;
     _version: number;
     _deleted: boolean | null;
     _lastChangedAt: number;
@@ -306,49 +363,29 @@ export type ListPrivateNotesQuery = {
   startedAt: number | null;
 };
 
-export type OnCreateTaskSubscription = {
-  __typename: "Task";
-  id: string;
-  title: string;
-  description: string | null;
-  status: string | null;
-  _version: number;
-  _deleted: boolean | null;
-  _lastChangedAt: number;
-  createdAt: string;
-  updatedAt: string;
+export type SyncActivitiesQuery = {
+  __typename: "ModelActivityConnection";
+  items: Array<{
+    __typename: "Activity";
+    id: string;
+    categoryID: string;
+    from: string;
+    _version: number;
+    _deleted: boolean | null;
+    _lastChangedAt: number;
+    createdAt: string;
+    updatedAt: string;
+    owner: string | null;
+  } | null> | null;
+  nextToken: string | null;
+  startedAt: number | null;
 };
 
-export type OnUpdateTaskSubscription = {
-  __typename: "Task";
+export type GetActivityQuery = {
+  __typename: "Activity";
   id: string;
-  title: string;
-  description: string | null;
-  status: string | null;
-  _version: number;
-  _deleted: boolean | null;
-  _lastChangedAt: number;
-  createdAt: string;
-  updatedAt: string;
-};
-
-export type OnDeleteTaskSubscription = {
-  __typename: "Task";
-  id: string;
-  title: string;
-  description: string | null;
-  status: string | null;
-  _version: number;
-  _deleted: boolean | null;
-  _lastChangedAt: number;
-  createdAt: string;
-  updatedAt: string;
-};
-
-export type OnCreatePrivateNoteSubscription = {
-  __typename: "PrivateNote";
-  id: string;
-  content: string;
+  categoryID: string;
+  from: string;
   _version: number;
   _deleted: boolean | null;
   _lastChangedAt: number;
@@ -357,10 +394,47 @@ export type OnCreatePrivateNoteSubscription = {
   owner: string | null;
 };
 
-export type OnUpdatePrivateNoteSubscription = {
-  __typename: "PrivateNote";
+export type ListActivitysQuery = {
+  __typename: "ModelActivityConnection";
+  items: Array<{
+    __typename: "Activity";
+    id: string;
+    categoryID: string;
+    from: string;
+    _version: number;
+    _deleted: boolean | null;
+    _lastChangedAt: number;
+    createdAt: string;
+    updatedAt: string;
+    owner: string | null;
+  } | null> | null;
+  nextToken: string | null;
+  startedAt: number | null;
+};
+
+export type OnCreateCategorySubscription = {
+  __typename: "Category";
   id: string;
-  content: string;
+  name: string;
+  color: string;
+  reminderInterval: number;
+  activities: {
+    __typename: "ModelActivityConnection";
+    items: Array<{
+      __typename: "Activity";
+      id: string;
+      categoryID: string;
+      from: string;
+      _version: number;
+      _deleted: boolean | null;
+      _lastChangedAt: number;
+      createdAt: string;
+      updatedAt: string;
+      owner: string | null;
+    } | null> | null;
+    nextToken: string | null;
+    startedAt: number | null;
+  } | null;
   _version: number;
   _deleted: boolean | null;
   _lastChangedAt: number;
@@ -369,10 +443,99 @@ export type OnUpdatePrivateNoteSubscription = {
   owner: string | null;
 };
 
-export type OnDeletePrivateNoteSubscription = {
-  __typename: "PrivateNote";
+export type OnUpdateCategorySubscription = {
+  __typename: "Category";
   id: string;
-  content: string;
+  name: string;
+  color: string;
+  reminderInterval: number;
+  activities: {
+    __typename: "ModelActivityConnection";
+    items: Array<{
+      __typename: "Activity";
+      id: string;
+      categoryID: string;
+      from: string;
+      _version: number;
+      _deleted: boolean | null;
+      _lastChangedAt: number;
+      createdAt: string;
+      updatedAt: string;
+      owner: string | null;
+    } | null> | null;
+    nextToken: string | null;
+    startedAt: number | null;
+  } | null;
+  _version: number;
+  _deleted: boolean | null;
+  _lastChangedAt: number;
+  createdAt: string;
+  updatedAt: string;
+  owner: string | null;
+};
+
+export type OnDeleteCategorySubscription = {
+  __typename: "Category";
+  id: string;
+  name: string;
+  color: string;
+  reminderInterval: number;
+  activities: {
+    __typename: "ModelActivityConnection";
+    items: Array<{
+      __typename: "Activity";
+      id: string;
+      categoryID: string;
+      from: string;
+      _version: number;
+      _deleted: boolean | null;
+      _lastChangedAt: number;
+      createdAt: string;
+      updatedAt: string;
+      owner: string | null;
+    } | null> | null;
+    nextToken: string | null;
+    startedAt: number | null;
+  } | null;
+  _version: number;
+  _deleted: boolean | null;
+  _lastChangedAt: number;
+  createdAt: string;
+  updatedAt: string;
+  owner: string | null;
+};
+
+export type OnCreateActivitySubscription = {
+  __typename: "Activity";
+  id: string;
+  categoryID: string;
+  from: string;
+  _version: number;
+  _deleted: boolean | null;
+  _lastChangedAt: number;
+  createdAt: string;
+  updatedAt: string;
+  owner: string | null;
+};
+
+export type OnUpdateActivitySubscription = {
+  __typename: "Activity";
+  id: string;
+  categoryID: string;
+  from: string;
+  _version: number;
+  _deleted: boolean | null;
+  _lastChangedAt: number;
+  createdAt: string;
+  updatedAt: string;
+  owner: string | null;
+};
+
+export type OnDeleteActivitySubscription = {
+  __typename: "Activity";
+  id: string;
+  categoryID: string;
+  from: string;
   _version: number;
   _deleted: boolean | null;
   _lastChangedAt: number;
@@ -385,102 +548,34 @@ export type OnDeletePrivateNoteSubscription = {
   providedIn: "root"
 })
 export class APIService {
-  async CreateTask(
-    input: CreateTaskInput,
-    condition?: ModelTaskConditionInput
-  ): Promise<CreateTaskMutation> {
-    const statement = `mutation CreateTask($input: CreateTaskInput!, $condition: ModelTaskConditionInput) {
-        createTask(input: $input, condition: $condition) {
+  async CreateCategory(
+    input: CreateCategoryInput,
+    condition?: ModelCategoryConditionInput
+  ): Promise<CreateCategoryMutation> {
+    const statement = `mutation CreateCategory($input: CreateCategoryInput!, $condition: ModelCategoryConditionInput) {
+        createCategory(input: $input, condition: $condition) {
           __typename
           id
-          title
-          description
-          status
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-        }
-      }`;
-    const gqlAPIServiceArguments: any = {
-      input
-    };
-    if (condition) {
-      gqlAPIServiceArguments.condition = condition;
-    }
-    const response = (await API.graphql(
-      graphqlOperation(statement, gqlAPIServiceArguments)
-    )) as any;
-    return <CreateTaskMutation>response.data.createTask;
-  }
-  async UpdateTask(
-    input: UpdateTaskInput,
-    condition?: ModelTaskConditionInput
-  ): Promise<UpdateTaskMutation> {
-    const statement = `mutation UpdateTask($input: UpdateTaskInput!, $condition: ModelTaskConditionInput) {
-        updateTask(input: $input, condition: $condition) {
-          __typename
-          id
-          title
-          description
-          status
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-        }
-      }`;
-    const gqlAPIServiceArguments: any = {
-      input
-    };
-    if (condition) {
-      gqlAPIServiceArguments.condition = condition;
-    }
-    const response = (await API.graphql(
-      graphqlOperation(statement, gqlAPIServiceArguments)
-    )) as any;
-    return <UpdateTaskMutation>response.data.updateTask;
-  }
-  async DeleteTask(
-    input: DeleteTaskInput,
-    condition?: ModelTaskConditionInput
-  ): Promise<DeleteTaskMutation> {
-    const statement = `mutation DeleteTask($input: DeleteTaskInput!, $condition: ModelTaskConditionInput) {
-        deleteTask(input: $input, condition: $condition) {
-          __typename
-          id
-          title
-          description
-          status
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-        }
-      }`;
-    const gqlAPIServiceArguments: any = {
-      input
-    };
-    if (condition) {
-      gqlAPIServiceArguments.condition = condition;
-    }
-    const response = (await API.graphql(
-      graphqlOperation(statement, gqlAPIServiceArguments)
-    )) as any;
-    return <DeleteTaskMutation>response.data.deleteTask;
-  }
-  async CreatePrivateNote(
-    input: CreatePrivateNoteInput,
-    condition?: ModelPrivateNoteConditionInput
-  ): Promise<CreatePrivateNoteMutation> {
-    const statement = `mutation CreatePrivateNote($input: CreatePrivateNoteInput!, $condition: ModelPrivateNoteConditionInput) {
-        createPrivateNote(input: $input, condition: $condition) {
-          __typename
-          id
-          content
+          name
+          color
+          reminderInterval
+          activities {
+            __typename
+            items {
+              __typename
+              id
+              categoryID
+              from
+              _version
+              _deleted
+              _lastChangedAt
+              createdAt
+              updatedAt
+              owner
+            }
+            nextToken
+            startedAt
+          }
           _version
           _deleted
           _lastChangedAt
@@ -498,17 +593,36 @@ export class APIService {
     const response = (await API.graphql(
       graphqlOperation(statement, gqlAPIServiceArguments)
     )) as any;
-    return <CreatePrivateNoteMutation>response.data.createPrivateNote;
+    return <CreateCategoryMutation>response.data.createCategory;
   }
-  async UpdatePrivateNote(
-    input: UpdatePrivateNoteInput,
-    condition?: ModelPrivateNoteConditionInput
-  ): Promise<UpdatePrivateNoteMutation> {
-    const statement = `mutation UpdatePrivateNote($input: UpdatePrivateNoteInput!, $condition: ModelPrivateNoteConditionInput) {
-        updatePrivateNote(input: $input, condition: $condition) {
+  async UpdateCategory(
+    input: UpdateCategoryInput,
+    condition?: ModelCategoryConditionInput
+  ): Promise<UpdateCategoryMutation> {
+    const statement = `mutation UpdateCategory($input: UpdateCategoryInput!, $condition: ModelCategoryConditionInput) {
+        updateCategory(input: $input, condition: $condition) {
           __typename
           id
-          content
+          name
+          color
+          reminderInterval
+          activities {
+            __typename
+            items {
+              __typename
+              id
+              categoryID
+              from
+              _version
+              _deleted
+              _lastChangedAt
+              createdAt
+              updatedAt
+              owner
+            }
+            nextToken
+            startedAt
+          }
           _version
           _deleted
           _lastChangedAt
@@ -526,17 +640,36 @@ export class APIService {
     const response = (await API.graphql(
       graphqlOperation(statement, gqlAPIServiceArguments)
     )) as any;
-    return <UpdatePrivateNoteMutation>response.data.updatePrivateNote;
+    return <UpdateCategoryMutation>response.data.updateCategory;
   }
-  async DeletePrivateNote(
-    input: DeletePrivateNoteInput,
-    condition?: ModelPrivateNoteConditionInput
-  ): Promise<DeletePrivateNoteMutation> {
-    const statement = `mutation DeletePrivateNote($input: DeletePrivateNoteInput!, $condition: ModelPrivateNoteConditionInput) {
-        deletePrivateNote(input: $input, condition: $condition) {
+  async DeleteCategory(
+    input: DeleteCategoryInput,
+    condition?: ModelCategoryConditionInput
+  ): Promise<DeleteCategoryMutation> {
+    const statement = `mutation DeleteCategory($input: DeleteCategoryInput!, $condition: ModelCategoryConditionInput) {
+        deleteCategory(input: $input, condition: $condition) {
           __typename
           id
-          content
+          name
+          color
+          reminderInterval
+          activities {
+            __typename
+            items {
+              __typename
+              id
+              categoryID
+              from
+              _version
+              _deleted
+              _lastChangedAt
+              createdAt
+              updatedAt
+              owner
+            }
+            nextToken
+            startedAt
+          }
           _version
           _deleted
           _lastChangedAt
@@ -554,126 +687,115 @@ export class APIService {
     const response = (await API.graphql(
       graphqlOperation(statement, gqlAPIServiceArguments)
     )) as any;
-    return <DeletePrivateNoteMutation>response.data.deletePrivateNote;
+    return <DeleteCategoryMutation>response.data.deleteCategory;
   }
-  async SyncTasks(
-    filter?: ModelTaskFilterInput,
+  async CreateActivity(
+    input: CreateActivityInput,
+    condition?: ModelActivityConditionInput
+  ): Promise<CreateActivityMutation> {
+    const statement = `mutation CreateActivity($input: CreateActivityInput!, $condition: ModelActivityConditionInput) {
+        createActivity(input: $input, condition: $condition) {
+          __typename
+          id
+          categoryID
+          from
+          _version
+          _deleted
+          _lastChangedAt
+          createdAt
+          updatedAt
+          owner
+        }
+      }`;
+    const gqlAPIServiceArguments: any = {
+      input
+    };
+    if (condition) {
+      gqlAPIServiceArguments.condition = condition;
+    }
+    const response = (await API.graphql(
+      graphqlOperation(statement, gqlAPIServiceArguments)
+    )) as any;
+    return <CreateActivityMutation>response.data.createActivity;
+  }
+  async UpdateActivity(
+    input: UpdateActivityInput,
+    condition?: ModelActivityConditionInput
+  ): Promise<UpdateActivityMutation> {
+    const statement = `mutation UpdateActivity($input: UpdateActivityInput!, $condition: ModelActivityConditionInput) {
+        updateActivity(input: $input, condition: $condition) {
+          __typename
+          id
+          categoryID
+          from
+          _version
+          _deleted
+          _lastChangedAt
+          createdAt
+          updatedAt
+          owner
+        }
+      }`;
+    const gqlAPIServiceArguments: any = {
+      input
+    };
+    if (condition) {
+      gqlAPIServiceArguments.condition = condition;
+    }
+    const response = (await API.graphql(
+      graphqlOperation(statement, gqlAPIServiceArguments)
+    )) as any;
+    return <UpdateActivityMutation>response.data.updateActivity;
+  }
+  async DeleteActivity(
+    input: DeleteActivityInput,
+    condition?: ModelActivityConditionInput
+  ): Promise<DeleteActivityMutation> {
+    const statement = `mutation DeleteActivity($input: DeleteActivityInput!, $condition: ModelActivityConditionInput) {
+        deleteActivity(input: $input, condition: $condition) {
+          __typename
+          id
+          categoryID
+          from
+          _version
+          _deleted
+          _lastChangedAt
+          createdAt
+          updatedAt
+          owner
+        }
+      }`;
+    const gqlAPIServiceArguments: any = {
+      input
+    };
+    if (condition) {
+      gqlAPIServiceArguments.condition = condition;
+    }
+    const response = (await API.graphql(
+      graphqlOperation(statement, gqlAPIServiceArguments)
+    )) as any;
+    return <DeleteActivityMutation>response.data.deleteActivity;
+  }
+  async SyncCategories(
+    filter?: ModelCategoryFilterInput,
     limit?: number,
     nextToken?: string,
     lastSync?: number
-  ): Promise<SyncTasksQuery> {
-    const statement = `query SyncTasks($filter: ModelTaskFilterInput, $limit: Int, $nextToken: String, $lastSync: AWSTimestamp) {
-        syncTasks(filter: $filter, limit: $limit, nextToken: $nextToken, lastSync: $lastSync) {
+  ): Promise<SyncCategoriesQuery> {
+    const statement = `query SyncCategories($filter: ModelCategoryFilterInput, $limit: Int, $nextToken: String, $lastSync: AWSTimestamp) {
+        syncCategories(filter: $filter, limit: $limit, nextToken: $nextToken, lastSync: $lastSync) {
           __typename
           items {
             __typename
             id
-            title
-            description
-            status
-            _version
-            _deleted
-            _lastChangedAt
-            createdAt
-            updatedAt
-          }
-          nextToken
-          startedAt
-        }
-      }`;
-    const gqlAPIServiceArguments: any = {};
-    if (filter) {
-      gqlAPIServiceArguments.filter = filter;
-    }
-    if (limit) {
-      gqlAPIServiceArguments.limit = limit;
-    }
-    if (nextToken) {
-      gqlAPIServiceArguments.nextToken = nextToken;
-    }
-    if (lastSync) {
-      gqlAPIServiceArguments.lastSync = lastSync;
-    }
-    const response = (await API.graphql(
-      graphqlOperation(statement, gqlAPIServiceArguments)
-    )) as any;
-    return <SyncTasksQuery>response.data.syncTasks;
-  }
-  async GetTask(id: string): Promise<GetTaskQuery> {
-    const statement = `query GetTask($id: ID!) {
-        getTask(id: $id) {
-          __typename
-          id
-          title
-          description
-          status
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-        }
-      }`;
-    const gqlAPIServiceArguments: any = {
-      id
-    };
-    const response = (await API.graphql(
-      graphqlOperation(statement, gqlAPIServiceArguments)
-    )) as any;
-    return <GetTaskQuery>response.data.getTask;
-  }
-  async ListTasks(
-    filter?: ModelTaskFilterInput,
-    limit?: number,
-    nextToken?: string
-  ): Promise<ListTasksQuery> {
-    const statement = `query ListTasks($filter: ModelTaskFilterInput, $limit: Int, $nextToken: String) {
-        listTasks(filter: $filter, limit: $limit, nextToken: $nextToken) {
-          __typename
-          items {
-            __typename
-            id
-            title
-            description
-            status
-            _version
-            _deleted
-            _lastChangedAt
-            createdAt
-            updatedAt
-          }
-          nextToken
-          startedAt
-        }
-      }`;
-    const gqlAPIServiceArguments: any = {};
-    if (filter) {
-      gqlAPIServiceArguments.filter = filter;
-    }
-    if (limit) {
-      gqlAPIServiceArguments.limit = limit;
-    }
-    if (nextToken) {
-      gqlAPIServiceArguments.nextToken = nextToken;
-    }
-    const response = (await API.graphql(
-      graphqlOperation(statement, gqlAPIServiceArguments)
-    )) as any;
-    return <ListTasksQuery>response.data.listTasks;
-  }
-  async SyncPrivateNotes(
-    filter?: ModelPrivateNoteFilterInput,
-    limit?: number,
-    nextToken?: string,
-    lastSync?: number
-  ): Promise<SyncPrivateNotesQuery> {
-    const statement = `query SyncPrivateNotes($filter: ModelPrivateNoteFilterInput, $limit: Int, $nextToken: String, $lastSync: AWSTimestamp) {
-        syncPrivateNotes(filter: $filter, limit: $limit, nextToken: $nextToken, lastSync: $lastSync) {
-          __typename
-          items {
-            __typename
-            id
-            content
+            name
+            color
+            reminderInterval
+            activities {
+              __typename
+              nextToken
+              startedAt
+            }
             _version
             _deleted
             _lastChangedAt
@@ -701,14 +823,33 @@ export class APIService {
     const response = (await API.graphql(
       graphqlOperation(statement, gqlAPIServiceArguments)
     )) as any;
-    return <SyncPrivateNotesQuery>response.data.syncPrivateNotes;
+    return <SyncCategoriesQuery>response.data.syncCategories;
   }
-  async GetPrivateNote(id: string): Promise<GetPrivateNoteQuery> {
-    const statement = `query GetPrivateNote($id: ID!) {
-        getPrivateNote(id: $id) {
+  async GetCategory(id: string): Promise<GetCategoryQuery> {
+    const statement = `query GetCategory($id: ID!) {
+        getCategory(id: $id) {
           __typename
           id
-          content
+          name
+          color
+          reminderInterval
+          activities {
+            __typename
+            items {
+              __typename
+              id
+              categoryID
+              from
+              _version
+              _deleted
+              _lastChangedAt
+              createdAt
+              updatedAt
+              owner
+            }
+            nextToken
+            startedAt
+          }
           _version
           _deleted
           _lastChangedAt
@@ -723,20 +864,27 @@ export class APIService {
     const response = (await API.graphql(
       graphqlOperation(statement, gqlAPIServiceArguments)
     )) as any;
-    return <GetPrivateNoteQuery>response.data.getPrivateNote;
+    return <GetCategoryQuery>response.data.getCategory;
   }
-  async ListPrivateNotes(
-    filter?: ModelPrivateNoteFilterInput,
+  async ListCategorys(
+    filter?: ModelCategoryFilterInput,
     limit?: number,
     nextToken?: string
-  ): Promise<ListPrivateNotesQuery> {
-    const statement = `query ListPrivateNotes($filter: ModelPrivateNoteFilterInput, $limit: Int, $nextToken: String) {
-        listPrivateNotes(filter: $filter, limit: $limit, nextToken: $nextToken) {
+  ): Promise<ListCategorysQuery> {
+    const statement = `query ListCategorys($filter: ModelCategoryFilterInput, $limit: Int, $nextToken: String) {
+        listCategorys(filter: $filter, limit: $limit, nextToken: $nextToken) {
           __typename
           items {
             __typename
             id
-            content
+            name
+            color
+            reminderInterval
+            activities {
+              __typename
+              nextToken
+              startedAt
+            }
             _version
             _deleted
             _lastChangedAt
@@ -761,80 +909,141 @@ export class APIService {
     const response = (await API.graphql(
       graphqlOperation(statement, gqlAPIServiceArguments)
     )) as any;
-    return <ListPrivateNotesQuery>response.data.listPrivateNotes;
+    return <ListCategorysQuery>response.data.listCategorys;
   }
-  OnCreateTaskListener: Observable<
-    SubscriptionResponse<OnCreateTaskSubscription>
-  > = API.graphql(
-    graphqlOperation(
-      `subscription OnCreateTask {
-        onCreateTask {
+  async SyncActivities(
+    filter?: ModelActivityFilterInput,
+    limit?: number,
+    nextToken?: string,
+    lastSync?: number
+  ): Promise<SyncActivitiesQuery> {
+    const statement = `query SyncActivities($filter: ModelActivityFilterInput, $limit: Int, $nextToken: String, $lastSync: AWSTimestamp) {
+        syncActivities(filter: $filter, limit: $limit, nextToken: $nextToken, lastSync: $lastSync) {
+          __typename
+          items {
+            __typename
+            id
+            categoryID
+            from
+            _version
+            _deleted
+            _lastChangedAt
+            createdAt
+            updatedAt
+            owner
+          }
+          nextToken
+          startedAt
+        }
+      }`;
+    const gqlAPIServiceArguments: any = {};
+    if (filter) {
+      gqlAPIServiceArguments.filter = filter;
+    }
+    if (limit) {
+      gqlAPIServiceArguments.limit = limit;
+    }
+    if (nextToken) {
+      gqlAPIServiceArguments.nextToken = nextToken;
+    }
+    if (lastSync) {
+      gqlAPIServiceArguments.lastSync = lastSync;
+    }
+    const response = (await API.graphql(
+      graphqlOperation(statement, gqlAPIServiceArguments)
+    )) as any;
+    return <SyncActivitiesQuery>response.data.syncActivities;
+  }
+  async GetActivity(id: string): Promise<GetActivityQuery> {
+    const statement = `query GetActivity($id: ID!) {
+        getActivity(id: $id) {
           __typename
           id
-          title
-          description
-          status
+          categoryID
+          from
           _version
           _deleted
           _lastChangedAt
           createdAt
           updatedAt
+          owner
         }
-      }`
-    )
-  ) as Observable<SubscriptionResponse<OnCreateTaskSubscription>>;
-
-  OnUpdateTaskListener: Observable<
-    SubscriptionResponse<OnUpdateTaskSubscription>
+      }`;
+    const gqlAPIServiceArguments: any = {
+      id
+    };
+    const response = (await API.graphql(
+      graphqlOperation(statement, gqlAPIServiceArguments)
+    )) as any;
+    return <GetActivityQuery>response.data.getActivity;
+  }
+  async ListActivitys(
+    filter?: ModelActivityFilterInput,
+    limit?: number,
+    nextToken?: string
+  ): Promise<ListActivitysQuery> {
+    const statement = `query ListActivitys($filter: ModelActivityFilterInput, $limit: Int, $nextToken: String) {
+        listActivitys(filter: $filter, limit: $limit, nextToken: $nextToken) {
+          __typename
+          items {
+            __typename
+            id
+            categoryID
+            from
+            _version
+            _deleted
+            _lastChangedAt
+            createdAt
+            updatedAt
+            owner
+          }
+          nextToken
+          startedAt
+        }
+      }`;
+    const gqlAPIServiceArguments: any = {};
+    if (filter) {
+      gqlAPIServiceArguments.filter = filter;
+    }
+    if (limit) {
+      gqlAPIServiceArguments.limit = limit;
+    }
+    if (nextToken) {
+      gqlAPIServiceArguments.nextToken = nextToken;
+    }
+    const response = (await API.graphql(
+      graphqlOperation(statement, gqlAPIServiceArguments)
+    )) as any;
+    return <ListActivitysQuery>response.data.listActivitys;
+  }
+  OnCreateCategoryListener: Observable<
+    SubscriptionResponse<OnCreateCategorySubscription>
   > = API.graphql(
     graphqlOperation(
-      `subscription OnUpdateTask {
-        onUpdateTask {
+      `subscription OnCreateCategory($owner: String!) {
+        onCreateCategory(owner: $owner) {
           __typename
           id
-          title
-          description
-          status
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-        }
-      }`
-    )
-  ) as Observable<SubscriptionResponse<OnUpdateTaskSubscription>>;
-
-  OnDeleteTaskListener: Observable<
-    SubscriptionResponse<OnDeleteTaskSubscription>
-  > = API.graphql(
-    graphqlOperation(
-      `subscription OnDeleteTask {
-        onDeleteTask {
-          __typename
-          id
-          title
-          description
-          status
-          _version
-          _deleted
-          _lastChangedAt
-          createdAt
-          updatedAt
-        }
-      }`
-    )
-  ) as Observable<SubscriptionResponse<OnDeleteTaskSubscription>>;
-
-  OnCreatePrivateNoteListener: Observable<
-    SubscriptionResponse<OnCreatePrivateNoteSubscription>
-  > = API.graphql(
-    graphqlOperation(
-      `subscription OnCreatePrivateNote($owner: String!) {
-        onCreatePrivateNote(owner: $owner) {
-          __typename
-          id
-          content
+          name
+          color
+          reminderInterval
+          activities {
+            __typename
+            items {
+              __typename
+              id
+              categoryID
+              from
+              _version
+              _deleted
+              _lastChangedAt
+              createdAt
+              updatedAt
+              owner
+            }
+            nextToken
+            startedAt
+          }
           _version
           _deleted
           _lastChangedAt
@@ -844,17 +1053,36 @@ export class APIService {
         }
       }`
     )
-  ) as Observable<SubscriptionResponse<OnCreatePrivateNoteSubscription>>;
+  ) as Observable<SubscriptionResponse<OnCreateCategorySubscription>>;
 
-  OnUpdatePrivateNoteListener: Observable<
-    SubscriptionResponse<OnUpdatePrivateNoteSubscription>
+  OnUpdateCategoryListener: Observable<
+    SubscriptionResponse<OnUpdateCategorySubscription>
   > = API.graphql(
     graphqlOperation(
-      `subscription OnUpdatePrivateNote($owner: String!) {
-        onUpdatePrivateNote(owner: $owner) {
+      `subscription OnUpdateCategory($owner: String!) {
+        onUpdateCategory(owner: $owner) {
           __typename
           id
-          content
+          name
+          color
+          reminderInterval
+          activities {
+            __typename
+            items {
+              __typename
+              id
+              categoryID
+              from
+              _version
+              _deleted
+              _lastChangedAt
+              createdAt
+              updatedAt
+              owner
+            }
+            nextToken
+            startedAt
+          }
           _version
           _deleted
           _lastChangedAt
@@ -864,17 +1092,36 @@ export class APIService {
         }
       }`
     )
-  ) as Observable<SubscriptionResponse<OnUpdatePrivateNoteSubscription>>;
+  ) as Observable<SubscriptionResponse<OnUpdateCategorySubscription>>;
 
-  OnDeletePrivateNoteListener: Observable<
-    SubscriptionResponse<OnDeletePrivateNoteSubscription>
+  OnDeleteCategoryListener: Observable<
+    SubscriptionResponse<OnDeleteCategorySubscription>
   > = API.graphql(
     graphqlOperation(
-      `subscription OnDeletePrivateNote($owner: String!) {
-        onDeletePrivateNote(owner: $owner) {
+      `subscription OnDeleteCategory($owner: String!) {
+        onDeleteCategory(owner: $owner) {
           __typename
           id
-          content
+          name
+          color
+          reminderInterval
+          activities {
+            __typename
+            items {
+              __typename
+              id
+              categoryID
+              from
+              _version
+              _deleted
+              _lastChangedAt
+              createdAt
+              updatedAt
+              owner
+            }
+            nextToken
+            startedAt
+          }
           _version
           _deleted
           _lastChangedAt
@@ -884,5 +1131,68 @@ export class APIService {
         }
       }`
     )
-  ) as Observable<SubscriptionResponse<OnDeletePrivateNoteSubscription>>;
+  ) as Observable<SubscriptionResponse<OnDeleteCategorySubscription>>;
+
+  OnCreateActivityListener: Observable<
+    SubscriptionResponse<OnCreateActivitySubscription>
+  > = API.graphql(
+    graphqlOperation(
+      `subscription OnCreateActivity($owner: String!) {
+        onCreateActivity(owner: $owner) {
+          __typename
+          id
+          categoryID
+          from
+          _version
+          _deleted
+          _lastChangedAt
+          createdAt
+          updatedAt
+          owner
+        }
+      }`
+    )
+  ) as Observable<SubscriptionResponse<OnCreateActivitySubscription>>;
+
+  OnUpdateActivityListener: Observable<
+    SubscriptionResponse<OnUpdateActivitySubscription>
+  > = API.graphql(
+    graphqlOperation(
+      `subscription OnUpdateActivity($owner: String!) {
+        onUpdateActivity(owner: $owner) {
+          __typename
+          id
+          categoryID
+          from
+          _version
+          _deleted
+          _lastChangedAt
+          createdAt
+          updatedAt
+          owner
+        }
+      }`
+    )
+  ) as Observable<SubscriptionResponse<OnUpdateActivitySubscription>>;
+
+  OnDeleteActivityListener: Observable<
+    SubscriptionResponse<OnDeleteActivitySubscription>
+  > = API.graphql(
+    graphqlOperation(
+      `subscription OnDeleteActivity($owner: String!) {
+        onDeleteActivity(owner: $owner) {
+          __typename
+          id
+          categoryID
+          from
+          _version
+          _deleted
+          _lastChangedAt
+          createdAt
+          updatedAt
+          owner
+        }
+      }`
+    )
+  ) as Observable<SubscriptionResponse<OnDeleteActivitySubscription>>;
 }
