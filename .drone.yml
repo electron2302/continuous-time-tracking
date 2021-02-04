@@ -10,11 +10,11 @@ steps:
   - cd ctt-frontend
   - npm install
 
-- name: "Test & Coverage"
-  image: buildkite/puppeteer
+- name: "Lint"
+  image: node:14
   commands:
   - cd ctt-frontend
-  - "npx ng test --browsers ChromeHeadlessNoSandbox --watch false --progress false --codeCoverage"
+  - "npx ng lint"
   depends_on: [ "Install dependencies" ]
 
 - name: "Prettier"
@@ -22,6 +22,13 @@ steps:
   commands:
   - cd ctt-frontend
   - "npx prettier --check ."
+  depends_on: [ "Install dependencies" ]
+
+- name: "Test & Coverage"
+  image: buildkite/puppeteer
+  commands:
+  - cd ctt-frontend
+  - "npx ng test --browsers ChromeHeadlessNoSandbox --watch false --progress false --codeCoverage"
   depends_on: [ "Install dependencies" ]
 
 #- name: "Upload to codecov"
