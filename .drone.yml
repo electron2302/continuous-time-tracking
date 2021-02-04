@@ -1,0 +1,32 @@
+kind: pipeline
+type: docker
+name: ci
+
+steps:
+
+- name: "Install dependencies"
+  image: node:14
+  commands:
+  - cd ctt-frontend
+  - npm install
+
+- name: "Test & Coverage"
+  image: buildkite/puppeteer
+  commands:
+  - cd ctt-frontend
+  - "npx ng test --browsers ChromeHeadlessNoSandbox --watch false --progress false --codeCoverage"
+  depends_on: [ "Install dependencies" ]
+
+- name: "Lint"
+  image: node:14
+  commands:
+  - cd ctt-frontend
+  - "npx ng lint"
+  depends_on: [ "Install dependencies" ]
+
+#- name: "Upload to codecov"
+#  image: plugins/codecov
+#  settings:
+#    token:
+#      from_secret: codecov-token
+#  depends_on: [ "Test & Coverage" ]

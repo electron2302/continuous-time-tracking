@@ -1,1 +1,2 @@
 # continuous-time-tracking
+[![Build Status](https://drone.dev.sart.solutions/api/badges/electron2302/continuous-time-tracking/status.svg?ref=refs/heads/develop)](https://drone.dev.sart.solutions/electron2302/continuous-time-tracking)
