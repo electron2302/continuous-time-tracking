@@ -20,6 +20,7 @@ subscription OnCreateCategory($owner: String!) {
       nextToken
       startedAt
     }
+    excludeFromStatistics
     _version
     _deleted
     _lastChangedAt
@@ -49,6 +50,7 @@ subscription OnUpdateCategory($owner: String!) {
       nextToken
       startedAt
     }
+    excludeFromStatistics
     _version
     _deleted
     _lastChangedAt
@@ -78,6 +80,7 @@ subscription OnDeleteCategory($owner: String!) {
       nextToken
       startedAt
     }
+    excludeFromStatistics
     _version
     _deleted
     _lastChangedAt
