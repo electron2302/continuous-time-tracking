@@ -1,4 +1,4 @@
-import { Category } from '../../models';
+import { Category } from '../interfaces/category';
 import { StatisticType } from '../interfaces/statistics';
 
 export interface CreateCategoryInput {

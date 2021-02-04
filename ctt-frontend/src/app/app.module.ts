@@ -39,6 +39,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { APIService } from './services/API.service';
 
 const materialModules = [
   CdkTreeModule,
@@ -84,7 +85,7 @@ const materialModules = [
     BrowserAnimationsModule,
     ...materialModules,
   ],
-  providers: [],
+  providers: [APIService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

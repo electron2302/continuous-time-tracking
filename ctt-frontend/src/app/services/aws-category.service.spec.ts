@@ -13,4 +13,44 @@ describe('AwsCategoryService', () => {
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
+
+  describe('create', () => {
+    it('should ', () => {
+
+    });
+
+    it('should ', () => {
+
+    });
+  });
+
+  describe('getById', () => {
+    it('should ', () => {
+
+    });
+
+    it('should ', () => {
+
+    });
+  });
+
+  describe('getAll', () => {
+    it('should ', () => {
+
+    });
+
+    it('should ', () => {
+
+    });
+  });
+
+  describe('update', () => {
+    it('should ', () => {
+
+    });
+
+    it('should ', () => {
+
+    });
+  });
 });
