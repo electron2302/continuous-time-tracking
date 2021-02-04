@@ -34,7 +34,7 @@ export interface ActivityService {
   /**
    * Deletes an existing activity.
    * 
-   * @param activity, the activity to create.
+   * @param activity, the activity to delete.
    */
   delete(activity: Activity): Promise<void>;
 
