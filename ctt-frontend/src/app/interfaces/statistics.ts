@@ -1,4 +1,4 @@
 export enum StatisticType {
-  RelativeTime,
-  AbsoluteTime,
+  relativeTime,
+  absoluteTime,
 }
