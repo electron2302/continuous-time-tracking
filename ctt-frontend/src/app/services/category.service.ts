@@ -17,7 +17,7 @@ export interface CategoryService {
   create(input: CreateCategoryInput): Promise<void>;
 
   /**
-   * Get an existing category ba an id.
+   * Get an existing category by an id.
    * 
    * @param id, the id of the category.
    */
