@@ -6,17 +6,10 @@ import { AppComponent } from './app.component';
 
 import { AmplifyUIAngularModule } from '@aws-amplify/ui-angular';
 
-
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    AmplifyUIAngularModule,
-  ],
+  declarations: [AppComponent],
+  imports: [BrowserModule, AppRoutingModule, AmplifyUIAngularModule],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
