@@ -20,6 +20,7 @@ query SyncCategories(
         nextToken
         startedAt
       }
+      excludeFromStatistics
       _version
       _deleted
       _lastChangedAt
@@ -52,6 +53,7 @@ query GetCategory($id: ID!) {
       nextToken
       startedAt
     }
+    excludeFromStatistics
     _version
     _deleted
     _lastChangedAt
@@ -75,6 +77,7 @@ query ListCategorys(
         nextToken
         startedAt
       }
+      excludeFromStatistics
       _version
       _deleted
       _lastChangedAt

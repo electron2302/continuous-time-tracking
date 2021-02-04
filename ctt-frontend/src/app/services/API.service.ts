@@ -14,13 +14,20 @@ export type CreateCategoryInput = {
   name: string;
   color: string;
   reminderInterval: number;
+  excludeFromStatistics?: Array<StatisticType | null> | null;
   _version?: number | null;
 };
+
+export enum StatisticType {
+  RelativeTime = "RelativeTime",
+  AbsoluteTime = "AbsoluteTime"
+}
 
 export type ModelCategoryConditionInput = {
   name?: ModelStringInput | null;
   color?: ModelStringInput | null;
   reminderInterval?: ModelIntInput | null;
+  excludeFromStatistics?: ModelStatisticTypeListInput | null;
   and?: Array<ModelCategoryConditionInput | null> | null;
   or?: Array<ModelCategoryConditionInput | null> | null;
   not?: ModelCategoryConditionInput | null;
@@ -77,11 +84,19 @@ export type ModelIntInput = {
   attributeType?: ModelAttributeTypes | null;
 };
 
+export type ModelStatisticTypeListInput = {
+  eq?: Array<StatisticType | null> | null;
+  ne?: Array<StatisticType | null> | null;
+  contains?: StatisticType | null;
+  notContains?: StatisticType | null;
+};
+
 export type UpdateCategoryInput = {
   id: string;
   name?: string | null;
   color?: string | null;
   reminderInterval?: number | null;
+  excludeFromStatistics?: Array<StatisticType | null> | null;
   _version?: number | null;
 };
 
@@ -138,6 +153,7 @@ export type ModelCategoryFilterInput = {
   name?: ModelStringInput | null;
   color?: ModelStringInput | null;
   reminderInterval?: ModelIntInput | null;
+  excludeFromStatistics?: ModelStatisticTypeListInput | null;
   and?: Array<ModelCategoryFilterInput | null> | null;
   or?: Array<ModelCategoryFilterInput | null> | null;
   not?: ModelCategoryFilterInput | null;
@@ -175,6 +191,7 @@ export type CreateCategoryMutation = {
     nextToken: string | null;
     startedAt: number | null;
   } | null;
+  excludeFromStatistics: Array<StatisticType | null> | null;
   _version: number;
   _deleted: boolean | null;
   _lastChangedAt: number;
@@ -206,6 +223,7 @@ export type UpdateCategoryMutation = {
     nextToken: string | null;
     startedAt: number | null;
   } | null;
+  excludeFromStatistics: Array<StatisticType | null> | null;
   _version: number;
   _deleted: boolean | null;
   _lastChangedAt: number;
@@ -237,6 +255,7 @@ export type DeleteCategoryMutation = {
     nextToken: string | null;
     startedAt: number | null;
   } | null;
+  excludeFromStatistics: Array<StatisticType | null> | null;
   _version: number;
   _deleted: boolean | null;
   _lastChangedAt: number;
@@ -297,6 +316,7 @@ export type SyncCategoriesQuery = {
       nextToken: string | null;
       startedAt: number | null;
     } | null;
+    excludeFromStatistics: Array<StatisticType | null> | null;
     _version: number;
     _deleted: boolean | null;
     _lastChangedAt: number;
@@ -331,6 +351,7 @@ export type GetCategoryQuery = {
     nextToken: string | null;
     startedAt: number | null;
   } | null;
+  excludeFromStatistics: Array<StatisticType | null> | null;
   _version: number;
   _deleted: boolean | null;
   _lastChangedAt: number;
@@ -352,6 +373,7 @@ export type ListCategorysQuery = {
       nextToken: string | null;
       startedAt: number | null;
     } | null;
+    excludeFromStatistics: Array<StatisticType | null> | null;
     _version: number;
     _deleted: boolean | null;
     _lastChangedAt: number;
@@ -435,6 +457,7 @@ export type OnCreateCategorySubscription = {
     nextToken: string | null;
     startedAt: number | null;
   } | null;
+  excludeFromStatistics: Array<StatisticType | null> | null;
   _version: number;
   _deleted: boolean | null;
   _lastChangedAt: number;
@@ -466,6 +489,7 @@ export type OnUpdateCategorySubscription = {
     nextToken: string | null;
     startedAt: number | null;
   } | null;
+  excludeFromStatistics: Array<StatisticType | null> | null;
   _version: number;
   _deleted: boolean | null;
   _lastChangedAt: number;
@@ -497,6 +521,7 @@ export type OnDeleteCategorySubscription = {
     nextToken: string | null;
     startedAt: number | null;
   } | null;
+  excludeFromStatistics: Array<StatisticType | null> | null;
   _version: number;
   _deleted: boolean | null;
   _lastChangedAt: number;
@@ -576,6 +601,7 @@ export class APIService {
             nextToken
             startedAt
           }
+          excludeFromStatistics
           _version
           _deleted
           _lastChangedAt
@@ -623,6 +649,7 @@ export class APIService {
             nextToken
             startedAt
           }
+          excludeFromStatistics
           _version
           _deleted
           _lastChangedAt
@@ -670,6 +697,7 @@ export class APIService {
             nextToken
             startedAt
           }
+          excludeFromStatistics
           _version
           _deleted
           _lastChangedAt
@@ -796,6 +824,7 @@ export class APIService {
               nextToken
               startedAt
             }
+            excludeFromStatistics
             _version
             _deleted
             _lastChangedAt
@@ -850,6 +879,7 @@ export class APIService {
             nextToken
             startedAt
           }
+          excludeFromStatistics
           _version
           _deleted
           _lastChangedAt
@@ -885,6 +915,7 @@ export class APIService {
               nextToken
               startedAt
             }
+            excludeFromStatistics
             _version
             _deleted
             _lastChangedAt
@@ -1044,6 +1075,7 @@ export class APIService {
             nextToken
             startedAt
           }
+          excludeFromStatistics
           _version
           _deleted
           _lastChangedAt
@@ -1083,6 +1115,7 @@ export class APIService {
             nextToken
             startedAt
           }
+          excludeFromStatistics
           _version
           _deleted
           _lastChangedAt
@@ -1122,6 +1155,7 @@ export class APIService {
             nextToken
             startedAt
           }
+          excludeFromStatistics
           _version
           _deleted
           _lastChangedAt

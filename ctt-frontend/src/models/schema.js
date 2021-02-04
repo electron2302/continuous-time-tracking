@@ -44,6 +44,16 @@ export const schema = {
                         "connectionType": "HAS_MANY",
                         "associatedWith": "categoryID"
                     }
+                },
+                "excludeFromStatistics": {
+                    "name": "excludeFromStatistics",
+                    "isArray": true,
+                    "type": {
+                        "enum": "StatisticType"
+                    },
+                    "isRequired": false,
+                    "attributes": [],
+                    "isArrayNullable": true
                 }
             },
             "syncable": true,
@@ -138,7 +148,15 @@ export const schema = {
             ]
         }
     },
-    "enums": {},
+    "enums": {
+        "StatisticType": {
+            "name": "StatisticType",
+            "values": [
+                "RelativeTime",
+                "AbsoluteTime"
+            ]
+        }
+    },
     "nonModels": {},
-    "version": "b09586faebcddf0365700c68516a355c"
+    "version": "e362c254426b87b7bb630f207d5c3dd0"
 };

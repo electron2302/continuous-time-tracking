@@ -4,6 +4,7 @@ type Category @model @auth(rules: [{ allow: owner }]) {
   color: String!
   reminderInterval: Int!
   activities: [Activity] @connection(keyName: "byCategory", fields: ["id"])
+  excludeFromStatistics: [StatisticType]
 }
 
 type Activity
@@ -13,4 +14,9 @@ type Activity
   id: ID!
   categoryID: ID!
   from: AWSDateTime!
+}
+
+enum StatisticType {
+  RelativeTime
+  AbsoluteTime
 }
