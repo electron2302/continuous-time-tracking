@@ -1,11 +1,1 @@
-<amplify-authenticator *ngIf="authState !== 'signedin'">
-  <amplify-sign-up
-    slot="sign-up" [formFields]="formFields"
-  ></amplify-sign-up>
-</amplify-authenticator>
-
-<div *ngIf="authState === 'signedin' && user" class="App">
-    <amplify-sign-out></amplify-sign-out>
-</div>
-
 <router-outlet></router-outlet>
