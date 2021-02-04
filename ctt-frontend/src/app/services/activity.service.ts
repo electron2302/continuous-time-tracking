@@ -70,7 +70,7 @@ export interface ActivityService {
 
   /**
    * Subscribe to all activities between from and to.
-   * If neighter from nor to is provided, 
+   * If neither from nor to is provided, 
    * then it subscrites to all activities of the current day.
    * 
    * @param from, the optional and included start time.
