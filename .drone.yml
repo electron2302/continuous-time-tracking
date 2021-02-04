@@ -17,11 +17,11 @@ steps:
   - "npx ng test --browsers ChromeHeadlessNoSandbox --watch false --progress false --codeCoverage"
   depends_on: [ "Install dependencies" ]
 
-- name: "Lint"
+- name: "Prettier"
   image: node:14
   commands:
   - cd ctt-frontend
-  - "npx ng lint"
+  - "npx prettier --check ."
   depends_on: [ "Install dependencies" ]
 
 #- name: "Upload to codecov"
