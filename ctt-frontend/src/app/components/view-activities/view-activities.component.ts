@@ -7,6 +7,8 @@ import {
 } from '../../helper/time';
 import { Activity } from '../../interfaces/activity';
 import { Category } from '../../interfaces/category';
+import { ActivityService } from '../../services/activity.service';
+import { CategoryService } from '../../services/category.service';
 import { ViewableActivity } from '../element-activity/element-activity.component';
 
 @Component({
@@ -15,81 +17,60 @@ import { ViewableActivity } from '../element-activity/element-activity.component
   styleUrls: ['./view-activities.component.scss'],
 })
 export class ViewActivitiesComponent implements OnInit {
-  public activities: Activity[] = [
-    {
-      categoryID: 'a',
-      from: new Date(2021, 1, 5, 0, 0),
-      id: 'a1',
-    },
-    {
-      categoryID: 'b',
-      from: new Date(2021, 1, 5, 7, 0),
-      id: 'b1',
-    },
-    {
-      categoryID: 'a',
-      from: new Date(2021, 1, 5, 11, 0),
-      id: 'a2',
-    },
-    {
-      categoryID: 'c',
-      from: new Date(2021, 1, 5, 12, 0),
-      id: 'c1',
-    },
-  ];
-
-  public categories: Category[] = [
-    {
-      id: 'a',
-      color: '#238a85',
-      name: 'Sleep',
-      reminderInterval: 0,
-      excludeFromStatistics: [],
-    },
-    {
-      id: 'b',
-      color: '#123456',
-      name: 'Work',
-      reminderInterval: 0,
-      excludeFromStatistics: [],
-    },
-    {
-      id: 'c',
-      color: '#3a7732',
-      name: 'Learn',
-      reminderInterval: 0,
-      excludeFromStatistics: [],
-    },
-  ];
+  currentDay: Date = new Date();
+  loading = true;
 
   public categoryById = new Map<string, Category>();
   public viewableActivities: ViewableActivity[] = [];
 
-  constructor() {
-    this.fillCategoryById();
-    this.viewableActivities = this.toViewableActivities();
+  constructor(
+    private activityService: ActivityService,
+    private categoryService: CategoryService
+  ) {}
+
+  async ngOnInit(): Promise<void> {
+    await this.getCategories();
+    const date = new Date();
+    date.setDate(date.getDate() - 1);
+    this.currentDay = nextDayMidnight(date);
+    await this.getActivities();
   }
 
-  ngOnInit(): void {}
+  public changeDay(delta: number): void {
+    this.currentDay = new Date(
+      this.currentDay.setDate(this.currentDay.getDate() + delta)
+    );
+    this.getActivities();
+  }
 
-  private fillCategoryById(): void {
-    this.categories.forEach((c) => {
+  private async getCategories(): Promise<void> {
+    const categories = await this.categoryService.getAll();
+    this.categoryById.clear();
+    categories.forEach((c) => {
       this.categoryById.set(c.id, c);
     });
   }
 
-  private toViewableActivities(): ViewableActivity[] {
+  private async getActivities(): Promise<void> {
+    this.loading = true;
+    const from = this.currentDay;
+    const to = nextDayMidnight(new Date(this.currentDay));
+    const activities = await this.activityService.getBetween(from, to);
+    this.viewableActivities = this.toViewableActivities(activities);
+    this.loading = false;
+  }
+
+  private toViewableActivities(activities: Activity[]): ViewableActivity[] {
     const result: ViewableActivity[] = [];
 
-    this.activities.forEach((a, i) => {
+    activities.forEach((a, i) => {
       const category = this.categoryById.get(a.categoryID);
       if (!category) {
         return;
       }
-      console.log(a.from);
       let durationMs;
-      if (i < this.activities.length - 1) {
-        durationMs = differenceInMs(this.activities[i + 1].from, a.from);
+      if (i < activities.length - 1) {
+        durationMs = differenceInMs(activities[i + 1].from, a.from);
       } else {
         if (isToday(a.from)) {
           durationMs = -1;
