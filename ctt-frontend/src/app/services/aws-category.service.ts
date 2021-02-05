@@ -13,7 +13,7 @@ export class AwsCategoryService extends CategoryService {
       name: 'sleep',
       id: 'a',
       reminderInterval: 10,
-      excludeFromStatistics: [StatisticType.AbsoluteTime],
+      excludeFromStatistics: [StatisticType.absoluteTime],
     });
   }
   getById(id: string): Promise<Category> {
@@ -22,7 +22,7 @@ export class AwsCategoryService extends CategoryService {
       name: 'Sleep',
       id: 'a',
       reminderInterval: 10,
-      excludeFromStatistics: [StatisticType.AbsoluteTime],
+      excludeFromStatistics: [StatisticType.absoluteTime],
     });
   }
   getAll(): Promise<Category[]> {

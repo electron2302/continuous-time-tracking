@@ -1,25 +1,27 @@
 export enum StatisticType {
-  RelativeTime,
-  AbsoluteTime,
+  relativeTime,
+  absoluteTime,
 }
 
-export function getDisplayText(statisticType: StatisticType): string {
+export const getDisplayText: (statisticType: StatisticType) => string = (
+  statisticType: StatisticType
+) => {
   switch (statisticType) {
-    case StatisticType.RelativeTime:
+    case StatisticType.relativeTime:
       return 'Relative time';
-    case StatisticType.AbsoluteTime:
+    case StatisticType.absoluteTime:
       return 'Absolute time';
     default:
       return statisticType;
   }
-}
+};
 
-export function iterateStatisticTypes(
+export const iterateStatisticTypes: (
   forEach: (statisticType: StatisticType) => void
-): void {
+) => void = (forEach: (statisticType: StatisticType) => void) => {
   Object.keys(StatisticType)
     .filter((k) => !isNaN(Number(k)))
     .forEach((k: string) => {
       forEach(Number(k));
     });
-}
+};
