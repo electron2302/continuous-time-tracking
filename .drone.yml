@@ -42,6 +42,7 @@ steps:
     commands:
       - cd ctt-frontend
       - npm install -g @aws-amplify/cli
+      - mkdir ~/.aws
       - echo "[default]" > ~/.aws/credentials
       - echo "aws_access_key_id=$KEYID" > ~/.aws/credentials
       - echo "aws_secret_access_key=$KEYSECRET" > ~/.aws/credentials
@@ -54,7 +55,7 @@ steps:
     when:
       branch:
         - develop
-        - ci-tests
+        - 3-aws-deployment
       event:
         - push
     depends_on: ["Test & Coverage", "Lint"]
