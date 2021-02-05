@@ -42,11 +42,11 @@ steps:
     commands:
       - cd ctt-frontend
       - amplify --help
-    environment:
-      USERNAME:
-        from_secret: docker_username
-      PASSWORD:
-        from_secret: docker_passworde
+    #    environment:
+    #      USERNAME:
+    #        from_secret: docker_username
+    #      PASSWORD:
+    #        from_secret: docker_passworde
     when:
       branch:
         - develop
