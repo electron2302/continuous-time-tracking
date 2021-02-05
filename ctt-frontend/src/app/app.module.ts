@@ -5,9 +5,9 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 import { AmplifyUIAngularModule } from '@aws-amplify/ui-angular';
-import Amplify from "aws-amplify";
+import Amplify from 'aws-amplify';
 // @ts-ignore
-import awsconfig from "../aws-exports";
+import awsconfig from '../aws-exports';
 
 import { AuthenticationComponent } from './components/authentication/authentication.component';
 import { AuthService } from './services/auth.service';

@@ -1,5 +1,4 @@
-import { Component, ChangeDetectorRef, HostListener, ViewChild } from '@angular/core';
-import { MatSidenav } from '@angular/material/sidenav';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -7,11 +6,5 @@ import { MatSidenav } from '@angular/material/sidenav';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  constructor(private ref: ChangeDetectorRef) {}
-
-  ngOnInit() {
-    this.ref.detectChanges();
-  }
-
-  ngOnDestroy() {}
+  constructor() {}
 }

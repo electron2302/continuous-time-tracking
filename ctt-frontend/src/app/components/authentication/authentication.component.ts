@@ -10,9 +10,9 @@ import { Router, RouterModule, Routes } from '@angular/router';
 })
 export class AuthenticationComponent implements OnInit {
   formFields: FormFieldTypes = [
-    { type: "username" },
-    { type: "password" },
-    { type: "email" }
+    { type: 'username' },
+    { type: 'password' },
+    { type: 'email' }
   ];
 
   constructor(
@@ -21,8 +21,8 @@ export class AuthenticationComponent implements OnInit {
     ) {}
 
   ngOnInit(): void {
-    if (this.authService.isSignedIn) {
-      this.router.navigate([AuthService.baseURL])
+    if (this.authService.isSignedIn()) {
+      this.router.navigate([AuthService.baseURL]);
     }
   }
 }
