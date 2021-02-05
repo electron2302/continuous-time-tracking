@@ -19,7 +19,7 @@ export class AwsCategoryService implements CategoryService {
       color: input.color,
       reminderInterval: input.reminderInterval,
       excludeFromStatistics: input.excludeFromStatistics.map((v) =>
-        (v === StatisticType.AbsoluteTime) ? APIStatistiyType.AbsoluteTime : APIStatistiyType.RelativeTime
+        (v === StatisticType.absoluteTime) ? APIStatistiyType.AbsoluteTime : APIStatistiyType.RelativeTime
       ),
     };
     return this.api.CreateCategory(i).then(() => Promise.resolve(), () => Promise.reject(`Category ${ input.name } could not be added`));
