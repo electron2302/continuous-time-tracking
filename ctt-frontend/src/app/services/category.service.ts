@@ -1,4 +1,4 @@
-import { Category } from '../../models';
+import { Category } from '../interfaces/category';
 import { StatisticType } from '../interfaces/statistics';
 
 export interface CreateCategoryInput {
@@ -8,30 +8,30 @@ export interface CreateCategoryInput {
   excludeFromStatistics: StatisticType[];
 }
 
-export interface CategoryService {
+export abstract class CategoryService {
   /**
    * Create a new category.
    *
    * @param input, the category to create.
    */
-  create(input: CreateCategoryInput): Promise<void>;
+  abstract create(input: CreateCategoryInput): Promise<Category>;
 
   /**
    * Get an existing category by an id.
    *
    * @param id, the id of the category.
    */
-  getById(id: string): Promise<Category>;
+  abstract getById(id: string): Promise<Category>;
 
   /**
    * Get all categories.
    */
-  getAll(): Promise<Category[]>;
+  abstract getAll(): Promise<Category[]>;
 
   /**
    * Update an existing category.
    *
    * @param category, the category to update.
    */
-  update(category: Category): Promise<void>;
+  abstract update(category: Category): Promise<void>;
 }

@@ -1,6 +1,6 @@
 import { StatisticType } from './statistics';
 
-interface Category {
+export interface Category {
   id: string;
   name: string;
   /**
