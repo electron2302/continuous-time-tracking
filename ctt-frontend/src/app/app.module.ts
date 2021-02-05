@@ -51,6 +51,8 @@ import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { AwsCategoryService } from './services/aws-category.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CategoryService } from './services/category.service';
+import { ViewActivitiesComponent } from './components/view-activities/view-activities.component';
+import { ElementActivityComponent } from './components/element-activity/element-activity.component';
 
 const materialModules = [
   CdkTreeModule,
@@ -89,7 +91,7 @@ const materialModules = [
 ];
 
 @NgModule({
-  declarations: [AppComponent, EditCategoryComponent, NavBarComponent],
+  declarations: [AppComponent, EditCategoryComponent, NavBarComponent, ViewActivitiesComponent, ElementActivityComponent],
   imports: [
     AmplifyUIAngularModule,
     AppRoutingModule,
