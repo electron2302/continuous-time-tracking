@@ -1,9 +1,9 @@
 export enum QueryDuration {
-  Day,
-  Week,
-  Month,
-  Year,
-  AllTime,
+  day,
+  week,
+  month,
+  year,
+  allTime,
 }
 
 export interface StatisticsService {
