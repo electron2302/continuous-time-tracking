@@ -1,3 +1,6 @@
+@import '~@angular/material/theming';
+@include mat-core();
+
 .container {
   display: flex;
   justify-content: center;
@@ -27,7 +30,7 @@ mat-slide-toggle {
 }
 
 ::ng-deep .ngx-mat-colorpicker-content {
-  background-color: #303030 !important;
+  background-color: mat-color($mat-grey, 700) !important;
 }
 
 ::ng-deep .ngx-mat-colorpicker-content .mat-input-element {
