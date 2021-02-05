@@ -12,7 +12,6 @@ export class AuthService {
   private signedInSubject = new Subject<boolean>();
   private usernameSubject = new Subject<string>();
   private signedIn = false;
-  private title = 'ctt-frontend';
   private user: CognitoUserInterface | undefined;
   private authState!: AuthState;
   // store the URL so we can redirect after logging in
