@@ -41,7 +41,7 @@ steps:
     image: node:14
     commands:
       - cd ctt-frontend
-      - amplify --help
+      - npx amplify --help
     #    environment:
     #      USERNAME:
     #        from_secret: docker_username
