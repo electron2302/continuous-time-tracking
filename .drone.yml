@@ -3,37 +3,54 @@ type: docker
 name: ci
 
 steps:
+  - name: "Install dependencies"
+    image: node:14
+    commands:
+      - cd ctt-frontend
+      - npm ci
 
-- name: "Install dependencies"
-  image: node:14
-  commands:
-  - cd ctt-frontend
-  - npm ci
+  - name: "Lint"
+    image: node:14
+    commands:
+      - cd ctt-frontend
+      - "npx ng lint"
+    depends_on: ["Install dependencies"]
 
-- name: "Lint"
-  image: node:14
-  commands:
-  - cd ctt-frontend
-  - "npx ng lint"
-  depends_on: [ "Install dependencies" ]
+  - name: "Prettier"
+    image: node:14
+    commands:
+      - cd ctt-frontend
+      - "npx prettier --check ."
+    depends_on: ["Install dependencies"]
 
-- name: "Prettier"
-  image: node:14
-  commands:
-  - cd ctt-frontend
-  - "npx prettier --check ."
-  depends_on: [ "Install dependencies" ]
+  - name: "Test & Coverage"
+    image: buildkite/puppeteer
+    commands:
+      - cd ctt-frontend
+      - "npx ng test --browsers ChromeHeadlessNoSandbox --watch false --progress false --codeCoverage"
+    depends_on: ["Install dependencies"]
 
-- name: "Test & Coverage"
-  image: buildkite/puppeteer
-  commands:
-  - cd ctt-frontend
-  - "npx ng test --browsers ChromeHeadlessNoSandbox --watch false --progress false --codeCoverage"
-  depends_on: [ "Install dependencies" ]
+  #- name: "Upload to codecov"
+  #  image: plugins/codecov
+  #  settings:
+  #    token:
+  #      from_secret: codecov-token
+  #  depends_on: [ "Test & Coverage" ]
 
-#- name: "Upload to codecov"
-#  image: plugins/codecov
-#  settings:
-#    token:
-#      from_secret: codecov-token
-#  depends_on: [ "Test & Coverage" ]
+  - name: "Deploy to development "
+    image: node:14
+    commands:
+      - cd ctt-frontend
+      - amplify --help
+    environment:
+      USERNAME:
+        from_secret: docker_username
+      PASSWORD:
+        from_secret: docker_passworde
+    when:
+      branch:
+        - develop
+        - ci-tests
+      event:
+        - push
+    depends_on: ["Test & Coverage", "Lint"]
