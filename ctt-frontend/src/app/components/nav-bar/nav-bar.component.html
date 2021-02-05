@@ -1,0 +1,15 @@
+<mat-toolbar color="primary">
+  <button
+    *ngIf="showBackButton"
+    mat-icon-button
+    aria-label="Go back"
+    (click)="onBackClicked()"
+  >
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <span *ngIf="title != null" class="title">{{ title }}</span>
+
+  <span class="fill-remaining-space"></span>
+
+  <ng-content></ng-content>
+</mat-toolbar>
