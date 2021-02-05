@@ -28,6 +28,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
@@ -39,6 +40,17 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import {
+  MAT_COLOR_FORMATS,
+  NgxMatColorPickerModule,
+  NGX_MAT_COLOR_FORMATS,
+} from '@angular-material-components/color-picker';
+
+import { EditCategoryComponent } from './components/edit-category/edit-category.component';
+import { NavBarComponent } from './components/nav-bar/nav-bar.component';
+import { AwsCategoryService } from './services/aws-category.service';
+import { ReactiveFormsModule } from '@angular/forms';
+import { CategoryService } from './services/category.service';
 
 const materialModules = [
   CdkTreeModule,
@@ -58,6 +70,7 @@ const materialModules = [
   MatRippleModule,
   MatSelectModule,
   MatSidenavModule,
+  MatSlideToggleModule,
   MatSnackBarModule,
   MatSortModule,
   MatTableModule,
@@ -76,15 +89,20 @@ const materialModules = [
 ];
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, EditCategoryComponent, NavBarComponent],
   imports: [
-    BrowserModule,
-    AppRoutingModule,
     AmplifyUIAngularModule,
+    AppRoutingModule,
+    BrowserModule,
     BrowserAnimationsModule,
+    ReactiveFormsModule,
+    NgxMatColorPickerModule,
     ...materialModules,
   ],
-  providers: [],
+  providers: [
+    { provide: CategoryService, useClass: AwsCategoryService },
+    { provide: MAT_COLOR_FORMATS, useValue: NGX_MAT_COLOR_FORMATS },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

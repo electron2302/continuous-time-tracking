@@ -1,0 +1,43 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px;
+}
+
+mat-card-actions {
+  display: flex;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+mat-icon {
+  font-size: 1.3em !important;
+}
+
+#card {
+  max-width: 500px;
+  width: 100%;
+}
+
+mat-slide-toggle {
+  padding-bottom: 20px;
+}
+
+::ng-deep .ngx-mat-colorpicker-content {
+  background-color: #303030 !important;
+}
+
+::ng-deep .ngx-mat-colorpicker-content .mat-input-element {
+  color: white !important;
+}
+
+::ng-deep
+  .ngx-mat-color-canvas
+  .color-canvas-row:nth-of-type(2)
+  .mat-form-field:first-of-type
+  .symbol {
+  color: white !important;
+}
