@@ -4,12 +4,7 @@ import { APIService } from './API.service';
 
 import { AwsCategoryService } from './aws-category.service';
 import { CreateCategoryInput as APICreateInput } from './API.service';
-import {
-  createMutation,
-  categoryInput,
-  categoryResult,
-  queryIdResult,
-} from './test-data/aws-category-service-data';
+import * as DummyData from './test-data/aws-category-service-data';
 
 describe('AwsCategoryService', () => {
   let service: AwsCategoryService;
@@ -30,10 +25,10 @@ describe('AwsCategoryService', () => {
         .setup((x) =>
           x.CreateCategory(TypeMoq.It.is((y) => (y as APICreateInput) !== null))
         )
-        .returns((y) => Promise.resolve(createMutation));
+        .returns((y) => Promise.resolve(DummyData.createMutation));
       const sut = new AwsCategoryService(apiMock.object);
 
-      await expectAsync(sut.create(categoryInput)).toBeResolved();
+      await expectAsync(sut.create(DummyData.categoryInput)).toBeResolved();
       expect(
         apiMock.verify(
           (x) => x.CreateCategory(TypeMoq.It.isAny()),
@@ -51,7 +46,7 @@ describe('AwsCategoryService', () => {
         .returns((y) => Promise.reject());
       const sut = new AwsCategoryService(apiMock.object);
 
-      await expectAsync(sut.create(categoryInput)).toBeRejectedWith(
+      await expectAsync(sut.create(DummyData.categoryInput)).toBeRejectedWith(
         'Category TestCat could not be added.'
       );
       expect(
@@ -86,10 +81,12 @@ describe('AwsCategoryService', () => {
       const apiMock = TypeMoq.Mock.ofType(APIService);
       apiMock
         .setup((x) => x.GetCategory(TypeMoq.It.isAnyString()))
-        .returns((y) => Promise.resolve(queryIdResult));
+        .returns((y) => Promise.resolve(DummyData.queryIdResult));
       const sut = new AwsCategoryService(apiMock.object);
 
-      await expectAsync(sut.getById('0')).toBeResolvedTo(categoryResult);
+      await expectAsync(sut.getById('0')).toBeResolvedTo(
+        DummyData.categoryResult
+      );
       expect(
         apiMock.verify(
           (x) => x.GetCategory(TypeMoq.It.isAnyString()),
@@ -100,9 +97,61 @@ describe('AwsCategoryService', () => {
   });
 
   describe('getAll', () => {
-    it('should ', () => {});
+    it('should reject if categories could not be queried', async () => {
+      const apiMock = TypeMoq.Mock.ofType(APIService);
+      apiMock.setup((x) => x.ListCategorys()).returns((y) => Promise.reject());
+      const sut = new AwsCategoryService(apiMock.object);
 
-    it('should ', () => {});
+      await expectAsync(sut.getAll()).toBeRejectedWith(
+        'Failed to query all Categories.'
+      );
+      expect(
+        apiMock.verify((x) => x.ListCategorys(), TypeMoq.Times.exactly(1))
+      ).toBeUndefined();
+    });
+
+    it('should accept if no categoried exist', async () => {
+      const apiMock = TypeMoq.Mock.ofType(APIService);
+      apiMock
+        .setup((x) => x.ListCategorys())
+        .returns((y) => Promise.resolve(DummyData.listIdResultEmpty));
+      const sut = new AwsCategoryService(apiMock.object);
+
+      await expectAsync(sut.getAll()).toBeResolvedTo(
+        DummyData.allCategoriesEmpty
+      );
+      expect(
+        apiMock.verify((x) => x.ListCategorys(), TypeMoq.Times.exactly(1))
+      ).toBeUndefined();
+    });
+
+    it('should accept if categories were successfully queried (single category)', async () => {
+      const apiMock = TypeMoq.Mock.ofType(APIService);
+      apiMock
+        .setup((x) => x.ListCategorys())
+        .returns((y) => Promise.resolve(DummyData.listIdResultSingle));
+      const sut = new AwsCategoryService(apiMock.object);
+
+      await expectAsync(sut.getAll()).toBeResolvedTo(
+        DummyData.allCategoriesSingle
+      );
+      expect(
+        apiMock.verify((x) => x.ListCategorys(), TypeMoq.Times.exactly(1))
+      ).toBeUndefined();
+    });
+
+    it('should accept if categories were successfully queried (multiple categories)', async () => {
+      const apiMock = TypeMoq.Mock.ofType(APIService);
+      apiMock
+        .setup((x) => x.ListCategorys())
+        .returns((y) => Promise.resolve(DummyData.listIdResult));
+      const sut = new AwsCategoryService(apiMock.object);
+
+      await expectAsync(sut.getAll()).toBeResolvedTo(DummyData.allCategories);
+      expect(
+        apiMock.verify((x) => x.ListCategorys(), TypeMoq.Times.exactly(1))
+      ).toBeUndefined();
+    });
   });
 
   describe('update', () => {

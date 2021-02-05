@@ -51,7 +51,30 @@ export class AwsCategoryService implements CategoryService {
 
   getAll(): Promise<Category[]> {
 
-    throw new Error('Method not implemented.');
+    return this.api.ListCategorys().then(
+      (result) => {
+        const list: Category[] = [];
+        result.items
+          ?.filter((val) => val !== null)
+          .forEach((item) =>
+            list.push({
+              name: item?.name,
+              id: item?.id,
+              color: item?.color,
+              reminderInterval: item?.reminderInterval,
+              excludeFromStatistics: item?.excludeFromStatistics
+                ?.filter((val) => val !== null)
+                .map((v) =>
+                  v === APIStatisticType.AbsoluteTime
+                    ? StatisticType.absoluteTime
+                    : StatisticType.relativeTime
+                ),
+            } as Category)
+          );
+        return list;
+      },
+      () => Promise.reject('Failed to query all Categories.')
+    );
   }
 
   update(category: Category): Promise<void> {
