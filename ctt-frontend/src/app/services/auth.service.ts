@@ -1,3 +1,4 @@
+import { stringify } from '@angular/compiler/src/util';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { onAuthUIStateChange, CognitoUserInterface, AuthState } from '@aws-amplify/ui-components';
@@ -7,6 +8,8 @@ import { Observable, Subject } from 'rxjs';
   providedIn: 'root'
 })
 export class AuthService {
+  static baseURL = ''
+
   signedInSubject = new Subject<boolean>();
   usernameSubject = new Subject<string>();
   isSignedIn = false;
@@ -14,7 +17,7 @@ export class AuthService {
   user: CognitoUserInterface | undefined;
   authState!: AuthState;
   // store the URL so we can redirect after logging in
-  redirectUrl?: string;
+  redirectUrl: string = AuthService.baseURL;
 
 
   constructor(router: Router) {
@@ -25,12 +28,12 @@ export class AuthService {
       if (this.isSignedIn) {
         router.navigate([this.redirectUrl])
       }
-      this.signedInSubject.next(
-        this.isSignedIn
-      )
-      this.usernameSubject.next(
-        this.user.username
-      )
+      this.signedInSubject.next(this.isSignedIn)
+      var username: string = '';
+      if (this.user) {
+        username = this.user.username!;
+      }
+      this.usernameSubject.next(username)
     });
   }
 
@@ -41,9 +44,4 @@ export class AuthService {
   username(): Observable<String> {
     return this.usernameSubject.asObservable();
   }
-
-  /*
-  ngOnDestroy() {
-    return onAuthUIStateChange;
-  }*/
 }

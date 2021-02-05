@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormFieldTypes } from '@aws-amplify/ui-components';
 import { AuthService } from 'src/app/services/auth.service';
-import { RouterModule, Routes } from '@angular/router';
+import { Router, RouterModule, Routes } from '@angular/router';
 
 @Component({
   selector: 'app-authentication',
@@ -15,8 +15,14 @@ export class AuthenticationComponent implements OnInit {
     { type: "email" }
   ];
 
-  constructor() {}
+  constructor(
+    private router: Router,
+    private authService: AuthService
+    ) {}
 
-  ngOnInit(): void {}
-    
+  ngOnInit(): void {
+    if (this.authService.isSignedIn) {
+      this.router.navigate([AuthService.baseURL])
+    }
+  }
 }
