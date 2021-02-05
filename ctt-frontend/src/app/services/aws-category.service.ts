@@ -13,7 +13,6 @@ import { StatisticType } from '../interfaces/statistics';
 export class AwsCategoryService implements CategoryService {
   constructor(private api: APIService) {}
 
-
   create(input: CreateCategoryInput): Promise<void> {
     const i: APICreateInput = {
       name: input.name,
@@ -28,6 +27,7 @@ export class AwsCategoryService implements CategoryService {
     return this.api.CreateCategory(i).then(
       () => Promise.resolve(),
       () => Promise.reject(`Category ${input.name} could not be added.`)
+    );
   }
 
   getById(id: string): Promise<Category> {
@@ -47,10 +47,10 @@ export class AwsCategoryService implements CategoryService {
             ),
         } as Category),
       () => Promise.reject(`Category with id '${id}' does not exist.`)
+    );
   }
 
   getAll(): Promise<Category[]> {
-
     return this.api.ListCategorys().then(
       (result) => {
         const list: Category[] = [];
@@ -78,7 +78,23 @@ export class AwsCategoryService implements CategoryService {
   }
 
   update(category: Category): Promise<void> {
-
-    throw new Error('Method not implemented.');
+    const i: APIUpdateInput = {
+      id: category.id,
+      name: category.name,
+      color: category.color,
+      reminderInterval: category.reminderInterval,
+      excludeFromStatistics: category.excludeFromStatistics.map((v) =>
+        v === StatisticType.absoluteTime
+          ? APIStatisticType.AbsoluteTime
+          : APIStatisticType.RelativeTime
+      ),
+    };
+    return this.api.UpdateCategory(i).then(
+      () => Promise.resolve(),
+      (result) =>
+        Promise.reject(
+          `Category ${category.name} with id ${category.id} could not be updated.`
+        )
+    );
   }
 }

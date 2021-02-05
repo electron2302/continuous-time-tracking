@@ -3,7 +3,10 @@ import * as TypeMoq from 'typemoq';
 import { APIService } from './API.service';
 
 import { AwsCategoryService } from './aws-category.service';
-import { CreateCategoryInput as APICreateInput } from './API.service';
+import {
+  CreateCategoryInput as APICreateInput,
+  UpdateCategoryMutation,
+} from './API.service';
 import * as DummyData from './test-data/aws-category-service-data';
 
 describe('AwsCategoryService', () => {
@@ -31,7 +34,10 @@ describe('AwsCategoryService', () => {
       await expectAsync(sut.create(DummyData.categoryInput)).toBeResolved();
       expect(
         apiMock.verify(
-          (x) => x.CreateCategory(TypeMoq.It.isAny()),
+          (x) =>
+            x.CreateCategory(
+              TypeMoq.It.is((y) => (y as APICreateInput) !== null)
+            ),
           TypeMoq.Times.exactly(1)
         )
       ).toBeUndefined();
@@ -51,7 +57,10 @@ describe('AwsCategoryService', () => {
       );
       expect(
         apiMock.verify(
-          (x) => x.CreateCategory(TypeMoq.It.isAny()),
+          (x) =>
+            x.CreateCategory(
+              TypeMoq.It.is((y) => (y as APICreateInput) !== null)
+            ),
           TypeMoq.Times.exactly(1)
         )
       ).toBeUndefined();
@@ -85,7 +94,7 @@ describe('AwsCategoryService', () => {
       const sut = new AwsCategoryService(apiMock.object);
 
       await expectAsync(sut.getById('0')).toBeResolvedTo(
-        DummyData.categoryResult
+        DummyData.categoryValue
       );
       expect(
         apiMock.verify(
@@ -155,8 +164,52 @@ describe('AwsCategoryService', () => {
   });
 
   describe('update', () => {
-    it('should ', () => {});
+    it('should reject if update failed', async () => {
+      const apiMock = TypeMoq.Mock.ofType(APIService);
+      apiMock
+        .setup((x) =>
+          x.UpdateCategory(
+            TypeMoq.It.is((y) => (y as UpdateCategoryMutation) !== null)
+          )
+        )
+        .returns((y) => Promise.reject());
+      const sut = new AwsCategoryService(apiMock.object);
 
-    it('should ', () => {});
+      await expectAsync(sut.update(DummyData.categoryValue)).toBeRejectedWith(
+        'Category ResultCategory with id 0 could not be updated.'
+      );
+      expect(
+        apiMock.verify(
+          (x) =>
+            x.UpdateCategory(
+              TypeMoq.It.is((y) => (y as UpdateCategoryMutation) !== null)
+            ),
+          TypeMoq.Times.exactly(1)
+        )
+      ).toBeUndefined();
+    });
+
+    it('should accept if update succeeded', async () => {
+      const apiMock = TypeMoq.Mock.ofType(APIService);
+      apiMock
+        .setup((x) =>
+          x.UpdateCategory(
+            TypeMoq.It.is((y) => (y as UpdateCategoryMutation) !== null)
+          )
+        )
+        .returns((y) => Promise.resolve(DummyData.updateCategory));
+      const sut = new AwsCategoryService(apiMock.object);
+
+      await expectAsync(sut.update(DummyData.categoryValue)).toBeResolved();
+      expect(
+        apiMock.verify(
+          (x) =>
+            x.UpdateCategory(
+              TypeMoq.It.is((y) => (y as UpdateCategoryMutation) !== null)
+            ),
+          TypeMoq.Times.exactly(1)
+        )
+      ).toBeUndefined();
+    });
   });
 });

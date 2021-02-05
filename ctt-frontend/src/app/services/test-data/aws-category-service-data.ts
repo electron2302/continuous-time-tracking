@@ -4,6 +4,7 @@ import {
   GetCategoryQuery,
   ListCategorysQuery,
   StatisticType as APIStatisticType,
+  UpdateCategoryMutation,
 } from '../API.service';
 import { CreateCategoryInput } from '../category.service';
 import { Category } from '../../interfaces/category';
@@ -32,7 +33,7 @@ export const createMutation: CreateCategoryMutation = {
   updatedAt: '',
 };
 
-export const categoryResult: Category = {
+export const categoryValue: Category = {
   id: '0',
   name: 'ResultCategory',
   color: '#012345',
@@ -88,7 +89,7 @@ export const listIdResultSingle: ListCategorysQuery = {
   ],
 };
 
-export const allCategoriesSingle: Category[] = [categoryResult];
+export const allCategoriesSingle: Category[] = [categoryValue];
 
 export const listIdResult: ListCategorysQuery = {
   __typename: 'ModelCategoryConnection',
@@ -129,7 +130,7 @@ export const listIdResult: ListCategorysQuery = {
 };
 
 export const allCategories: Category[] = [
-  categoryResult,
+  categoryValue,
   {
     id: '1',
     name: 'ResultCategory 2',
@@ -138,3 +139,19 @@ export const allCategories: Category[] = [
     reminderInterval: 0,
   },
 ];
+
+export const updateCategory: UpdateCategoryMutation = {
+  __typename: 'Category',
+  _deleted: false,
+  _lastChangedAt: 0,
+  _version: 1,
+  activities: null,
+  id: '0',
+  owner: null,
+  updatedAt: '0',
+  createdAt: '0',
+  color: '#00000',
+  name: 'TestCat',
+  excludeFromStatistics: [],
+  reminderInterval: 10,
+};
