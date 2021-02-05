@@ -8,7 +8,7 @@ steps:
   image: node:14
   commands:
   - cd ctt-frontend
-  - npm install
+  - npm ci
 
 - name: "Lint"
   image: node:14
