@@ -14,17 +14,15 @@ export class AwsCategoryService implements CategoryService {
   constructor(private api: APIService) { }
 
   create(input: CreateCategoryInput): Promise<void> {    
-    let i: APICreateInput = {
+    const i: APICreateInput = {
       name: input.name,
       color: input.color,
       reminderInterval: input.reminderInterval,
-      excludeFromStatistics: input.excludeFromStatistics.map((v) => {
-        return (v == StatisticType.AbsoluteTime) ? APIStatistiyType.AbsoluteTime : APIStatistiyType.RelativeTime;
-      }),
+      excludeFromStatistics: input.excludeFromStatistics.map((v) =>
+        (v === StatisticType.AbsoluteTime) ? APIStatistiyType.AbsoluteTime : APIStatistiyType.RelativeTime
+      ),
     };
-
-    this.api.CreateCategory(i).then(() => { return Promise.resolve(); });
-    return Promise.reject(`Category ${ input.name } could not be added`);
+    return this.api.CreateCategory(i).then(() => Promise.resolve(), () => Promise.reject(`Category ${ input.name } could not be added`));
   }
 
   getById(id: string): Promise<Category> {
