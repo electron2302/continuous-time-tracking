@@ -1,11 +1,10 @@
 import { TestBed } from '@angular/core/testing';
 import * as TypeMoq from 'typemoq';
 import { APIService } from './API.service';
-import { CreateCategoryInput } from './category.service'
 
 import { AwsCategoryService } from './aws-category.service';
 import { CreateCategoryInput as APICreateInput } from './API.service';
-import { CreateCategoryMutation as APICreateMutation } from './API.service';
+import { CreateMutation, CategoryInput, CategoryResult, QueryIdResult } from './test-data/aws-category-service-data';
 
 describe('AwsCategoryService', () => {
   let service: AwsCategoryService;
@@ -20,60 +19,42 @@ describe('AwsCategoryService', () => {
   });
 
   describe('create', () => {
-    it('should accept a CreateCategoryInput', () => {
-      const mut: APICreateMutation = {
-        color: '#000000',
-        name: 'TestCat',excludeFromStatistics: [],
-        reminderInterval: 10,
-        activities: null,
-        __typename: 'Category',
-        id: '1',
-        createdAt: '',
-        owner: null,
-        _deleted: false,
-        _lastChangedAt: 0,
-        _version: 1,
-        updatedAt: ''
-      };
-
+    it('should accept a CreateCategoryInput', async () => {
       const apiMock = TypeMoq.Mock.ofType(APIService);
-      apiMock.setup(x => x.CreateCategory(TypeMoq.It.is(y => (y as APICreateInput) !== null))).returns((y) => Promise.resolve(mut));
-      const category: CreateCategoryInput = {
-        color: '#00000',
-        name: 'TestCat',
-        excludeFromStatistics: [],
-        reminderInterval: 10
-      };
+      apiMock.setup(x => x.CreateCategory(TypeMoq.It.is(y => (y as APICreateInput) !== null))).returns((y) => Promise.resolve(CreateMutation));
       const sut = new AwsCategoryService(apiMock.object);
 
-      sut.create(category);
-
+      await expectAsync(sut.create(CategoryInput)).toBeResolved();
       expect(apiMock.verify(x => x.CreateCategory(TypeMoq.It.isAny()), TypeMoq.Times.exactly(1))).toBeUndefined();
     });
 
-    it('should reject promise if category could not be created', async function() {
+    it('should reject promise if category could not be created', async () => {
       const apiMock = TypeMoq.Mock.ofType(APIService);
       apiMock.setup(x => x.CreateCategory(TypeMoq.It.is(y => (y as APICreateInput) !== null))).returns((y) => Promise.reject());
-      const category: CreateCategoryInput = {
-        color: '#000000',
-        name: 'TestCat',
-        excludeFromStatistics: [],
-        reminderInterval: 10
-      };
       const sut = new AwsCategoryService(apiMock.object);
 
-      await expectAsync(sut.create(category)).toBeRejectedWith('Category TestCat could not be added.');
+      await expectAsync(sut.create(CategoryInput)).toBeRejectedWith('Category TestCat could not be added.');
       expect(apiMock.verify(x => x.CreateCategory(TypeMoq.It.isAny()), TypeMoq.Times.exactly(1))).toBeUndefined();
     });
   });
 
   describe('getById', () => {
-    it('should ', () => {
+    it('should reject if no category matches the id', async () => {
+      const apiMock = TypeMoq.Mock.ofType(APIService);
+      apiMock.setup(x => x.GetCategory(TypeMoq.It.isAnyString())).returns((y) => Promise.reject());
+      const sut = new AwsCategoryService(apiMock.object);
 
+      await expectAsync(sut.getById('1')).toBeRejectedWith(`Category with id '1' does not exist.`);
+      expect(apiMock.verify(x => x.GetCategory(TypeMoq.It.isAnyString()), TypeMoq.Times.exactly(1))).toBeUndefined();
     });
 
-    it('should ', () => {
+    it('should accept if a matching category is found', async () => {
+      const apiMock = TypeMoq.Mock.ofType(APIService);
+      apiMock.setup(x => x.GetCategory(TypeMoq.It.isAnyString())).returns((y) => Promise.resolve(QueryIdResult));
+      const sut = new AwsCategoryService(apiMock.object);
 
+      await expectAsync(sut.getById('0')).toBeResolvedTo(CategoryResult);
+      expect(apiMock.verify(x => x.GetCategory(TypeMoq.It.isAnyString()), TypeMoq.Times.exactly(1))).toBeUndefined();
     });
   });
 
