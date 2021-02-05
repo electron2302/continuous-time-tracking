@@ -41,6 +41,7 @@ steps:
     image: node:14
     commands:
       - cd ctt-frontend
+      - npm install -g @aws-amplify/cli
       - npx amplify --help
     #    environment:
     #      USERNAME:
