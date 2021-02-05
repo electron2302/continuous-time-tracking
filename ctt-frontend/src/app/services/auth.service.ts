@@ -41,7 +41,7 @@ export class AuthService {
     return this.signedInSubject.asObservable();
   }
 
-  username(): Observable<String> {
+  usernameObservable(): Observable<String> {
     return this.usernameSubject.asObservable();
   }
 }
