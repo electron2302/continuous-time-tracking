@@ -62,7 +62,7 @@ describe('AwsCategoryService', () => {
       };
       const sut = new AwsCategoryService(apiMock.object);
 
-      await expectAsync(sut.create(category)).toBeRejectedWith('Category TestCat could not be added');
+      await expectAsync(sut.create(category)).toBeRejectedWith('Category TestCat could not be added.');
       expect(apiMock.verify(x => x.CreateCategory(TypeMoq.It.isAny()), TypeMoq.Times.exactly(1))).toBeUndefined();
     });
   });
