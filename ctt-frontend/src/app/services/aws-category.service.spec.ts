@@ -31,7 +31,7 @@ describe('AwsCategoryService', () => {
         .returns((y) => Promise.resolve(DummyData.createMutation));
       const sut = new AwsCategoryService(apiMock.object);
 
-      await expectAsync(sut.create(DummyData.categoryInput)).toBeResolved();
+      await expectAsync(sut.create(DummyData.categoryInput)).toBeResolvedTo(DummyData.categoryValue);
       expect(
         apiMock.verify(
           (x) =>
@@ -53,7 +53,7 @@ describe('AwsCategoryService', () => {
       const sut = new AwsCategoryService(apiMock.object);
 
       await expectAsync(sut.create(DummyData.categoryInput)).toBeRejectedWith(
-        'Category TestCat could not be added.'
+        `Category ${DummyData.categoryValue.name} could not be added.`
       );
       expect(
         apiMock.verify(

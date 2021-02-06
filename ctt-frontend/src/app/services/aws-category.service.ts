@@ -13,7 +13,7 @@ import { StatisticType } from '../interfaces/statistics';
 export class AwsCategoryService implements CategoryService {
   constructor(private api: APIService) {}
 
-  create(input: CreateCategoryInput): Promise<void> {
+  create(input: CreateCategoryInput): Promise<Category> {
     const i: APICreateInput = {
       name: input.name,
       color: input.color,
@@ -25,7 +25,19 @@ export class AwsCategoryService implements CategoryService {
       ),
     };
     return this.api.CreateCategory(i).then(
-      () => Promise.resolve(),
+      (result) => Promise.resolve({
+        color: result.color,
+        id: result.id,
+        name: result.name,
+        reminderInterval: result.reminderInterval,
+        excludeFromStatistics: result.excludeFromStatistics
+        ?.filter((val) => val !== null)
+        .map((v) =>
+          v === APIStatisticType.AbsoluteTime
+            ? StatisticType.absoluteTime
+            : StatisticType.relativeTime
+        ),
+      } as Category),
       () => Promise.reject(`Category ${input.name} could not be added.`)
     );
   }

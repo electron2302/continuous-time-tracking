@@ -14,7 +14,7 @@ export abstract class CategoryService {
    *
    * @param input, the category to create.
    */
-  abstract create(input: CreateCategoryInput): Promise<void>;
+  abstract create(input: CreateCategoryInput): Promise<Category>;
 
   /**
    * Get an existing category by an id.

@@ -11,20 +11,20 @@ import { Category } from '../../interfaces/category';
 import { StatisticType } from 'src/app/interfaces/statistics';
 
 export const categoryInput: CreateCategoryInput = {
-  color: '#00000',
-  name: 'TestCat',
-  excludeFromStatistics: [],
+  color: '#012345',
+  name: 'ResultCategory',
+  excludeFromStatistics: [StatisticType.absoluteTime],
   reminderInterval: 10,
 };
 
 export const createMutation: CreateCategoryMutation = {
-  color: '#000000',
-  name: 'TestCat',
-  excludeFromStatistics: [],
+  color: '#012345',
+  name: 'ResultCategory',
+  excludeFromStatistics: [APIStatisticType.AbsoluteTime],
   reminderInterval: 10,
   activities: null,
   __typename: 'Category',
-  id: '1',
+  id: '0',
   createdAt: '',
   owner: null,
   _deleted: false,
@@ -38,7 +38,7 @@ export const categoryValue: Category = {
   name: 'ResultCategory',
   color: '#012345',
   excludeFromStatistics: [StatisticType.absoluteTime],
-  reminderInterval: 5,
+  reminderInterval: 10,
 };
 
 export const queryIdResult: GetCategoryQuery = {
@@ -46,7 +46,7 @@ export const queryIdResult: GetCategoryQuery = {
   name: 'ResultCategory',
   color: '#012345',
   excludeFromStatistics: [APIStatisticType.AbsoluteTime],
-  reminderInterval: 5,
+  reminderInterval: 10,
   __typename: 'Category',
   _deleted: false,
   _lastChangedAt: 0,
@@ -76,7 +76,7 @@ export const listIdResultSingle: ListCategorysQuery = {
       name: 'ResultCategory',
       color: '#012345',
       excludeFromStatistics: [APIStatisticType.AbsoluteTime],
-      reminderInterval: 5,
+      reminderInterval: 10,
       __typename: 'Category',
       _deleted: false,
       _lastChangedAt: 0,
@@ -101,7 +101,7 @@ export const listIdResult: ListCategorysQuery = {
       name: 'ResultCategory',
       color: '#012345',
       excludeFromStatistics: [APIStatisticType.AbsoluteTime],
-      reminderInterval: 5,
+      reminderInterval: 10,
       __typename: 'Category',
       _deleted: false,
       _lastChangedAt: 0,
