@@ -23,7 +23,7 @@ export class AwsCategoryService implements CategoryService {
           ? APIStatisticType.AbsoluteTime
           : APIStatisticType.RelativeTime
       ),
-    };
+    } as APICreateInput;
     return this.api.CreateCategory(i).then(
       (result) =>
         Promise.resolve({
@@ -39,7 +39,7 @@ export class AwsCategoryService implements CategoryService {
                 : StatisticType.relativeTime
             ),
         } as Category),
-      () => Promise.reject(`Category ${input.name} could not be added.`)
+      (_err) => Promise.reject(`Category ${input.name} could not be added.`)
     );
   }
 

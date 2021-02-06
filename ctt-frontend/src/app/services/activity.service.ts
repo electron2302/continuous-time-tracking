@@ -1,5 +1,6 @@
 import { Observable } from 'rxjs';
-import { Activity, Category } from '../../models';
+import { Activity } from '../interfaces/activity';
+import { Category } from '../interfaces/category';
 
 export interface CreateActivityInput {
   categoryID: string;
