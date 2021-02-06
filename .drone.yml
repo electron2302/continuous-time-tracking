@@ -37,7 +37,7 @@ steps:
   #      from_secret: codecov-token
   #  depends_on: [ "Test & Coverage" ]
 
-  - name: "Deploy to development "
+  - name: "Deploy to development"
     image: node:14
     commands:
       - cd ctt-frontend
@@ -46,7 +46,8 @@ steps:
       - echo "[default]" > ~/.aws/credentials
       - echo "aws_access_key_id=$KEYID" > ~/.aws/credentials
       - echo "aws_secret_access_key=$KEYSECRET" > ~/.aws/credentials
-      - npx amplify pull
+      - npx amplify env checkout dev
+      - npx amplify publish --yes
     environment:
       KEYID:
         from_secret: aws_access_key_id
@@ -55,7 +56,6 @@ steps:
     when:
       branch:
         - develop
-        - 3-aws-deployment
       event:
         - push
     depends_on: ["Test & Coverage", "Lint"]
