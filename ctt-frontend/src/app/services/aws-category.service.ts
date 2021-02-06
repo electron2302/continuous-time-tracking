@@ -25,19 +25,20 @@ export class AwsCategoryService implements CategoryService {
       ),
     };
     return this.api.CreateCategory(i).then(
-      (result) => Promise.resolve({
-        color: result.color,
-        id: result.id,
-        name: result.name,
-        reminderInterval: result.reminderInterval,
-        excludeFromStatistics: result.excludeFromStatistics
-        ?.filter((val) => val !== null)
-        .map((v) =>
-          v === APIStatisticType.AbsoluteTime
-            ? StatisticType.absoluteTime
-            : StatisticType.relativeTime
-        ),
-      } as Category),
+      (result) =>
+        Promise.resolve({
+          color: result.color,
+          id: result.id,
+          name: result.name,
+          reminderInterval: result.reminderInterval,
+          excludeFromStatistics: result.excludeFromStatistics
+            ?.filter((val) => val !== null)
+            .map((v) =>
+              v === APIStatisticType.AbsoluteTime
+                ? StatisticType.absoluteTime
+                : StatisticType.relativeTime
+            ),
+        } as Category),
       () => Promise.reject(`Category ${input.name} could not be added.`)
     );
   }

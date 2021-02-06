@@ -65,7 +65,11 @@ export abstract class ActivityService {
    * @param to, the excluded end time.
    * @param category, the optional category, to filter the activities.
    */
-  abstract getBetween(from: Date, to: Date, category?: Category): Promise<Activity[]>;
+  abstract getBetween(
+    from: Date,
+    to: Date,
+    category?: Category
+  ): Promise<Activity[]>;
 
   /**
    * Subscribe to all activities between from and to.
@@ -75,5 +79,8 @@ export abstract class ActivityService {
    * @param from, the optional and included start time.
    * @param to, the optional and excluded end time
    */
-  abstract subscribeToActivities(from?: Date, to?: Date): Observable<Activity[]>;
+  abstract subscribeToActivities(
+    from?: Date,
+    to?: Date
+  ): Observable<Activity[]>;
 }

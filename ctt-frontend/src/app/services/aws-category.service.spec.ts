@@ -31,7 +31,9 @@ describe('AwsCategoryService', () => {
         .returns((y) => Promise.resolve(DummyData.createMutation));
       const sut = new AwsCategoryService(apiMock.object);
 
-      await expectAsync(sut.create(DummyData.categoryInput)).toBeResolvedTo(DummyData.categoryValue);
+      await expectAsync(sut.create(DummyData.categoryInput)).toBeResolvedTo(
+        DummyData.categoryValue
+      );
       expect(
         apiMock.verify(
           (x) =>
