@@ -26,7 +26,29 @@ export class AwsCategoryService extends CategoryService {
     });
   }
   getAll(): Promise<Category[]> {
-    throw new Error('Method not implemented.');
+    return Promise.resolve([
+      {
+        id: 'a',
+        color: '#238a85',
+        name: 'Sleep',
+        reminderInterval: 0,
+        excludeFromStatistics: [],
+      },
+      {
+        id: 'b',
+        color: '#123456',
+        name: 'Work',
+        reminderInterval: 0,
+        excludeFromStatistics: [],
+      },
+      {
+        id: 'c',
+        color: '#3a7732',
+        name: 'Learn',
+        reminderInterval: 0,
+        excludeFromStatistics: [],
+      },
+    ]);
   }
   update(category: Category): Promise<void> {
     return Promise.resolve();
