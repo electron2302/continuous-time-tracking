@@ -5,6 +5,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 import { AmplifyUIAngularModule } from '@aws-amplify/ui-angular';
+import Amplify from 'aws-amplify';
+// @ts-ignore
+import awsconfig from '../aws-exports';
+
+import { AuthenticationComponent } from './components/authentication/authentication.component';
+import { AuthService } from './services/auth.service';
+import { AuthGuard } from './guards/auth.guard';
+
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { OverlayModule } from '@angular/cdk/overlay';
@@ -93,9 +101,12 @@ const materialModules = [
   MatTooltipModule,
 ];
 
+Amplify.configure(awsconfig);
+
 @NgModule({
   declarations: [
     AppComponent,
+    AuthenticationComponent,
     EditCategoryComponent,
     NavBarComponent,
     ViewActivitiesComponent,
@@ -115,6 +126,8 @@ const materialModules = [
     { provide: CategoryService, useClass: AwsCategoryService },
     { provide: MAT_COLOR_FORMATS, useValue: NGX_MAT_COLOR_FORMATS },
     APIService,
+    AuthService,
+    AuthGuard,
   ],
   bootstrap: [AppComponent],
 })
