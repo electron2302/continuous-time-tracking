@@ -176,7 +176,7 @@ export class EditCategoryComponent implements OnInit {
       this.category = await this.categoryService.getById(id);
       this.updateFormControl();
     } catch (error) {
-      this.handleError(error, 'Categegory not found');
+      this.handleError(error, 'Category not found');
       this.router.navigate(['category/new']);
     }
   }

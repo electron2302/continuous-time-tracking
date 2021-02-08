@@ -1,0 +1,20 @@
+<mat-card [ngStyle]="{ background: viewableActivity?.color }" id="card">
+  <h1 class="name">
+    {{ viewableActivity?.name }}
+  </h1>
+  <div class="from icon-text">
+    <mat-icon>access_time</mat-icon>
+    <span>{{ viewableActivity?.from | date: 'HH:mm' }}</span>
+  </div>
+  <div class="duration icon-text">
+    <mat-icon [ngClass]="{ blink: viewableActivity?.duration == '' }"
+      >timelapse</mat-icon
+    >
+    <span *ngIf="viewableActivity?.duration == ''">
+      {{ ongoingDuration | async }}
+    </span>
+    <span *ngIf="viewableActivity?.duration != ''">
+      {{ viewableActivity?.duration }}
+    </span>
+  </div>
+</mat-card>
