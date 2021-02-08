@@ -56,7 +56,6 @@ import {
 } from '@angular-material-components/color-picker';
 
 import { EditCategoryComponent } from './components/edit-category/edit-category.component';
-import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { AwsCategoryService } from './services/aws-category.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CategoryService } from './services/category.service';
@@ -64,6 +63,10 @@ import { ViewActivitiesComponent } from './components/view-activities/view-activ
 import { ElementActivityComponent } from './components/element-activity/element-activity.component';
 import { ActivityService } from './services/activity.service';
 import { AwsActivityService } from './services/aws-activity.service';
+import { ChangeActivityComponent } from './components/change-activity/change-activity.component';
+import { ViewCategoriesComponent } from './components/view-categories/view-categories.component';
+import { AccountComponent } from './components/account/account.component';
+import { StatisticsComponent } from './components/statistics/statistics.component';
 
 const materialModules = [
   CdkTreeModule,
@@ -108,9 +111,12 @@ Amplify.configure(awsconfig);
     AppComponent,
     AuthenticationComponent,
     EditCategoryComponent,
-    NavBarComponent,
     ViewActivitiesComponent,
     ElementActivityComponent,
+    ChangeActivityComponent,
+    ViewCategoriesComponent,
+    AccountComponent,
+    StatisticsComponent,
   ],
   imports: [
     AmplifyUIAngularModule,
