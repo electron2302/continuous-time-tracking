@@ -75,4 +75,11 @@ export class AppComponent implements OnDestroy, OnInit {
     this.authService.logout();
     this.sidenav?.close();
   }
+
+  closeSideNav(): void {
+    if (!this.desktopQuery.matches) {
+      this.sidenav?.close();
+    }
+  }
+
 }

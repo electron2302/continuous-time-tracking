@@ -19,14 +19,14 @@
       [mode]="mobileQuery.matches ? 'over' : 'side'"
       [fixedInViewport]="mobileQuery.matches"
       fixedTopGap="56"
-      [opened]="desktopQuery.matches ? true : undefined"
+      [opened]="desktopQuery.matches && isSignedIn ? true : undefined"
     >
       <mat-nav-list>
         <!-- Account -->
         <h2 matSubheader>Account</h2>
         <a
           mat-list-item
-          (click)="snav.close()"
+          (click)="closeSideNav()"
           routerLink="account"
           routerLinkActive="is-active"
         >
@@ -42,7 +42,7 @@
         <a
           *ngFor="let item of items"
           mat-list-item
-          (click)="snav.close()"
+          (click)="closeSideNav()"
           [routerLink]="[item.route]"
           routerLinkActive="is-active"
           [routerLinkActiveOptions]="{ exact: true }"
