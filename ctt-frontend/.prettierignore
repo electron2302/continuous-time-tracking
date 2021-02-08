@@ -4,3 +4,4 @@ amplify
 src/app/services/API.service.ts
 src/models/
 src/graphql/
+coverage

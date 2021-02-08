@@ -48,6 +48,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { APIService } from './services/API.service';
 import {
   MAT_COLOR_FORMATS,
   NgxMatColorPickerModule,
@@ -124,6 +125,7 @@ Amplify.configure(awsconfig);
     { provide: ActivityService, useClass: AwsActivityService },
     { provide: CategoryService, useClass: AwsCategoryService },
     { provide: MAT_COLOR_FORMATS, useValue: NGX_MAT_COLOR_FORMATS },
+    APIService,
     AuthService,
     AuthGuard,
   ],
