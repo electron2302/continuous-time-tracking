@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Activity } from '../interfaces/activity';
@@ -7,6 +8,7 @@ import {
   APIService,
   CreateActivityInput as APICreateInput,
   UpdateActivityInput,
+  DeleteActivityInput,
 } from './API.service';
 
 @Injectable({
@@ -31,6 +33,7 @@ export class AwsActivityService implements ActivityService {
           categoryID: result.categoryID,
           from: new Date(Date.parse(result.from)),
           id: result.id,
+          version: result._version,
         } as Activity),
       () =>
         Promise.reject(
@@ -44,74 +47,73 @@ export class AwsActivityService implements ActivityService {
       id: activity.id,
       categoryID: activity.categoryID,
       from: activity.from.toISOString(),
+      _version: activity.version,
     };
     return this.api.UpdateActivity(updateActivity).then(
       () => Promise.resolve(),
-      () => Promise.reject(`Could not update activity from ${activity.from.toISOString()}`)
+      () =>
+        Promise.reject(
+          `Could not update activity from ${activity.from.toISOString()}`
+        )
     );
   }
 
   delete(activity: Activity): Promise<void> {
-    throw new Error('Method not implemented.');
+    const deleteActivity: DeleteActivityInput = {
+      id: activity.id,
+      _version: activity.version,
+    };
+    return this.api.DeleteActivity(deleteActivity).then(
+      () => Promise.resolve(),
+      () =>
+        Promise.reject(
+          `Could not delete activity from ${activity.from.toISOString()}`
+        )
+    );
   }
+
   getAll(): Promise<Activity[]> {
-    throw new Error('Method not implemented.');
+    return this.api.ListActivitys().then(
+      (result) => {
+        const list: Activity[] = [];
+        result.items?.filter((item) => {
+          if (item == null) {
+            return;
+          }
+          list.push({
+            categoryID: item.categoryID,
+            from: new Date(Date.parse(item.from)),
+            id: item.id,
+            version: item._version,
+          } as Activity);
+        });
+        return list;
+      },
+      () => Promise.reject('Could not query activities.')
+    );
   }
+
   getById(id: string): Promise<Activity> {
-    throw new Error('Method not implemented.');
+    return this.api.GetActivity(id).then(
+      (result) =>
+        Promise.resolve({
+          categoryID: result.categoryID,
+          from: new Date(Date.parse(result.from)),
+          id: result.id,
+          version: result._version,
+        } as Activity),
+      () => Promise.reject(`Could not get activity with id ${id}`)
+    );
   }
+
   getByCategory(category: Category): Promise<Activity[]> {
     throw new Error('Method not implemented.');
   }
+
   getBetween(from: Date, to: Date, category?: Category): Promise<Activity[]> {
-    if (from > new Date()) {
-      return Promise.resolve([]);
-    }
-    if (from.getDate() < new Date().getDate()) {
-      return new Promise((resolve) =>
-        setTimeout(() => {
-          resolve([
-            {
-              categoryID: 'a',
-              from: new Date(2021, 1, 4, 0, 0),
-              id: 'a1',
-            },
-            {
-              categoryID: 'b',
-              from: new Date(2021, 1, 4, 15, 0),
-              id: 'b1',
-            },
-          ]);
-        }, 1_000)
-      );
-    }
-    return new Promise((resolve) =>
-      setTimeout(() => {
-        resolve([
-          {
-            categoryID: 'a',
-            from: new Date(2021, 1, 5, 0, 0),
-            id: 'a1',
-          },
-          {
-            categoryID: 'b',
-            from: new Date(2021, 1, 5, 7, 0),
-            id: 'b1',
-          },
-          {
-            categoryID: 'a',
-            from: new Date(2021, 1, 5, 11, 0),
-            id: 'a2',
-          },
-          {
-            categoryID: 'c',
-            from: new Date(2021, 1, 5, 12, 0),
-            id: 'c1',
-          },
-        ]);
-      }, 1_000)
-    );
+    throw new Error('Method not implemented.');
   }
+
   subscribeToActivities(from?: Date, to?: Date): Observable<Activity[]> {
     throw new Error('Method not implemented.');
   }
