@@ -2,6 +2,7 @@ import { MediaMatcher } from '@angular/cdk/layout';
 import { ChangeDetectorRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Component } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
+import { Router } from '@angular/router';
 import { AuthService } from './services/auth.service';
 
 @Component({
@@ -46,7 +47,8 @@ export class AppComponent implements OnDestroy, OnInit {
   constructor(
     changeDetectorRef: ChangeDetectorRef,
     media: MediaMatcher,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this.desktopQuery = media.matchMedia('(min-width: 1200px)');
@@ -74,5 +76,15 @@ export class AppComponent implements OnDestroy, OnInit {
   logout(): void {
     this.authService.logout();
     this.sidenav?.close();
+  }
+
+  closeSideNav(): void {
+    if (!this.desktopQuery.matches) {
+      this.sidenav?.close();
+    }
+  }
+
+  navigateHome(): void {
+    this.router.navigate(['']);
   }
 }
