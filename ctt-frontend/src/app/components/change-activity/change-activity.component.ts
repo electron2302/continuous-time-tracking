@@ -1,4 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { nextDayMidnight, startOfToday } from '../../helper/time';
+import { Activity } from '../../interfaces/activity';
+import { Category, toCategoryMap } from '../../interfaces/category';
+import {
+  toViewableActivities,
+  ViewableActivity,
+} from '../../interfaces/viewable-activity';
 import { ActivityService } from '../../services/activity.service';
 import { CategoryService } from '../../services/category.service';
 
@@ -8,10 +15,38 @@ import { CategoryService } from '../../services/category.service';
   styleUrls: ['./change-activity.component.scss'],
 })
 export class ChangeActivityComponent implements OnInit {
+  public categories: Category[] = [];
+  public categoryById: Map<string, Category> = new Map<string, Category>();
+  public lastActivities: ViewableActivity[] = [];
+  public loading = true;
+
   constructor(
     private activityService: ActivityService,
     private categoryService: CategoryService
   ) {}
 
-  ngOnInit(): void {}
+  async ngOnInit(): Promise<void> {
+    await this.getCategories();
+    this.updateActivites(
+      await this.activityService.getBetween(
+        startOfToday(),
+        nextDayMidnight(startOfToday())
+      )
+    );
+    this.activityService.subscribeToActivities().subscribe((next) => {
+      this.loading = true;
+      this.updateActivites(next);
+    });
+  }
+
+  private async getCategories(): Promise<void> {
+    this.categories = await this.categoryService.getAll();
+    this.categoryById = toCategoryMap(this.categories);
+  }
+
+  private updateActivites(activities: Activity[]): void {
+    activities = activities.slice(-1);
+    this.lastActivities = toViewableActivities(this.categoryById, activities);
+    this.loading = false;
+  }
 }

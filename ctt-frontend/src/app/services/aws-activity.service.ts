@@ -56,22 +56,22 @@ export class AwsActivityService extends ActivityService {
         resolve([
           {
             categoryID: 'a',
-            from: new Date(2021, 1, 5, 0, 0),
+            from: new Date(2021, 1, 8, 0, 0),
             id: 'a1',
           },
           {
             categoryID: 'b',
-            from: new Date(2021, 1, 5, 7, 0),
+            from: new Date(2021, 1, 8, 7, 0),
             id: 'b1',
           },
           {
             categoryID: 'a',
-            from: new Date(2021, 1, 5, 11, 0),
+            from: new Date(2021, 1, 8, 8, 0),
             id: 'a2',
           },
           {
             categoryID: 'c',
-            from: new Date(2021, 1, 5, 12, 0),
+            from: new Date(2021, 1, 8, 10, 0),
             id: 'c1',
           },
         ]);
@@ -79,6 +79,6 @@ export class AwsActivityService extends ActivityService {
     );
   }
   subscribeToActivities(from?: Date, to?: Date): Observable<Activity[]> {
-    throw new Error('Method not implemented.');
+    return new Observable();
   }
 }

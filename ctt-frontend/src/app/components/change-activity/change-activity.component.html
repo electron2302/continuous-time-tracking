@@ -1,1 +1,26 @@
-<p>Works</p>
+<app-nav-bar
+  title="Continuous Time Tracking"
+  [showBackButton]="false"
+></app-nav-bar>
+
+<h1>Current activity</h1>
+
+<div *ngIf="loading" class="loading">
+  <mat-spinner></mat-spinner>
+</div>
+
+<div style="margin: 10px" *ngIf="!loading && lastActivities.length > 0">
+  <app-element-activity
+    *ngFor="let activity of lastActivities"
+    [viewableActivity]="activity"
+  >
+  </app-element-activity>
+</div>
+
+<h1>Start new activity</h1>
+
+<div class="buttons">
+  <button mat-button mat-raised-button *ngFor="let category of categories">
+    {{ category.name }}
+  </button>
+</div>
