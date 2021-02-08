@@ -5,6 +5,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 import { AmplifyUIAngularModule } from '@aws-amplify/ui-angular';
+import Amplify from 'aws-amplify';
+// @ts-ignore
+import awsconfig from '../aws-exports';
+
+import { AuthenticationComponent } from './components/authentication/authentication.component';
+import { AuthService } from './services/auth.service';
+import { AuthGuard } from './guards/auth.guard';
+
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { OverlayModule } from '@angular/cdk/overlay';
@@ -51,6 +59,10 @@ import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { AwsCategoryService } from './services/aws-category.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CategoryService } from './services/category.service';
+import { ViewActivitiesComponent } from './components/view-activities/view-activities.component';
+import { ElementActivityComponent } from './components/element-activity/element-activity.component';
+import { ActivityService } from './services/activity.service';
+import { AwsActivityService } from './services/aws-activity.service';
 
 const materialModules = [
   CdkTreeModule,
@@ -88,8 +100,17 @@ const materialModules = [
   MatTooltipModule,
 ];
 
+Amplify.configure(awsconfig);
+
 @NgModule({
-  declarations: [AppComponent, EditCategoryComponent, NavBarComponent],
+  declarations: [
+    AppComponent,
+    AuthenticationComponent,
+    EditCategoryComponent,
+    NavBarComponent,
+    ViewActivitiesComponent,
+    ElementActivityComponent,
+  ],
   imports: [
     AmplifyUIAngularModule,
     AppRoutingModule,
@@ -100,8 +121,11 @@ const materialModules = [
     ...materialModules,
   ],
   providers: [
+    { provide: ActivityService, useClass: AwsActivityService },
     { provide: CategoryService, useClass: AwsCategoryService },
     { provide: MAT_COLOR_FORMATS, useValue: NGX_MAT_COLOR_FORMATS },
+    AuthService,
+    AuthGuard,
   ],
   bootstrap: [AppComponent],
 })

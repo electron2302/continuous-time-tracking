@@ -1,0 +1,32 @@
+<app-nav-bar title="Activities" [showBackButton]="true"></app-nav-bar>
+
+<div class="header">
+  <button mat-button mat-raised-button (click)="changeDay(-1)">
+    <mat-icon inline="true">keyboard_arrow_left</mat-icon>
+  </button>
+
+  <span class="current-day">
+    {{ currentDay | date: 'dd.MM.yyyy' }}
+  </span>
+
+  <button mat-button mat-raised-button (click)="changeDay(+1)">
+    <mat-icon inline="true">keyboard_arrow_right</mat-icon>
+  </button>
+</div>
+
+<div *ngIf="loading" class="loading">
+  <mat-spinner></mat-spinner>
+  <span>Loading activities...</span>
+</div>
+
+<div style="margin: 10px" *ngIf="!loading && viewableActivities.length > 0">
+  <app-element-activity
+    *ngFor="let activity of viewableActivities"
+    [viewableActivity]="activity"
+  >
+  </app-element-activity>
+</div>
+
+<div *ngIf="!loading && viewableActivities.length == 0" class="no-activities">
+  <span>No activites on this day</span>
+</div>

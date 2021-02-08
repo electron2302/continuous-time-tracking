@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-nav-bar',
@@ -16,9 +17,17 @@ export class NavBarComponent implements OnInit {
   @Output()
   backClicked = new EventEmitter<() => void>();
 
-  constructor(private router: Router) {}
+  isSignedInObservable = false;
 
-  ngOnInit(): void {}
+  constructor(private router: Router, private authService: AuthService) {
+    this.authService.isSignedInObserable().subscribe((next) => {
+      this.isSignedInObservable = next;
+    });
+  }
+
+  async ngOnInit(): Promise<void> {
+    this.isSignedInObservable = await this.authService.isSignedIn();
+  }
 
   onBackClicked(): void {
     if (this.backClicked.observers.length > 0) {

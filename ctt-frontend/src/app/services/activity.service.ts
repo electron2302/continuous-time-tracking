@@ -1,18 +1,19 @@
 import { Observable } from 'rxjs';
-import { Activity, Category } from '../../models';
+import { Activity } from '../interfaces/activity';
+import { Category } from '../interfaces/category';
 
 export interface CreateActivityInput {
   categoryID: string;
   from: Date;
 }
 
-export interface ActivityService {
+export abstract class ActivityService {
   /**
    * Create a new activity.
    *
    * @param input, the activity to create.
    */
-  create(input: CreateActivityInput): Promise<void>;
+  abstract create(input: CreateActivityInput): Promise<void>;
 
   /**
    * Insert an activity.
@@ -21,40 +22,40 @@ export interface ActivityService {
    *
    * @param insert, the activity to insert.
    */
-  insert(insert: CreateActivityInput): Promise<Activity>;
+  abstract insert(insert: CreateActivityInput): Promise<Activity>;
 
   /**
    * Update an existing activity
    *
    * @param activity, the activity to update.
    */
-  update(activity: Activity): Promise<void>;
+  abstract update(activity: Activity): Promise<void>;
 
   /**
    * Deletes an existing activity.
    *
    * @param activity, the activity to delete.
    */
-  delete(activity: Activity): Promise<void>;
+  abstract delete(activity: Activity): Promise<void>;
 
   /**
    * Get all activities.
    */
-  getAll(): Promise<Activity[]>;
+  abstract getAll(): Promise<Activity[]>;
 
   /**
    * Get an existing activity by an id.
    *
    * @param id, the id of the activity.
    */
-  getById(id: string): Promise<Activity>;
+  abstract getById(id: string): Promise<Activity>;
 
   /**
    * Get all activities relating a category.
    *
    * @param category, the category to match.
    */
-  getByCategory(category: Category): Promise<Activity[]>;
+  abstract getByCategory(category: Category): Promise<Activity[]>;
 
   /**
    * Get all activities between from and to.
@@ -65,7 +66,11 @@ export interface ActivityService {
    * @param to, the excluded end time.
    * @param category, the optional category, to filter the activities.
    */
-  getBetween(from: Date, to: Date, category?: Category): Promise<Activity[]>;
+  abstract getBetween(
+    from: Date,
+    to: Date,
+    category?: Category
+  ): Promise<Activity[]>;
 
   /**
    * Subscribe to all activities between from and to.
@@ -75,5 +80,8 @@ export interface ActivityService {
    * @param from, the optional and included start time.
    * @param to, the optional and excluded end time
    */
-  subscribeToActivities(from?: Date, to?: Date): Observable<Activity[]>;
+  abstract subscribeToActivities(
+    from?: Date,
+    to?: Date
+  ): Observable<Activity[]>;
 }
