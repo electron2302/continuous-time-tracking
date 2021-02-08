@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import { Injectable } from '@angular/core';
 import { Category } from '../interfaces/category';
 import { APIService } from './API.service';
@@ -29,6 +30,7 @@ export class AwsCategoryService implements CategoryService {
           id: result.id,
           name: result.name,
           reminderInterval: result.reminderInterval,
+          version: result._version,
           excludeFromStatistics: result.excludeFromStatistics
             ?.filter((val) => val !== null)
             .map((v) => this.convertApiStatisticTypeToStatisticType(v)),
@@ -45,6 +47,7 @@ export class AwsCategoryService implements CategoryService {
           id: result.id,
           color: result.color,
           reminderInterval: result.reminderInterval,
+          version: result._version,
           excludeFromStatistics: result.excludeFromStatistics
             ?.filter((val) => val !== null)
             .map((v) => this.convertApiStatisticTypeToStatisticType(v)),
@@ -65,6 +68,7 @@ export class AwsCategoryService implements CategoryService {
               id: item?.id,
               color: item?.color,
               reminderInterval: item?.reminderInterval,
+              version: item?._version,
               excludeFromStatistics: item?.excludeFromStatistics
                 ?.filter((val) => val !== null)
                 .map((v) => this.convertApiStatisticTypeToStatisticType(v)),
@@ -85,6 +89,7 @@ export class AwsCategoryService implements CategoryService {
       excludeFromStatistics: category.excludeFromStatistics.map((v) =>
         this.convertStatisticTypeToApiStatisticType(v)
       ),
+      _version: category.version,
     };
     return this.api.UpdateCategory(i).then(
       () => Promise.resolve(),

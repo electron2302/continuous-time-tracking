@@ -15,4 +15,9 @@ export interface Category {
   reminderInterval: number;
 
   excludeFromStatistics: StatisticType[];
+  /**
+   * Version number is necessary to update the data in the database.
+   * For the update, the version in the database has to be specified.
+   */
+  version: number;
 }

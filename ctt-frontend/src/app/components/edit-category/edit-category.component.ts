@@ -59,6 +59,7 @@ export class EditCategoryComponent implements OnInit {
     name: '',
     excludeFromStatistics: [],
     reminderInterval: 30,
+    version: 1
   };
 
   public statisticTypeSelectEntries: StatisticTypeSelect[] = [];
@@ -164,7 +165,7 @@ export class EditCategoryComponent implements OnInit {
 
   private updateCategory(): void {
     this.category.name = this.nameCtl.value;
-    this.category.color = this.colorCtl.value;
+    this.category.color = `#${this.colorCtl.value.toHex()}`;
     this.category.reminderInterval = this.reminderEnabledCtl.value
       ? this.reminderIntervalCtl.value
       : 0;
