@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
 import {
   onAuthUIStateChange,
@@ -22,12 +22,11 @@ export class AuthService {
   // store the URL so we can redirect after logging in
   private redirectUrl: string = AuthService.baseURL;
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private zone: NgZone) {
     onAuthUIStateChange((authState, authData) => {
       this.authState = authState;
       console.log('CHANGED AUTH UI STATE: ' + authState);
       this.user = authData as CognitoUserInterface;
-      const dricetedUrl = this.getRedirectUrl();
       if (
         this.authState === AuthState.SignedOut ||
         this.authState === AuthState.SignOut
@@ -35,13 +34,13 @@ export class AuthService {
         console.log('SIGN OUT');
         console.log('Router from Auth Service to: ' + router.url);
         console.log('Redirect from Auth Service to: ' + this.getRedirectUrl());
-        this.router.navigate([AuthService.loginURL]);
+        this.navigateToUrl(AuthService.loginURL);
       }
       if (this.isSignedInState()) {
         console.log('SIGNED IN');
         console.log('Router from Auth Service to: ' + router.url);
         console.log('Redirect from Auth Service to: ' + this.getRedirectUrl());
-        this.router.navigate([this.getRedirectUrl()]);
+        this.navigateToUrl(this.getRedirectUrl());
       }
       this.signedInSubject.next(this.isSignedInState());
       let username = '';
@@ -59,10 +58,6 @@ export class AuthService {
       return Auth.currentAuthenticatedUser()
         .then(() => true)
         .catch(() => false);
-      /*
-      return new Promise(() => {
-        this.isSignedInObserable().subscribe((next) => next);
-      }); */
     }
   }
 
@@ -88,5 +83,9 @@ export class AuthService {
 
   private isSignedInState(): boolean {
     return this.authState === AuthState.SignedIn;
+  }
+
+  private navigateToUrl(url: string) {
+    this.zone.run(() => this.router.navigate([url]));
   }
 }
