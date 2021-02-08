@@ -44,7 +44,7 @@ steps:
       - echo "aws_secret_access_key=$KEYSECRET" >> ~/.aws/credentials
       - echo "[default]" > ~/.aws/config
       - echo "region=us-east-1" >> ~/.aws/config
-      - npx amplify pull --envName dev --yes --amplify "{\"appId\":\"d29764zb1c1ba0\"}"
+      - npx amplify pull --appId d29764zb1c1ba0 --envName dev --yes
       - npm run build
     environment:
       KEYID:
