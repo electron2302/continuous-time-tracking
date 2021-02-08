@@ -59,6 +59,10 @@ import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { AwsCategoryService } from './services/aws-category.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CategoryService } from './services/category.service';
+import { ViewActivitiesComponent } from './components/view-activities/view-activities.component';
+import { ElementActivityComponent } from './components/element-activity/element-activity.component';
+import { ActivityService } from './services/activity.service';
+import { AwsActivityService } from './services/aws-activity.service';
 
 const materialModules = [
   CdkTreeModule,
@@ -104,6 +108,8 @@ Amplify.configure(awsconfig);
     AuthenticationComponent,
     EditCategoryComponent,
     NavBarComponent,
+    ViewActivitiesComponent,
+    ElementActivityComponent,
   ],
   imports: [
     AmplifyUIAngularModule,
@@ -115,6 +121,7 @@ Amplify.configure(awsconfig);
     ...materialModules,
   ],
   providers: [
+    { provide: ActivityService, useClass: AwsActivityService },
     { provide: CategoryService, useClass: AwsCategoryService },
     { provide: MAT_COLOR_FORMATS, useValue: NGX_MAT_COLOR_FORMATS },
     AuthService,
