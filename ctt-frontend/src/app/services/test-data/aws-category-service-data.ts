@@ -39,6 +39,7 @@ export const categoryValue: Category = {
   color: '#012345',
   excludeFromStatistics: [StatisticType.absoluteTime],
   reminderInterval: 10,
+  version: 1,
 };
 
 export const queryIdResult: GetCategoryQuery = {
@@ -50,7 +51,7 @@ export const queryIdResult: GetCategoryQuery = {
   __typename: 'Category',
   _deleted: false,
   _lastChangedAt: 0,
-  _version: 2,
+  _version: 1,
   activities: null,
   createdAt: '',
   owner: null,
@@ -80,7 +81,7 @@ export const listIdResultSingle: ListCategorysQuery = {
       __typename: 'Category',
       _deleted: false,
       _lastChangedAt: 0,
-      _version: 2,
+      _version: 1,
       activities: null,
       createdAt: '',
       owner: null,
@@ -105,7 +106,7 @@ export const listIdResult: ListCategorysQuery = {
       __typename: 'Category',
       _deleted: false,
       _lastChangedAt: 0,
-      _version: 2,
+      _version: 1,
       activities: null,
       createdAt: '',
       owner: null,
@@ -120,7 +121,7 @@ export const listIdResult: ListCategorysQuery = {
       __typename: 'Category',
       _deleted: false,
       _lastChangedAt: 1,
-      _version: 1,
+      _version: 2,
       activities: null,
       createdAt: '',
       owner: null,
@@ -137,6 +138,7 @@ export const allCategories: Category[] = [
     color: '#111111',
     excludeFromStatistics: [StatisticType.relativeTime],
     reminderInterval: 0,
+    version: 2,
   },
 ];
 

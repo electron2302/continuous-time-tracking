@@ -59,7 +59,7 @@ export class EditCategoryComponent implements OnInit {
     name: '',
     excludeFromStatistics: [],
     reminderInterval: 30,
-    version: 1
+    version: 1,
   };
 
   public statisticTypeSelectEntries: StatisticTypeSelect[] = [];
