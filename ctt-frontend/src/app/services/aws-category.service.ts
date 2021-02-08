@@ -19,9 +19,7 @@ export class AwsCategoryService implements CategoryService {
       color: input.color,
       reminderInterval: input.reminderInterval,
       excludeFromStatistics: input.excludeFromStatistics.map((v) =>
-        v === StatisticType.absoluteTime
-          ? APIStatisticType.AbsoluteTime
-          : APIStatisticType.RelativeTime
+        this.convertStatisticTypeToApiStatisticType(v)
       ),
     } as APICreateInput;
     return this.api.CreateCategory(i).then(
@@ -33,11 +31,7 @@ export class AwsCategoryService implements CategoryService {
           reminderInterval: result.reminderInterval,
           excludeFromStatistics: result.excludeFromStatistics
             ?.filter((val) => val !== null)
-            .map((v) =>
-              v === APIStatisticType.AbsoluteTime
-                ? StatisticType.absoluteTime
-                : StatisticType.relativeTime
-            ),
+            .map((v) => this.convertApiStatisticTypeToStatisticType(v)),
         } as Category),
       (_err) => Promise.reject(`Category ${input.name} could not be added.`)
     );
@@ -53,11 +47,7 @@ export class AwsCategoryService implements CategoryService {
           reminderInterval: result.reminderInterval,
           excludeFromStatistics: result.excludeFromStatistics
             ?.filter((val) => val !== null)
-            .map((v) =>
-              v === APIStatisticType.AbsoluteTime
-                ? StatisticType.absoluteTime
-                : StatisticType.relativeTime
-            ),
+            .map((v) => this.convertApiStatisticTypeToStatisticType(v)),
         } as Category),
       () => Promise.reject(`Category with id '${id}' does not exist.`)
     );
@@ -77,11 +67,7 @@ export class AwsCategoryService implements CategoryService {
               reminderInterval: item?.reminderInterval,
               excludeFromStatistics: item?.excludeFromStatistics
                 ?.filter((val) => val !== null)
-                .map((v) =>
-                  v === APIStatisticType.AbsoluteTime
-                    ? StatisticType.absoluteTime
-                    : StatisticType.relativeTime
-                ),
+                .map((v) => this.convertApiStatisticTypeToStatisticType(v)),
             } as Category)
           );
         return list;
@@ -97,9 +83,7 @@ export class AwsCategoryService implements CategoryService {
       color: category.color,
       reminderInterval: category.reminderInterval,
       excludeFromStatistics: category.excludeFromStatistics.map((v) =>
-        v === StatisticType.absoluteTime
-          ? APIStatisticType.AbsoluteTime
-          : APIStatisticType.RelativeTime
+        this.convertStatisticTypeToApiStatisticType(v)
       ),
     };
     return this.api.UpdateCategory(i).then(
@@ -109,5 +93,21 @@ export class AwsCategoryService implements CategoryService {
           `Category ${category.name} with id ${category.id} could not be updated.`
         )
     );
+  }
+
+  private convertStatisticTypeToApiStatisticType(
+    value: StatisticType
+  ): APIStatisticType {
+    return value === StatisticType.absoluteTime
+      ? APIStatisticType.AbsoluteTime
+      : APIStatisticType.RelativeTime;
+  }
+
+  private convertApiStatisticTypeToStatisticType(
+    value: APIStatisticType | null
+  ): StatisticType {
+    return value === APIStatisticType.AbsoluteTime
+      ? StatisticType.absoluteTime
+      : StatisticType.relativeTime;
   }
 }
