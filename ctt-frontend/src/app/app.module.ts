@@ -99,7 +99,12 @@ const materialModules = [
 Amplify.configure(awsconfig);
 
 @NgModule({
-  declarations: [AppComponent, EditCategoryComponent, NavBarComponent],
+  declarations: [
+    AppComponent,
+    AuthenticationComponent,
+    EditCategoryComponent,
+    NavBarComponent,
+  ],
   imports: [
     AmplifyUIAngularModule,
     AppRoutingModule,

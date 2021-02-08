@@ -1,32 +1,49 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { onAuthUIStateChange, CognitoUserInterface, AuthState } from '@aws-amplify/ui-components';
+import {
+  onAuthUIStateChange,
+  CognitoUserInterface,
+  AuthState,
+} from '@aws-amplify/ui-components';
+import { Auth } from 'aws-amplify';
 import { Observable, Subject } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
-  public static baseURL = '';
+  public static loginURL = '/login';
+  private static baseURL = '';
 
   private signedInSubject = new Subject<boolean>();
   private usernameSubject = new Subject<string>();
-  private signedIn = false;
   private user: CognitoUserInterface | undefined;
-  private authState!: AuthState;
+  private authState?: AuthState;
   // store the URL so we can redirect after logging in
   private redirectUrl: string = AuthService.baseURL;
 
-
-  constructor(router: Router) {
+  constructor(private router: Router) {
     onAuthUIStateChange((authState, authData) => {
       this.authState = authState;
+      console.log('CHANGED AUTH UI STATE: ' + authState);
       this.user = authData as CognitoUserInterface;
-      this.setSignedIn(this.authState === AuthState.SignedIn);
-      if (this.isSignedIn()) {
-        router.navigate([this.redirectUrl]);
+      const dricetedUrl = this.getRedirectUrl();
+      if (
+        this.authState === AuthState.SignedOut ||
+        this.authState === AuthState.SignOut
+      ) {
+        console.log('SIGN OUT');
+        console.log('Router from Auth Service to: ' + router.url);
+        console.log('Redirect from Auth Service to: ' + this.getRedirectUrl());
+        this.router.navigate([AuthService.loginURL]);
       }
-      this.signedInSubject.next(this.isSignedIn());
+      if (this.isSignedInState()) {
+        console.log('SIGNED IN');
+        console.log('Router from Auth Service to: ' + router.url);
+        console.log('Redirect from Auth Service to: ' + this.getRedirectUrl());
+        this.router.navigate([this.getRedirectUrl()]);
+      }
+      this.signedInSubject.next(this.isSignedInState());
       let username = '';
       if (this.user && this.user.username) {
         username = this.user.username;
@@ -35,8 +52,18 @@ export class AuthService {
     });
   }
 
-  isSignedIn(): boolean {
-    return this.signedIn;
+  public isSignedIn(): Promise<boolean> {
+    if (this.authState) {
+      return Promise.resolve(this.isSignedInState());
+    } else {
+      return Auth.currentAuthenticatedUser()
+        .then(() => true)
+        .catch(() => false);
+      /*
+      return new Promise(() => {
+        this.isSignedInObserable().subscribe((next) => next);
+      }); */
+    }
   }
 
   isSignedInObserable(): Observable<boolean> {
@@ -47,11 +74,19 @@ export class AuthService {
     return this.usernameSubject.asObservable();
   }
 
+  getRedirectUrl(): string {
+    return this.redirectUrl;
+  }
+
   setRedirectUrl(url: string): void {
     this.redirectUrl = url;
   }
 
-  private setSignedIn(signedIn: boolean): void {
-    this.signedIn = signedIn;
+  getAuthState(): AuthState | undefined {
+    return this.authState;
+  }
+
+  private isSignedInState(): boolean {
+    return this.authState === AuthState.SignedIn;
   }
 }
