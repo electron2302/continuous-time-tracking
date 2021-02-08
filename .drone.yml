@@ -78,3 +78,12 @@ steps:
       dockerfile: ctt-frontend/Dockerfile
       tags: ["develop"]
     depends_on: ["Build develop"]
+
+  - name: "Publish develop"
+    image: joshdvir/drone-ecs-deploy
+    cluster: ctt-cluster
+    service: developen-service
+    image_name: 356962203731.dkr.ecr.us-east-1.amazonaws.com/ctt:develop
+    aws_access_key_id: from_secret: aws_access_key_id
+    aws_secret_access_key: from_secret: aws_secret_access_key
+    depends_on: ["Push develop"]
