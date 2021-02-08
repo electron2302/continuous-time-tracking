@@ -1,15 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { nextDayMidnight } from '../../helper/time';
+import { Category, toCategoryMap } from '../../interfaces/category';
 import {
-  differenceInMs,
-  formatDuration,
-  isToday,
-  nextDayMidnight,
-} from '../../helper/time';
-import { Activity } from '../../interfaces/activity';
-import { Category } from '../../interfaces/category';
+  toViewableActivities,
+  ViewableActivity,
+} from '../../interfaces/viewable-activity';
 import { ActivityService } from '../../services/activity.service';
 import { CategoryService } from '../../services/category.service';
-import { ViewableActivity } from '../element-activity/element-activity.component';
 
 @Component({
   selector: 'app-view-activities',
@@ -44,11 +41,7 @@ export class ViewActivitiesComponent implements OnInit {
   }
 
   private async getCategories(): Promise<void> {
-    const categories = await this.categoryService.getAll();
-    this.categoryById.clear();
-    categories.forEach((c) => {
-      this.categoryById.set(c.id, c);
-    });
+    this.categoryById = toCategoryMap(await this.categoryService.getAll());
   }
 
   private async getActivities(): Promise<void> {
@@ -56,35 +49,10 @@ export class ViewActivitiesComponent implements OnInit {
     const from = this.currentDay;
     const to = nextDayMidnight(new Date(this.currentDay));
     const activities = await this.activityService.getBetween(from, to);
-    this.viewableActivities = this.toViewableActivities(activities);
+    this.viewableActivities = toViewableActivities(
+      this.categoryById,
+      activities
+    );
     this.loading = false;
-  }
-
-  private toViewableActivities(activities: Activity[]): ViewableActivity[] {
-    const result: ViewableActivity[] = [];
-
-    activities.forEach((a, i) => {
-      const category = this.categoryById.get(a.categoryID);
-      if (!category) {
-        return;
-      }
-      let durationMs;
-      if (i < activities.length - 1) {
-        durationMs = differenceInMs(activities[i + 1].from, a.from);
-      } else {
-        if (isToday(a.from)) {
-          durationMs = -1;
-        } else {
-          durationMs = differenceInMs(nextDayMidnight(a.from), a.from);
-        }
-      }
-      result.push({
-        color: category.color,
-        from: a.from,
-        name: category.name,
-        duration: durationMs === -1 ? '' : formatDuration(durationMs),
-      });
-    });
-    return result;
   }
 }

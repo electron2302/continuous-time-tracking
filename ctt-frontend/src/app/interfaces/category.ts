@@ -16,3 +16,11 @@ export interface Category {
 
   excludeFromStatistics: StatisticType[];
 }
+
+export const toCategoryMap = (categories: Category[]) => {
+  const categoryById = new Map<string, Category>();
+  categories.forEach((c) => {
+    categoryById.set(c.id, c);
+  });
+  return categoryById;
+};
