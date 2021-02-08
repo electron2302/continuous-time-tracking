@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { nextDayMidnight, startOfToday } from '../../helper/time';
 import { Activity } from '../../interfaces/activity';
 import { Category, toCategoryMap } from '../../interfaces/category';
@@ -22,7 +23,8 @@ export class ChangeActivityComponent implements OnInit {
 
   constructor(
     private activityService: ActivityService,
-    private categoryService: CategoryService
+    private categoryService: CategoryService,
+    private router: Router
   ) {}
 
   async ngOnInit(): Promise<void> {
@@ -37,6 +39,10 @@ export class ChangeActivityComponent implements OnInit {
       this.loading = true;
       this.updateActivites(next);
     });
+  }
+
+  public navigateToAddCategory() {
+    this.router.navigate(['category/new']);
   }
 
   private async getCategories(): Promise<void> {

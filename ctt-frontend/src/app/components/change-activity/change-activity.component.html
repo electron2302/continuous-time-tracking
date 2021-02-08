@@ -1,26 +1,47 @@
-<app-nav-bar
-  title="Continuous Time Tracking"
-  [showBackButton]="false"
-></app-nav-bar>
-
-<h1>Current activity</h1>
-
-<div *ngIf="loading" class="loading">
+<div *ngIf="loading; else notLoading" class="loading">
   <mat-spinner></mat-spinner>
 </div>
 
-<div style="margin: 10px" *ngIf="!loading && lastActivities.length > 0">
-  <app-element-activity
-    *ngFor="let activity of lastActivities"
-    [viewableActivity]="activity"
+<ng-template #notLoading>
+  <h1>Current activity</h1>
+
+  <div
+    style="margin: 10px"
+    *ngIf="lastActivities.length > 0; else noActivities"
   >
-  </app-element-activity>
-</div>
+    <app-element-activity
+      *ngFor="let activity of lastActivities"
+      [viewableActivity]="activity"
+    >
+    </app-element-activity>
+  </div>
 
-<h1>Start new activity</h1>
+  <ng-template #noActivities>
+    <mat-card class="bg-accent info-card">
+      <mat-icon inline="true">info</mat-icon>
+      <div>
+        You haven't started any activity yet. Start one by clicking one of the
+        buttons bellow!
+      </div>
+    </mat-card>
+  </ng-template>
 
-<div class="buttons">
-  <button mat-button mat-raised-button *ngFor="let category of categories">
-    {{ category.name }}
-  </button>
-</div>
+  <h1>Start new activity</h1>
+
+  <div class="buttons" *ngIf="categories.length > 0; else noCategories">
+    <button mat-button mat-raised-button *ngFor="let category of categories">
+      {{ category.name }}
+    </button>
+  </div>
+  <ng-template #noCategories>
+    <mat-card class="bg-accent info-card">
+      <mat-icon inline="true">info</mat-icon>
+      <div>
+        <p>You haven't created any categories yet!</p>
+        <button mat-button mat-raised-button (click)="navigateToAddCategory()">
+          Add a new category
+        </button>
+      </div>
+    </mat-card>
+  </ng-template>
+</ng-template>
