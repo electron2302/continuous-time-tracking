@@ -5,6 +5,7 @@ import {
   CreateActivityMutation,
   UpdateActivityMutation,
   ListActivitysQuery,
+  GetActivityQuery,
 } from '../API.service';
 
 export const activityResult: Activity = {
@@ -114,4 +115,17 @@ export const activityApiListMulti: ListActivitysQuery = {
   nextToken: null,
   startedAt: null,
   __typename: 'ModelActivityConnection',
+};
+
+export const getActivity: GetActivityQuery = {
+  __typename: 'Activity',
+  _deleted: null,
+  _lastChangedAt: 0,
+  _version: 1,
+  categoryID: '0',
+  createdAt: '',
+  from: new Date(2021, 2, 8, 12, 0).toISOString(),
+  id: '1',
+  owner: null,
+  updatedAt: '',
 };

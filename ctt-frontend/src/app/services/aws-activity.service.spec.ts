@@ -233,4 +233,34 @@ describe('AwsActivityService', () => {
       apiMock.verify((x) => x.ListActivitys(), TypeMoq.Times.once());
     });
   });
+
+  describe('getById', () => {
+    it('should resolve promise on success', async () => {
+      apiMock
+        .setup((x) => x.GetActivity(TypeMoq.It.isAnyString()))
+        .returns(() => Promise.resolve(MockData.getActivity));
+
+      await expectAsync(sut.getById('1')).toBeResolvedTo(
+        MockData.activityResult
+      );
+      apiMock.verify(
+        (x) => x.GetActivity(TypeMoq.It.isAnyString()),
+        TypeMoq.Times.once()
+      );
+    });
+
+    it('should reject promise on fail', async () => {
+      apiMock
+        .setup((x) => x.GetActivity(TypeMoq.It.isAnyString()))
+        .returns(() => Promise.reject());
+
+      await expectAsync(sut.getById('1')).toBeRejectedWith(
+        `Could not get activity with id 1`
+      );
+      apiMock.verify(
+        (x) => x.GetActivity(TypeMoq.It.isAnyString()),
+        TypeMoq.Times.once()
+      );
+    });
+  });
 });
