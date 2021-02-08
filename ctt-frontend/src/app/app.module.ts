@@ -55,7 +55,6 @@ import {
 } from '@angular-material-components/color-picker';
 
 import { EditCategoryComponent } from './components/edit-category/edit-category.component';
-import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { AwsCategoryService } from './services/aws-category.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CategoryService } from './services/category.service';
@@ -111,7 +110,6 @@ Amplify.configure(awsconfig);
     AppComponent,
     AuthenticationComponent,
     EditCategoryComponent,
-    NavBarComponent,
     ViewActivitiesComponent,
     ElementActivityComponent,
     ChangeActivityComponent,
