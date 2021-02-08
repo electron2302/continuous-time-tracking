@@ -77,4 +77,4 @@ steps:
       registry: 356962203731.dkr.ecr.us-east-1.amazonaws.com
       dockerfile: ctt-frontend/Dockerfile
       tags: ["develop"]
-    depends_on: ["Amplify develop"]
+    depends_on: ["Build develop"]
