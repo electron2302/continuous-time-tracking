@@ -30,14 +30,10 @@ steps:
       - "npx ng test --browsers ChromeHeadlessNoSandbox --watch false --progress false --codeCoverage"
     depends_on: ["Install dependencies"]
 
-  #- name: "Upload to codecov"
-  #  image: plugins/codecov
-  #  settings:
-  #    token:
-  #      from_secret: codecov-token
-  #  depends_on: [ "Test & Coverage" ]
-
-  - name: "Deploy to development"
+  ######
+  # CD Branch develop
+  #####
+  - name: "Amplify develop"
     image: node:14
     commands:
       - cd ctt-frontend
@@ -47,7 +43,6 @@ steps:
       - echo "aws_access_key_id=$KEYID" > ~/.aws/credentials
       - echo "aws_secret_access_key=$KEYSECRET" > ~/.aws/credentials
       - npx amplify env checkout dev
-      - npx amplify publish --yes
     environment:
       KEYID:
         from_secret: aws_access_key_id
@@ -56,6 +51,27 @@ steps:
     when:
       branch:
         - develop
+        - 3-aws-deployment
       event:
         - push
     depends_on: ["Test & Coverage", "Lint"]
+
+  - name: "Build develop"
+    image: node:10
+    commands:
+      - cd ctt-frontend
+      - npm run build
+    depends_on: ["Amplify develop"]
+
+  - name: "Push develop"
+    image: plugins/ecr
+    settings:
+      access_key:
+        from_secret: aws_access_key_id
+      secret_key:
+        from_secret: aws_secret_access_key
+      repo: ctt
+      registry: 356962203731.dkr.ecr.us-east-1.amazonaws.com
+      dockerfile: ctt-frontend/Dockerfile
+      tags: ["develop"]
+    depends_on: ["Build develop"]
