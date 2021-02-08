@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { nextDayMidnight } from '../../helper/time';
+import { nextDayMidnight, startOfToday } from '../../helper/time';
 import { Category, toCategoryMap } from '../../interfaces/category';
 import {
   toViewableActivities,
@@ -27,9 +27,7 @@ export class ViewActivitiesComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     await this.getCategories();
-    const date = new Date();
-    date.setDate(date.getDate() - 1);
-    this.currentDay = nextDayMidnight(date);
+    this.currentDay = startOfToday();
     await this.getActivities();
   }
 
