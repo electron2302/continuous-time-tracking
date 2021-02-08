@@ -6,7 +6,8 @@ import {
   AuthState,
 } from '@aws-amplify/ui-components';
 import { Auth } from 'aws-amplify';
-import { Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { User } from '../interfaces/user';
 
 @Injectable({
   providedIn: 'root',
@@ -15,9 +16,7 @@ export class AuthService {
   public static loginURL = '/login';
   private static baseURL = '';
 
-  private signedInSubject = new Subject<boolean>();
-  private usernameSubject = new Subject<string>();
-  private user: CognitoUserInterface | undefined;
+  private userSubject = new BehaviorSubject<User | undefined>(undefined);
   private authState?: AuthState;
   // store the URL so we can redirect after logging in
   private redirectUrl: string = AuthService.baseURL;
@@ -26,7 +25,6 @@ export class AuthService {
     onAuthUIStateChange((authState, authData) => {
       this.authState = authState;
       console.log('CHANGED AUTH UI STATE: ' + authState);
-      this.user = authData as CognitoUserInterface;
       if (
         this.authState === AuthState.SignedOut ||
         this.authState === AuthState.SignOut
@@ -35,19 +33,21 @@ export class AuthService {
         console.log('Router from Auth Service to: ' + router.url);
         console.log('Redirect from Auth Service to: ' + this.getRedirectUrl());
         this.navigateToUrl(AuthService.loginURL);
-      }
-      if (this.isSignedInState()) {
+        this.userSubject.next(undefined);
+      } else if (this.isSignedInState()) {
         console.log('SIGNED IN');
         console.log('Router from Auth Service to: ' + router.url);
         console.log('Redirect from Auth Service to: ' + this.getRedirectUrl());
         this.navigateToUrl(this.getRedirectUrl());
       }
-      this.signedInSubject.next(this.isSignedInState());
-      let username = '';
-      if (this.user && this.user.username) {
-        username = this.user.username;
+      if (authData) {
+        const cognitorUserInfo = authData as CognitoUserInterface;
+        this.userSubject.next({
+          userName: cognitorUserInfo.username || '',
+        });
+      } else {
+        this.userSubject.next(undefined);
       }
-      this.usernameSubject.next(username);
     });
   }
 
@@ -61,24 +61,29 @@ export class AuthService {
     }
   }
 
-  isSignedInObserable(): Observable<boolean> {
-    return this.signedInSubject.asObservable();
+  public userObservable(): Observable<User | undefined> {
+    Auth.currentAuthenticatedUser()
+      .then((cognitoUser: CognitoUserInterface) => {
+        this.userSubject.next({
+          userName: cognitoUser.username || '',
+        });
+      })
+      .catch(() => this.userSubject.next(undefined));
+    return this.userSubject.asObservable();
   }
 
-  usernameObservable(): Observable<string> {
-    return this.usernameSubject.asObservable();
-  }
-
-  getRedirectUrl(): string {
+  public getRedirectUrl(): string {
     return this.redirectUrl;
   }
 
-  setRedirectUrl(url: string): void {
+  public setRedirectUrl(url: string): void {
     this.redirectUrl = url;
   }
 
-  getAuthState(): AuthState | undefined {
-    return this.authState;
+  public logout(): void {
+    Auth.signOut().then(() => {
+      this.navigateToUrl(AuthService.loginURL);
+    });
   }
 
   private isSignedInState(): boolean {

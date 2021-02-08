@@ -1,0 +1,28 @@
+@import '/src/styles.scss';
+@import '~@angular/material/theming';
+@include mat-core();
+
+amplify-authenticator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  height: 500px;
+  padding: 5px;
+  --amplify-primary-tint: #5bd0b1 !important;
+  --amplify-primary-color: #14bc8f !important;
+  --amplify-primary-shade: #0ead7c !important;
+  --amplify-primary-contrast: black !important;
+
+  --amplify-secondary-color: white !important;
+  --amplify-secondary-tint: #ff744b !important;
+  --amplify-secondary-shade: black !important;
+  --amplify-secondary-contrast: #424242 !important;
+
+  --amplify-tertiary-tint: black !important;
+  --amplify-tertiary-color: black !important;
+  --amplify-tertiary-shade: black !important;
+  --amplify-tertiary-contrast: black !important;
+
+  --amplify-background-color: #424242 !important;
+}

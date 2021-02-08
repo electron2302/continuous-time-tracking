@@ -1,2 +1,3 @@
 src/models
 src/polyfills.ts
+coverage/
