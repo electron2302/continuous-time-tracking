@@ -3,20 +3,54 @@ import { Observable } from 'rxjs';
 import { Activity } from '../interfaces/activity';
 import { Category } from '../interfaces/category';
 import { ActivityService, CreateActivityInput } from './activity.service';
+import {
+  APIService,
+  CreateActivityInput as APICreateInput,
+  UpdateActivityInput,
+} from './API.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class AwsActivityService extends ActivityService {
-  create(input: CreateActivityInput): Promise<void> {
-    throw new Error('Method not implemented.');
+export class AwsActivityService implements ActivityService {
+  constructor(private api: APIService) {}
+
+  create(input: CreateActivityInput): Promise<Activity> {
+    return this.insert(input);
   }
+
   insert(insert: CreateActivityInput): Promise<Activity> {
-    throw new Error('Method not implemented.');
+    const activityInput: APICreateInput = {
+      categoryID: insert.categoryID,
+      from: insert.from.toISOString(),
+    };
+
+    return this.api.CreateActivity(activityInput).then(
+      (result) =>
+        Promise.resolve({
+          categoryID: result.categoryID,
+          from: new Date(Date.parse(result.from)),
+          id: result.id,
+        } as Activity),
+      () =>
+        Promise.reject(
+          `Could nor insert Activity at starttime ${insert.from.toISOString()}`
+        )
+    );
   }
+
   update(activity: Activity): Promise<void> {
-    throw new Error('Method not implemented.');
+    const updateActivity: UpdateActivityInput = {
+      id: activity.id,
+      categoryID: activity.categoryID,
+      from: activity.from.toISOString(),
+    };
+    return this.api.UpdateActivity(updateActivity).then(
+      () => Promise.resolve(),
+      () => Promise.reject(`Could not update activity from ${activity.from.toISOString()}`)
+    );
   }
+
   delete(activity: Activity): Promise<void> {
     throw new Error('Method not implemented.');
   }
