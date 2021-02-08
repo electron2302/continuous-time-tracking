@@ -55,6 +55,7 @@ import { ViewActivitiesComponent } from './components/view-activities/view-activ
 import { ElementActivityComponent } from './components/element-activity/element-activity.component';
 import { ActivityService } from './services/activity.service';
 import { AwsActivityService } from './services/aws-activity.service';
+import { ChangeActivityComponent } from './components/change-activity/change-activity.component';
 
 const materialModules = [
   CdkTreeModule,
@@ -99,6 +100,7 @@ const materialModules = [
     NavBarComponent,
     ViewActivitiesComponent,
     ElementActivityComponent,
+    ChangeActivityComponent,
   ],
   imports: [
     AmplifyUIAngularModule,
