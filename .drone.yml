@@ -33,7 +33,7 @@ steps:
   ######
   # CD for develop branch
   #####
-  - name: "Build develop"
+  - name: "Amplify develop"
     image: node:14
     commands:
       - cd ctt-frontend
@@ -44,8 +44,8 @@ steps:
       - echo "aws_secret_access_key=$KEYSECRET" >> ~/.aws/credentials
       - echo "[default]" > ~/.aws/config
       - echo "region=us-east-1" >> ~/.aws/config
-      - npx amplify pull --appId d29764zb1c1ba0 --envName dev --yes
-      - npm run build
+      - npx amplify init --envName dev --yes
+      - npx amplify push --yes
     environment:
       KEYID:
         from_secret: aws_access_key_id
@@ -59,6 +59,13 @@ steps:
         - push
     depends_on: ["Test & Coverage", "Lint"]
 
+  - name: "Build develop"
+    image: node:14
+    commands:
+      - cd ctt-frontend
+      - npm run build
+    depends_on: ["Amplify develop"]
+
   - name: "Push develop"
     image: plugins/ecr
     settings:
@@ -70,4 +77,4 @@ steps:
       registry: 356962203731.dkr.ecr.us-east-1.amazonaws.com
       dockerfile: ctt-frontend/Dockerfile
       tags: ["develop"]
-    depends_on: ["Build develop"]
+    depends_on: ["Amplify develop"]
