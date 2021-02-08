@@ -11,7 +11,7 @@ import awsconfig from '../aws-exports';
 
 import { AuthenticationComponent } from './components/authentication/authentication.component';
 import { AuthService } from './services/auth.service';
-import { AuthGuard } from './auth/auth.guard';
+import { AuthGuard } from './guards/auth.guard';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
