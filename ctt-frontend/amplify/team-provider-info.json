@@ -32,12 +32,6 @@
     "categories": {
       "auth": {
         "cttfrontendf69ef296": {}
-      },
-      "hosting": {
-        "amplifyhosting": {
-          "appId": "d29764zb1c1ba0",
-          "type": "manual"
-        }
       }
     }
   }
