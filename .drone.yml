@@ -30,19 +30,6 @@ steps:
       - "npx ng test --browsers ChromeHeadlessNoSandbox --watch false --progress false --codeCoverage"
     depends_on: ["Install dependencies"]
 
-  - name: "Build"
-    image: node:14
-    commands:
-      - cd ctt-frontend
-      - npm run build
-    when:
-      branch:
-        - develop
-        - main
-      event:
-        - push
-    depends_on: ["Amplify develop"]
-
   ######
   # CD for develop branch
   #####
@@ -71,6 +58,18 @@ steps:
         - push
     depends_on: ["Test & Coverage", "Lint"]
 
+  - name: "Build develop"
+    image: node:14
+    commands:
+      - cd ctt-frontend
+      - npm run build
+    when:
+      branch:
+        - develop
+      event:
+        - push
+    depends_on: ["Amplify develop"]
+
   - name: "Push develop"
     image: plugins/ecr
     settings:
@@ -87,7 +86,7 @@ steps:
         - develop
       event:
         - push
-    depends_on: ["Build"]
+    depends_on: ["Build develop"]
 
   - name: "Publish develop"
     image: joshdvir/drone-ecs-deploy
@@ -137,6 +136,18 @@ steps:
         - push
     depends_on: ["Test & Coverage", "Lint"]
 
+  - name: "Build main"
+    image: node:14
+    commands:
+      - cd ctt-frontend
+      - npm run build
+    when:
+      branch:
+        - main
+      event:
+        - push
+    depends_on: ["Amplify main"]
+
   - name: "Push main"
     image: plugins/ecr
     settings:
@@ -153,7 +164,7 @@ steps:
         - main
       event:
         - push
-    depends_on: ["Build"]
+    depends_on: ["Build main"]
 
   - name: "Publish main"
     image: joshdvir/drone-ecs-deploy
