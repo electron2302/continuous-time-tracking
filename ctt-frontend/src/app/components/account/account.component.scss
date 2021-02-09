@@ -1,46 +1,36 @@
 @import '~@angular/material/theming';
 @include mat-core();
 
-.account {
+#card {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column;
+  max-width: 300px;
+  width: 100%;
+  margin: 30px;
+}
+
+#mat-card-content {
+  display: flex;
+  flex-direction: column;
   margin: 20px;
 }
 
-mat-card-actions {
-  display: flex;
+#username {
+  max-width: 180px;
+  margin: 10px;
 }
 
-mat-form-field {
-  width: 100%;
+#email {
+  max-width: 250px;
+  margin: 10px;
 }
 
-mat-icon {
-  font-size: 1.3em !important;
+#is-verified {
+  margin: 5px;
+  color: #37c6a0;
 }
 
-#card {
-  max-width: 500px;
-  width: 100%;
-}
-
-mat-slide-toggle {
-  padding-bottom: 20px;
-}
-
-::ng-deep .ngx-mat-colorpicker-content {
-  background-color: mat-color($mat-grey, 700) !important;
-}
-
-::ng-deep .ngx-mat-colorpicker-content .mat-input-element {
-  color: white !important;
-}
-
-::ng-deep
-  .ngx-mat-color-canvas
-  .color-canvas-row:nth-of-type(2)
-  .mat-form-field:first-of-type
-  .symbol {
-  color: white !important;
+#is-not-verified {
+  margin: 5px;
+  color: #c77a4e;
 }
