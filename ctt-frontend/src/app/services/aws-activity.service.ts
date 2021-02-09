@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { Activity } from '../interfaces/activity';
 import { Category } from '../interfaces/category';
 import { ActivityService, CreateActivityInput } from './activity.service';
@@ -15,6 +15,9 @@ import {
   providedIn: 'root',
 })
 export class AwsActivityService implements ActivityService {
+  private activitySubject = new Subject<Activity[]>();
+  private activities: Activity[] = [];
+
   constructor(private api: APIService) {}
 
   create(input: CreateActivityInput): Promise<Activity> {
@@ -28,13 +31,18 @@ export class AwsActivityService implements ActivityService {
     };
 
     return this.api.CreateActivity(activityInput).then(
-      (result) =>
-        Promise.resolve({
+      (result) => {
+        const activity: Activity = {
           categoryID: result.categoryID,
           from: new Date(Date.parse(result.from)),
           id: result.id,
           version: result._version,
-        } as Activity),
+        };
+        this.activities.push(activity);
+        this.activities = this.activities.sort((a, b) => a.from < b.from ? -1 : 1);
+        this.activitySubject.next(this.activities);
+        return Promise.resolve(activity);
+      },
       () =>
         Promise.reject(
           `Could nor insert Activity at starttime ${insert.from.toISOString()}`
@@ -153,6 +161,6 @@ export class AwsActivityService implements ActivityService {
   }
 
   subscribeToActivities(from?: Date, to?: Date): Observable<Activity[]> {
-    throw new Error('Method not implemented.');
+    return this.activitySubject.asObservable();
   }
 }
