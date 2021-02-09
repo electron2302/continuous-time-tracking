@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, Subscriber } from 'rxjs';
 import { Activity } from '../interfaces/activity';
 import { Category } from '../interfaces/category';
 import { ActivityService, CreateActivityInput } from './activity.service';
@@ -9,16 +9,22 @@ import {
   CreateActivityInput as APICreateInput,
   UpdateActivityInput,
   DeleteActivityInput,
+  SubscriptionResponse,
+  OnCreateActivitySubscription,
+  OnDeleteActivitySubscription,
+  OnUpdateActivitySubscription,
 } from './API.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AwsActivityService implements ActivityService {
-  private activitySubject = new Subject<Activity[]>();
-  private activities: Activity[] = [];
-
-  constructor(private api: APIService) {}
+  private activitySubjects: DateSubscriber[] = [];
+  constructor(private api: APIService) {
+    this.api.OnCreateActivityListener.subscribe(this.activityCreated);
+    this.api.OnUpdateActivityListener.subscribe(this.activityUpdated);
+    this.api.OnDeleteActivityListener.subscribe(this.activityDeleted);
+  }
 
   create(input: CreateActivityInput): Promise<Activity> {
     return this.insert(input);
@@ -38,9 +44,6 @@ export class AwsActivityService implements ActivityService {
           id: result.id,
           version: result._version,
         };
-        this.activities.push(activity);
-        this.activities = this.activities.sort((a, b) => a.from < b.from ? -1 : 1);
-        this.activitySubject.next(this.activities);
         return Promise.resolve(activity);
       },
       () =>
@@ -115,52 +118,126 @@ export class AwsActivityService implements ActivityService {
   }
 
   getByCategory(category: Category): Promise<Activity[]> {
-    return this.api.ListActivitys({
-      categoryID: {eq: category.id}
-    }).then(
-      (result) => {
-        const list: Activity[] = [];
-        result.items?.filter((item) => {
-          if (!item) {
-            return;
-          }
-          list.push({
-            categoryID: item.categoryID,
-            from: new Date(Date.parse(item.from)),
-            id: item.id,
-            version: item._version,
-          } as Activity);
-        });
-        return list;
-      },
-      () => Promise.reject(`Could not query activities for category ${category.name}.`)
-    );
+    return this.api
+      .ListActivitys({
+        categoryID: { eq: category.id },
+      })
+      .then(
+        (result) => {
+          const list: Activity[] = [];
+          result.items?.filter((item) => {
+            if (!item) {
+              return;
+            }
+            list.push({
+              categoryID: item.categoryID,
+              from: new Date(Date.parse(item.from)),
+              id: item.id,
+              version: item._version,
+            } as Activity);
+          });
+          return list;
+        },
+        () =>
+          Promise.reject(
+            `Could not query activities for category ${category.name}.`
+          )
+      );
   }
 
   getBetween(from: Date, to: Date, category?: Category): Promise<Activity[]> {
-    return this.api.ListActivitys({
-      from: {between: [from.toISOString(), to.toISOString()]}
-    }).then(
-      (result) => {
-        const list: Activity[] = [];
-        result.items?.filter((item) => {
-          if (!item) {
-            return;
-          }
-          list.push({
-            categoryID: item.categoryID,
-            from: new Date(Date.parse(item.from)),
-            id: item.id,
-            version: item._version,
-          } as Activity);
-        });
-        return list;
-      },
-      () => Promise.reject(`Could not query activities between ${from.toISOString()} and ${to.toISOString()}.`)
-    );
+    return this.api
+      .ListActivitys({
+        from: { between: [from.toISOString(), to.toISOString()] },
+        categoryID: { eq: category?.id },
+      })
+      .then(
+        (result) => {
+          const list: Activity[] = [];
+          result.items?.filter((item) => {
+            if (!item) {
+              return;
+            }
+            list.push({
+              categoryID: item.categoryID,
+              from: new Date(Date.parse(item.from)),
+              id: item.id,
+              version: item._version,
+            } as Activity);
+          });
+          return list;
+        },
+        () =>
+          Promise.reject(
+            `Could not query activities between ${from.toISOString()} and ${to.toISOString()}.`
+          )
+      );
   }
 
   subscribeToActivities(from?: Date, to?: Date): Observable<Activity[]> {
-    return this.activitySubject.asObservable();
+    const sub = new DateSubscriber(new Subject<Activity[]>(), from, to);
+    this.activitySubjects.push(sub);
+    return sub.subscribeable.asObservable();
+  }
+
+  activityCreated(
+    val: SubscriptionResponse<OnCreateActivitySubscription>
+  ): void {
+    if (val.value && val.value.data) {
+      const date: Date = new Date(Date.parse(val.value.data.from));
+      this.activitySubjects.forEach((item) => {
+        if (item.from && item.from < date && item.to && item.to > date) {
+          this.getBetween(item.from, item.to).then((result) =>
+            item.subscribeable.next(result)
+          );
+        } else {
+          this.getAll().then((result) => item.subscribeable.next(result));
+        }
+      });
+    }
+  }
+  activityUpdated(
+    val: SubscriptionResponse<OnUpdateActivitySubscription>
+  ): void {
+    if (val.value && val.value.data) {
+      const date: Date = new Date(Date.parse(val.value.data.from));
+      this.activitySubjects.forEach((item) => {
+        if (item.from && item.from < date && item.to && item.to > date) {
+          this.getBetween(item.from, item.to).then((result) =>
+            item.subscribeable.next(result)
+          );
+        } else {
+          this.getAll().then((result) => item.subscribeable.next(result));
+        }
+      });
+    }
+  }
+  activityDeleted(
+    val: SubscriptionResponse<OnDeleteActivitySubscription>
+  ): void {
+    if (val.value && val.value.data) {
+      const date: Date = new Date(Date.parse(val.value.data.from));
+      this.activitySubjects.forEach((item) => {
+        if (item.from && item.from < date && item.to && item.to > date) {
+          this.getBetween(item.from, item.to).then((result) =>
+            item.subscribeable.next(result)
+          );
+        } else {
+          this.getAll().then((result) => item.subscribeable.next(result));
+        }
+      });
+    }
+  }
+}
+
+class DateSubscriber {
+  from?: Date;
+  to?: Date;
+  subscribeable: Subject<Activity[]>;
+
+  constructor(subscribable: Subject<Activity[]>, from?: Date, to?: Date) {
+    this.from = from;
+    this.to = to;
+    this.subscribeable = subscribable;
   }
 }
