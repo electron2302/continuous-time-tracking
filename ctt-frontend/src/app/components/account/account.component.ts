@@ -35,7 +35,6 @@ export class AccountComponent implements OnInit {
   }
 
   private setEmail(email: string): void {
-    console.log('email: ' + email);
     this.email = email;
   }
 
