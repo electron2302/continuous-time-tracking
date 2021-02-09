@@ -30,7 +30,7 @@ steps:
       - "npx ng test --browsers ChromeHeadlessNoSandbox --watch false --progress false --codeCoverage"
     depends_on: ["Install dependencies"]
 
-  - name: "Build develop"
+  - name: "Build"
     image: node:14
     commands:
       - cd ctt-frontend
