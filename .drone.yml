@@ -80,21 +80,6 @@ steps:
     depends_on: ["Build develop"]
 
   - name: "Publish develop"
-    #    image: peloton/drone-ecs
-    #    settings:
-    #      access_key:
-    #        from_secret: aws_access_key_id
-    #      secret_key:
-    #        from_secret: aws_secret_access_key
-    #      service: developen-service
-    #      region: us-east-1
-    #      family: developen-task
-    #      image_name: 356962203731.dkr.ecr.us-east-1.amazonaws.com/ctt
-    #      image_tag: develop
-    #      port_mappings:
-    #        - 80 80
-    #      memory: 512
-    #    depends_on: ["Push develop"]
     image: joshdvir/drone-ecs-deploy
     environment:
       AWS_ACCESS_KEY_ID:
@@ -106,4 +91,5 @@ steps:
       service: developen-service
       image_name: "356962203731.dkr.ecr.us-east-1.amazonaws.com/ctt:develop"
       aws_region: us-east-1
+      timeout: "1800"
     depends_on: ["Push develop"]
