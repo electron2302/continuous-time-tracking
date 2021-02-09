@@ -1,0 +1,13 @@
+.loading {
+  text-align: center;
+
+  mat-spinner {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 80px;
+    margin-bottom: 30px;
+  }
+  span {
+    font-size: 25px;
+  }
+}
