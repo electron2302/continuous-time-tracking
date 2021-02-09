@@ -58,10 +58,11 @@ export class EditCategoryComponent implements OnInit {
     id: 'new',
     name: '',
     excludeFromStatistics: [],
-    reminderInterval: 30,
+    reminderInterval: -1,
     version: 1,
   };
 
+  public loading = true;
   public statisticTypeSelectEntries: StatisticTypeSelect[] = [];
 
   public categoryForm = new FormGroup(
@@ -102,15 +103,18 @@ export class EditCategoryComponent implements OnInit {
       } else {
         this.updateFormControl();
       }
+      this.loading = false;
     });
   }
 
   public async onSave(): Promise<void> {
+    this.loading = true;
     if (this.isNew()) {
       this.saveNewCategory();
     } else {
       this.saveExistingCategory();
     }
+    this.loading = false;
   }
 
   public onBackClicked(): void {

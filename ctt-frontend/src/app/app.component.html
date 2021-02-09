@@ -7,7 +7,7 @@
     >
       <mat-icon>menu</mat-icon>
     </button>
-    <h1 class="app-name">Continuous Time Tracking</h1>
+    <h1 class="app-name" (click)="navigateHome()">Continuous Time Tracking</h1>
   </mat-toolbar>
 
   <mat-sidenav-container
@@ -19,14 +19,14 @@
       [mode]="mobileQuery.matches ? 'over' : 'side'"
       [fixedInViewport]="mobileQuery.matches"
       fixedTopGap="56"
-      [opened]="desktopQuery.matches ? true : undefined"
+      [opened]="desktopQuery.matches && isSignedIn ? true : undefined"
     >
       <mat-nav-list>
         <!-- Account -->
         <h2 matSubheader>Account</h2>
         <a
           mat-list-item
-          (click)="snav.close()"
+          (click)="closeSideNav()"
           routerLink="account"
           routerLinkActive="is-active"
         >
@@ -42,7 +42,7 @@
         <a
           *ngFor="let item of items"
           mat-list-item
-          (click)="snav.close()"
+          (click)="closeSideNav()"
           [routerLink]="[item.route]"
           routerLinkActive="is-active"
           [routerLinkActiveOptions]="{ exact: true }"
@@ -69,6 +69,15 @@
       <div class="content-container">
         <router-outlet></router-outlet>
       </div>
+      <button
+        mat-fab
+        color="primary"
+        *ngIf="fabConfig"
+        class="fab"
+        (click)="navigateTo(fabConfig.route)"
+      >
+        <mat-icon>{{ fabConfig.icon }}</mat-icon>
+      </button>
     </mat-sidenav-content>
   </mat-sidenav-container>
 </div>

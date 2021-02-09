@@ -21,3 +21,11 @@ export interface Category {
    */
   version: number;
 }
+
+export const toCategoryMap = (categories: Category[]) => {
+  const categoryById = new Map<string, Category>();
+  categories.forEach((c) => {
+    categoryById.set(c.id, c);
+  });
+  return categoryById;
+};
