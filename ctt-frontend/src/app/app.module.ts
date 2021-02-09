@@ -68,6 +68,7 @@ import { ViewCategoriesComponent } from './components/view-categories/view-categ
 import { AccountComponent } from './components/account/account.component';
 import { StatisticsComponent } from './components/statistics/statistics.component';
 import { LoadingComponent } from './components/loading/loading.component';
+import { EditActivityComponent } from './components/edit-activity/edit-activity.component';
 
 const materialModules = [
   CdkTreeModule,
@@ -119,6 +120,7 @@ Amplify.configure(awsconfig);
     AccountComponent,
     StatisticsComponent,
     LoadingComponent,
+    EditActivityComponent,
   ],
   imports: [
     AmplifyUIAngularModule,
