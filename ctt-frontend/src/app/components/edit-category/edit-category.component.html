@@ -7,7 +7,7 @@
     <mat-card id="card">
       <mat-card-header>
         <mat-card-title>{{
-          isNew ? 'New category' : category.name
+          isNew() ? 'New category' : category.name
         }}</mat-card-title>
         <mat-card-subtitle *ngIf="!isNew()"
           >Id: {{ category.id }}</mat-card-subtitle

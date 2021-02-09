@@ -27,3 +27,9 @@ export const nextDayMidnight = (date: Date) => {
   nextDay.setSeconds(0);
   return nextDay;
 };
+
+export const startOfToday = () => {
+  const date = new Date();
+  date.setDate(date.getDate() - 1);
+  return nextDayMidnight(date);
+};

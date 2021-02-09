@@ -1,13 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Observable, Observer } from 'rxjs';
 import { differenceInMs, formatDuration } from '../../helper/time';
-
-export interface ViewableActivity {
-  color: string;
-  name: string;
-  from: Date;
-  duration: string;
-}
+import { ViewableActivity } from '../../interfaces/viewable-activity';
 
 @Component({
   selector: 'app-element-activity',

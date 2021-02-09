@@ -58,7 +58,7 @@ export class EditCategoryComponent implements OnInit {
     id: 'new',
     name: '',
     excludeFromStatistics: [],
-    reminderInterval: 30,
+    reminderInterval: -1,
     version: 1,
   };
 
