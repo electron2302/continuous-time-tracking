@@ -45,6 +45,13 @@ export class ChangeActivityComponent implements OnInit {
     this.router.navigate(['category/new']);
   }
 
+  public startNewActivity(categoryId: string) {
+    this.activityService.create({
+      categoryID: categoryId,
+      from: new Date(),
+    });
+  }
+
   private async getCategories(): Promise<void> {
     this.categories = await this.categoryService.getAll();
     this.categoryById = toCategoryMap(this.categories);

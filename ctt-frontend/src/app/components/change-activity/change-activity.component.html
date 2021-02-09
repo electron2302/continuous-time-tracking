@@ -29,7 +29,12 @@
   <h1>Start new activity</h1>
 
   <div class="buttons" *ngIf="categories.length > 0; else noCategories">
-    <button mat-button mat-raised-button *ngFor="let category of categories">
+    <button
+      mat-button
+      mat-raised-button
+      *ngFor="let category of categories"
+      (click)="startNewActivity(category.id)"
+    >
       {{ category.name }}
     </button>
   </div>
