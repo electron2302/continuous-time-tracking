@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { Category } from '../../interfaces/category';
+import { CategoryService } from '../../services/category.service';
 
 @Component({
   selector: 'app-view-categories',
@@ -6,7 +9,18 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./view-categories.component.scss'],
 })
 export class ViewCategoriesComponent implements OnInit {
-  constructor() {}
+  public categories: Category[] = [];
 
-  ngOnInit(): void {}
+  constructor(
+    private categoryService: CategoryService,
+    private router: Router
+  ) {}
+
+  async ngOnInit(): Promise<void> {
+    this.categories = await this.categoryService.getAll();
+  }
+
+  public navigateToEdit(id: string): void {
+    this.router.navigate([`category/${id}`]);
+  }
 }
