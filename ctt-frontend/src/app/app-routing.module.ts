@@ -8,6 +8,7 @@ import { ChangeActivityComponent } from './components/change-activity/change-act
 import { ViewCategoriesComponent } from './components/view-categories/view-categories.component';
 import { AccountComponent } from './components/account/account.component';
 import { StatisticsComponent } from './components/statistics/statistics.component';
+import { EditActivityComponent } from './components/edit-activity/edit-activity.component';
 
 const routes: Routes = [
   {
@@ -34,6 +35,16 @@ const routes: Routes = [
   {
     path: 'category/:id',
     component: EditCategoryComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'activity/new',
+    component: EditActivityComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'activity/:id',
+    component: EditActivityComponent,
     canActivate: [AuthGuard],
   },
   {

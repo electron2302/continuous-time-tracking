@@ -13,7 +13,7 @@ export abstract class ActivityService {
    *
    * @param input, the activity to create.
    */
-  abstract create(input: CreateActivityInput): Promise<void>;
+  abstract create(input: CreateActivityInput): Promise<Activity>;
 
   /**
    * Insert an activity.
