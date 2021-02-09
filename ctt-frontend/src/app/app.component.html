@@ -69,6 +69,15 @@
       <div class="content-container">
         <router-outlet></router-outlet>
       </div>
+      <button
+        mat-fab
+        color="primary"
+        *ngIf="fabConfig"
+        class="fab"
+        (click)="navigateTo(fabConfig.route)"
+      >
+        <mat-icon>{{ fabConfig.icon }}</mat-icon>
+      </button>
     </mat-sidenav-content>
   </mat-sidenav-container>
 </div>

@@ -2,8 +2,16 @@ import { MediaMatcher } from '@angular/cdk/layout';
 import { ChangeDetectorRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Component } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
-import { Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { AuthService } from './services/auth.service';
+import { filter, map, switchMap } from 'rxjs/operators';
+import { of } from 'rxjs';
+
+/** Config for floating action button */
+interface FabConfig {
+  route: string;
+  icon: string;
+}
 
 @Component({
   selector: 'app-root',
@@ -18,6 +26,8 @@ export class AppComponent implements OnDestroy, OnInit {
 
   isSignedIn = false;
   userName = '';
+
+  fabConfig?: FabConfig;
 
   public items = [
     {
@@ -48,13 +58,15 @@ export class AppComponent implements OnDestroy, OnInit {
     changeDetectorRef: ChangeDetectorRef,
     media: MediaMatcher,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private activatedRoute: ActivatedRoute
   ) {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this.desktopQuery = media.matchMedia('(min-width: 1200px)');
     this.queryListener = () => changeDetectorRef.detectChanges();
     this.mobileQuery.addEventListener('change', this.queryListener);
     this.desktopQuery.addEventListener('change', this.queryListener);
+    this.subscribeToRouteDataChanges();
   }
 
   ngOnInit() {
@@ -85,6 +97,31 @@ export class AppComponent implements OnDestroy, OnInit {
   }
 
   navigateHome(): void {
-    this.router.navigate(['']);
+    this.navigateTo('');
+  }
+
+  navigateTo(route: string): void {
+    this.router.navigate([route]);
+  }
+
+  private subscribeToRouteDataChanges(): void {
+    // see https://medium.com/@tomastrajan/how-to-get-route-path-parameters-in-non-routed-angular-components-32fc90d9cb52
+    // on how to access route data on non routed components
+    this.router.events
+      .pipe(
+        filter((event) => event instanceof NavigationEnd),
+        map(() => this.activatedRoute.root),
+        map((root) => root.firstChild),
+        switchMap((firstChild) => {
+          if (firstChild) {
+            return firstChild.data;
+          } else {
+            return of(null);
+          }
+        })
+      )
+      .subscribe((next) => {
+        this.fabConfig = next?.fab;
+      });
   }
 }

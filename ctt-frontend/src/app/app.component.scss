@@ -62,3 +62,13 @@ mat-icon {
 mat-toolbar h1 {
   cursor: pointer;
 }
+
+.fab {
+  right: 20px;
+  bottom: 20px;
+  position: fixed !important;
+
+  mat-icon {
+    margin-right: 0px;
+  }
+}
