@@ -30,6 +30,19 @@ steps:
       - "npx ng test --browsers ChromeHeadlessNoSandbox --watch false --progress false --codeCoverage"
     depends_on: ["Install dependencies"]
 
+  - name: "Build develop"
+    image: node:14
+    commands:
+      - cd ctt-frontend
+      - npm run build
+    when:
+      branch:
+        - develop
+        - main
+      event:
+        - push
+    depends_on: ["Amplify develop"]
+
   ######
   # CD for develop branch
   #####
@@ -58,13 +71,6 @@ steps:
         - push
     depends_on: ["Test & Coverage", "Lint"]
 
-  - name: "Build develop"
-    image: node:14
-    commands:
-      - cd ctt-frontend
-      - npm run build
-    depends_on: ["Amplify develop"]
-
   - name: "Push develop"
     image: plugins/ecr
     settings:
@@ -76,7 +82,12 @@ steps:
       registry: 356962203731.dkr.ecr.us-east-1.amazonaws.com
       dockerfile: ctt-frontend/Dockerfile
       tags: ["develop"]
-    depends_on: ["Build develop"]
+    when:
+      branch:
+        - develop
+      event:
+        - push
+    depends_on: ["Build"]
 
   - name: "Publish develop"
     image: joshdvir/drone-ecs-deploy
@@ -91,6 +102,11 @@ steps:
       image_name: "356962203731.dkr.ecr.us-east-1.amazonaws.com/ctt:develop"
       aws_region: us-east-1
       timeout: "1800"
+    when:
+      branch:
+        - develop
+      event:
+        - push
     depends_on: ["Push develop"]
 
   ######
@@ -121,13 +137,6 @@ steps:
         - push
     depends_on: ["Test & Coverage", "Lint"]
 
-  - name: "Build main"
-    image: node:14
-    commands:
-      - cd ctt-frontend
-      - npm run build
-    depends_on: ["Amplify main"]
-
   - name: "Push main"
     image: plugins/ecr
     settings:
@@ -139,7 +148,12 @@ steps:
       registry: 356962203731.dkr.ecr.us-east-1.amazonaws.com
       dockerfile: ctt-frontend/Dockerfile
       tags: ["main"]
-    depends_on: ["Build main"]
+    when:
+      branch:
+        - main
+      event:
+        - push
+    depends_on: ["Build"]
 
   - name: "Publish main"
     image: joshdvir/drone-ecs-deploy
@@ -154,4 +168,9 @@ steps:
       image_name: "356962203731.dkr.ecr.us-east-1.amazonaws.com/ctt:main"
       aws_region: us-east-1
       timeout: "1800"
+    when:
+      branch:
+        - main
+      event:
+        - push
     depends_on: ["Push main"]
