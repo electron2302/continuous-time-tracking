@@ -12,10 +12,7 @@
   </button>
 </div>
 
-<div *ngIf="loading" class="loading">
-  <mat-spinner></mat-spinner>
-  <span>Loading activities...</span>
-</div>
+<app-loading [active]="loading" text="Loading activites..."></app-loading>
 
 <div style="margin: 10px" *ngIf="!loading && viewableActivities.length > 0">
   <app-element-activity

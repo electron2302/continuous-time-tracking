@@ -1,12 +1,6 @@
 @import '~@angular/material/theming';
 @include mat-core();
 
-.container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 mat-card-actions {
   display: flex;
 }
@@ -17,10 +11,6 @@ mat-form-field {
 
 mat-icon {
   font-size: 1.3em !important;
-}
-
-#card {
-  width: 100%;
 }
 
 mat-slide-toggle {

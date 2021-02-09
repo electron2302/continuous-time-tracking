@@ -17,20 +17,6 @@ h1 {
   margin-right: 10px;
 }
 
-.loading {
-  text-align: center;
-
-  mat-spinner {
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 10px;
-    margin-bottom: 10px;
-  }
-  span {
-    font-size: 25px;
-  }
-}
-
 .info-card {
   flex-direction: row;
   display: flex;

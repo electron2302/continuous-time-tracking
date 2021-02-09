@@ -19,6 +19,12 @@ const routes: Routes = [
     path: 'categories',
     component: ViewCategoriesComponent,
     canActivate: [AuthGuard],
+    data: {
+      fab: {
+        route: 'category/new',
+        icon: 'add',
+      },
+    },
   },
   {
     path: 'category/new',

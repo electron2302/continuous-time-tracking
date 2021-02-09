@@ -1,1 +1,12 @@
-<p>view-categories works!</p>
+<app-loading [active]="loading" text="Loading categories..."></app-loading>
+
+<mat-card *ngFor="let category of categories">
+  <h1>{{ category.name }}</h1>
+  <button
+    mat-icon-button
+    aria-label="Edit category"
+    (click)="navigateToEdit(category.id)"
+  >
+    <mat-icon>edit</mat-icon>
+  </button>
+</mat-card>
