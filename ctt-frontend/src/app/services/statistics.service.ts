@@ -6,7 +6,7 @@ export enum QueryDuration {
   allTime,
 }
 
-export interface StatisticsService {
+export abstract class StatisticsService {
   /**
    * Get the categoryID to the absolute
    * distribution of it's occurence.
@@ -14,7 +14,7 @@ export interface StatisticsService {
    * @param durationTyp, the duration to calculate the distibution.
    * @param durationValue, the count of the discrete durations to analyze.
    */
-  getAbsoluteCategoryTime(
+  abstract getAbsoluteCategoryTime(
     durationType: QueryDuration,
     durationValue: number
   ): Promise<Map<string, number>>;
@@ -26,7 +26,7 @@ export interface StatisticsService {
    * @param durationType, the duration to calculate the distibution.
    * @param durationValue, the count of the discrete durations to analyze.
    */
-  getRelativeCategoryTime(
+  abstract getRelativeCategoryTime(
     durationType: QueryDuration,
     durationValue: number
   ): Promise<Map<string, number>>;

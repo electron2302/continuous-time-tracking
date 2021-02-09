@@ -15,4 +15,17 @@ export interface Category {
   reminderInterval: number;
 
   excludeFromStatistics: StatisticType[];
+  /**
+   * Version number is necessary to update the data in the database.
+   * For the update, the version in the database has to be specified.
+   */
+  version: number;
 }
+
+export const toCategoryMap = (categories: Category[]) => {
+  const categoryById = new Map<string, Category>();
+  categories.forEach((c) => {
+    categoryById.set(c.id, c);
+  });
+  return categoryById;
+};
