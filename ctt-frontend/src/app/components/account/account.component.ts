@@ -31,7 +31,6 @@ export class AccountComponent implements OnInit {
   }
 
   private setUsername(username: string): void {
-    console.log('username: ' + username);
     this.username = username;
   }
 
