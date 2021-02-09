@@ -77,7 +77,7 @@ export class AwsActivityService implements ActivityService {
       (result) => {
         const list: Activity[] = [];
         result.items?.filter((item) => {
-          if (item == null) {
+          if (!item) {
             return;
           }
           list.push({
@@ -107,11 +107,49 @@ export class AwsActivityService implements ActivityService {
   }
 
   getByCategory(category: Category): Promise<Activity[]> {
-    throw new Error('Method not implemented.');
+    return this.api.ListActivitys({
+      categoryID: {eq: category.id}
+    }).then(
+      (result) => {
+        const list: Activity[] = [];
+        result.items?.filter((item) => {
+          if (!item) {
+            return;
+          }
+          list.push({
+            categoryID: item.categoryID,
+            from: new Date(Date.parse(item.from)),
+            id: item.id,
+            version: item._version,
+          } as Activity);
+        });
+        return list;
+      },
+      () => Promise.reject(`Could not query activities for category ${category.name}.`)
+    );
   }
 
   getBetween(from: Date, to: Date, category?: Category): Promise<Activity[]> {
-    throw new Error('Method not implemented.');
+    return this.api.ListActivitys({
+      from: {between: [from.toISOString(), to.toISOString()]}
+    }).then(
+      (result) => {
+        const list: Activity[] = [];
+        result.items?.filter((item) => {
+          if (!item) {
+            return;
+          }
+          list.push({
+            categoryID: item.categoryID,
+            from: new Date(Date.parse(item.from)),
+            id: item.id,
+            version: item._version,
+          } as Activity);
+        });
+        return list;
+      },
+      () => Promise.reject(`Could not query activities between ${from.toISOString()} and ${to.toISOString()}.`)
+    );
   }
 
   subscribeToActivities(from?: Date, to?: Date): Observable<Activity[]> {

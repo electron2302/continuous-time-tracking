@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { Activity } from '../../interfaces/activity';
+import { Category } from '../../interfaces/category';
 import { CreateActivityInput } from '../activity.service';
 import {
   CreateActivityMutation,
@@ -17,7 +18,7 @@ export const activityResult: Activity = {
 
 export const secondActivity: Activity = {
   categoryID: '3',
-  from: new Date(2021, 2, 1, 1, 0),
+  from: new Date(2021, 2, 9, 1, 0),
   id: '2',
   version: 2,
 };
@@ -106,7 +107,7 @@ export const activityApiListMulti: ListActivitysQuery = {
       _version: 2,
       categoryID: '3',
       createdAt: '',
-      from: new Date(2021, 2, 1, 1, 0).toISOString(),
+      from: new Date(2021, 2, 9, 1, 0).toISOString(),
       id: '2',
       owner: null,
       updatedAt: '',
@@ -129,3 +130,15 @@ export const getActivity: GetActivityQuery = {
   owner: null,
   updatedAt: '',
 };
+
+export const filterCategroy: Category = {
+  color: '#000000',
+  excludeFromStatistics: [],
+  id: '0',
+  name: 'TestCat',
+  reminderInterval: -1,
+  version: 1,
+};
+
+export const fromDate: Date = new Date(2021, 2, 1, 1, 0);
+export const toDate: Date = new Date(2021, 2, 9, 13, 0);
