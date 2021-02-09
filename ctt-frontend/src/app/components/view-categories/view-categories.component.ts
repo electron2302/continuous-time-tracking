@@ -11,6 +11,8 @@ import { CategoryService } from '../../services/category.service';
 export class ViewCategoriesComponent implements OnInit {
   public categories: Category[] = [];
 
+  public loading = true;
+
   constructor(
     private categoryService: CategoryService,
     private router: Router
@@ -18,6 +20,7 @@ export class ViewCategoriesComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.categories = await this.categoryService.getAll();
+    this.loading = false;
   }
 
   public navigateToEdit(id: string): void {

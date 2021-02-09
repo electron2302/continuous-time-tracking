@@ -1,3 +1,5 @@
+<app-loading [active]="loading" text="Loading categories..."></app-loading>
+
 <mat-card *ngFor="let category of categories">
   <h1>{{ category.name }}</h1>
   <button
