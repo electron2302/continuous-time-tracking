@@ -23,6 +23,7 @@ export const toViewableActivities = (
   activities.forEach((a, i) => {
     const category = categoryById.get(a.categoryID);
     if (!category) {
+      console.error(`No category found with id ${a.categoryID}`);
       return;
     }
     let durationMs;
