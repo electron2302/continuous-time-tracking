@@ -39,7 +39,6 @@ export class AccountComponent implements OnInit {
   }
 
   private setIsVerified(isVerified: string): void {
-    console.log('isVerified: ' + isVerified);
     this.isVerified = isVerified === TRUE_STRING;
   }
 }
