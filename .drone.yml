@@ -3,37 +3,185 @@ type: docker
 name: ci
 
 steps:
+  - name: "Install dependencies"
+    image: node:14
+    commands:
+      - cd ctt-frontend
+      - npm ci
 
-- name: "Install dependencies"
-  image: node:14
-  commands:
-  - cd ctt-frontend
-  - npm ci
+  - name: "Lint"
+    image: node:14
+    commands:
+      - cd ctt-frontend
+      - "npx ng lint"
+    depends_on: ["Install dependencies"]
 
-- name: "Lint"
-  image: node:14
-  commands:
-  - cd ctt-frontend
-  - "npx ng lint"
-  depends_on: [ "Install dependencies" ]
+  - name: "Prettier"
+    image: node:14
+    commands:
+      - cd ctt-frontend
+      - "npx prettier --check ."
+    depends_on: ["Install dependencies"]
 
-- name: "Prettier"
-  image: node:14
-  commands:
-  - cd ctt-frontend
-  - "npx prettier --check ."
-  depends_on: [ "Install dependencies" ]
+  - name: "Test & Coverage"
+    image: buildkite/puppeteer
+    commands:
+      - cd ctt-frontend
+      - "npx ng test --browsers ChromeHeadlessNoSandbox --watch false --progress false --codeCoverage"
+    depends_on: ["Install dependencies"]
 
-- name: "Test & Coverage"
-  image: buildkite/puppeteer
-  commands:
-  - cd ctt-frontend
-  - "npx ng test --browsers ChromeHeadlessNoSandbox --watch false --progress false --codeCoverage"
-  depends_on: [ "Install dependencies" ]
+  ######
+  # CD for develop branch
+  #####
+  - name: "Amplify develop"
+    image: node:14
+    commands:
+      - cd ctt-frontend
+      - npm install -g @aws-amplify/cli
+      - mkdir ~/.aws
+      - echo "[default]" > ~/.aws/credentials
+      - echo "aws_access_key_id=$KEYID" >> ~/.aws/credentials
+      - echo "aws_secret_access_key=$KEYSECRET" >> ~/.aws/credentials
+      - echo "[default]" > ~/.aws/config
+      - echo "region=us-east-1" >> ~/.aws/config
+      - npx amplify init --envName dev --yes
+      - npx amplify push --yes
+    environment:
+      KEYID:
+        from_secret: aws_access_key_id
+      KEYSECRET:
+        from_secret: aws_secret_access_key
+    when:
+      branch:
+        - develop
+      event:
+        - push
+    depends_on: ["Test & Coverage", "Lint"]
 
-#- name: "Upload to codecov"
-#  image: plugins/codecov
-#  settings:
-#    token:
-#      from_secret: codecov-token
-#  depends_on: [ "Test & Coverage" ]
+  - name: "Build develop"
+    image: node:14
+    commands:
+      - cd ctt-frontend
+      - npm run build
+    when:
+      branch:
+        - develop
+      event:
+        - push
+    depends_on: ["Amplify develop"]
+
+  - name: "Push develop"
+    image: plugins/ecr
+    settings:
+      access_key:
+        from_secret: aws_access_key_id
+      secret_key:
+        from_secret: aws_secret_access_key
+      repo: ctt
+      registry: 356962203731.dkr.ecr.us-east-1.amazonaws.com
+      dockerfile: ctt-frontend/Dockerfile
+      tags: ["develop"]
+    when:
+      branch:
+        - develop
+      event:
+        - push
+    depends_on: ["Build develop"]
+
+  - name: "Publish develop"
+    image: joshdvir/drone-ecs-deploy
+    environment:
+      AWS_ACCESS_KEY_ID:
+        from_secret: aws_access_key_id
+      AWS_SECRET_ACCESS_KEY:
+        from_secret: aws_secret_access_key
+    settings:
+      cluster: ctt-cluster
+      service: developen-service
+      image_name: "356962203731.dkr.ecr.us-east-1.amazonaws.com/ctt:develop"
+      aws_region: us-east-1
+      timeout: "1800"
+    when:
+      branch:
+        - develop
+      event:
+        - push
+    depends_on: ["Push develop"]
+
+  ######
+  # CD for main branch
+  #####
+  - name: "Amplify main"
+    image: node:14
+    commands:
+      - cd ctt-frontend
+      - npm install -g @aws-amplify/cli
+      - mkdir ~/.aws
+      - echo "[default]" > ~/.aws/credentials
+      - echo "aws_access_key_id=$KEYID" >> ~/.aws/credentials
+      - echo "aws_secret_access_key=$KEYSECRET" >> ~/.aws/credentials
+      - echo "[default]" > ~/.aws/config
+      - echo "region=us-east-1" >> ~/.aws/config
+      - npx amplify init --envName main --yes
+      - npx amplify push --yes
+    environment:
+      KEYID:
+        from_secret: aws_access_key_id
+      KEYSECRET:
+        from_secret: aws_secret_access_key
+    when:
+      branch:
+        - main
+      event:
+        - push
+    depends_on: ["Test & Coverage", "Lint"]
+
+  - name: "Build main"
+    image: node:14
+    commands:
+      - cd ctt-frontend
+      - npm run build
+    when:
+      branch:
+        - main
+      event:
+        - push
+    depends_on: ["Amplify main"]
+
+  - name: "Push main"
+    image: plugins/ecr
+    settings:
+      access_key:
+        from_secret: aws_access_key_id
+      secret_key:
+        from_secret: aws_secret_access_key
+      repo: ctt
+      registry: 356962203731.dkr.ecr.us-east-1.amazonaws.com
+      dockerfile: ctt-frontend/Dockerfile
+      tags: ["main"]
+    when:
+      branch:
+        - main
+      event:
+        - push
+    depends_on: ["Build main"]
+
+  - name: "Publish main"
+    image: joshdvir/drone-ecs-deploy
+    environment:
+      AWS_ACCESS_KEY_ID:
+        from_secret: aws_access_key_id
+      AWS_SECRET_ACCESS_KEY:
+        from_secret: aws_secret_access_key
+    settings:
+      cluster: ctt-cluster
+      service: main-service
+      image_name: "356962203731.dkr.ecr.us-east-1.amazonaws.com/ctt:main"
+      aws_region: us-east-1
+      timeout: "1800"
+    when:
+      branch:
+        - main
+      event:
+        - push
+    depends_on: ["Push main"]
