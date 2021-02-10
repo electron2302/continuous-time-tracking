@@ -4,15 +4,38 @@
 
 ## Usage
 
-Text
-
 ## Development Setup
 
-Text
+Prerequisites:
+
+- Node.js v10.x or later
+- npm v5.x or later
+- git v2.14.1 or later
+
+Install the aws-amplify cli with (you might need <code>sudo</code>):
+
+- <code>npm install -g @aws-amplify/cli</code>
+
+Configure Amplify with:
+
+- <code>amplify configure</code>
+- region: us-east-1
+
+Install Amplify libraries:
+
+- <code>npm install --save aws-amplify @aws-amplify/ui-angular</code>
+
+Get implemented api, database and authentication with:
+
+- <code>amplify pull</code>
+
+Check your Amplify status with:
+
+- <code>amplify status</code>
 
 ### Code Style
 
-Text
+ESLint
 
 ### Integration into Visual Studio Code
 
@@ -35,7 +58,8 @@ Plugins:
 
 You can build and serve your local changes localy with:
 
-<code>ng serve</code>
+- <code>npm install</code>
+- <code>ng serve</code>
 
 , in the ./ctt-frontend directory.
 
@@ -43,7 +67,7 @@ You can build and serve your local changes localy with:
 
 You can run the tests with:
 
-<code>ng test</code>
+- <code>ng test</code>
 
 , in the ./ctt-frontend directory.
 
