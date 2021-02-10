@@ -154,12 +154,15 @@ export class AwsActivityService implements ActivityService {
 
   getBetween(from: Date, to: Date, category?: Category): Promise<Activity[]> {
     return this.api
-      .ListActivitys(//{
+      .ListActivitys(
+        //{
         //and: [
-          { from: { between: [from.toISOString(), to.toISOString()] } //},
+        {
+          from: { between: [from.toISOString(), to.toISOString()] }, //},
           //{ categoryID: { eq: category?.id } },
-        //],
-      })
+          //],
+        }
+      )
       .then(
         (result) => {
           const list: Activity[] = [];
@@ -174,11 +177,11 @@ export class AwsActivityService implements ActivityService {
               version: item._version,
             } as Activity);
           });
-          return list.sort((a, b) => a.from < b.from ? -1 : 1);
+          return list.sort((a, b) => (a.from < b.from ? -1 : 1));
         },
         (res) =>
           Promise.reject(
-              `Could not query activities between ${from.toISOString()} and ${to.toISOString()}.`
+            `Could not query activities between ${from.toISOString()} and ${to.toISOString()}.`
           )
       );
   }
@@ -218,10 +221,16 @@ export class AwsActivityService implements ActivityService {
     this.activitySubjects.forEach((item) => {
       if (item.from && item.from < affected && item.to && item.to > affected) {
         this.getBetween(item.from, item.to).then((result) =>
-          item.subscribeable.next(result.sort((a, b) => a.from < b.from ? -1 : 1))
+          item.subscribeable.next(
+            result.sort((a, b) => (a.from < b.from ? -1 : 1))
+          )
         );
       } else {
-        this.getAll().then((result) => item.subscribeable.next(result.sort((a, b) => a.from < b.from ? -1 : 1)));
+        this.getAll().then((result) =>
+          item.subscribeable.next(
+            result.sort((a, b) => (a.from < b.from ? -1 : 1))
+          )
+        );
       }
     });
   }

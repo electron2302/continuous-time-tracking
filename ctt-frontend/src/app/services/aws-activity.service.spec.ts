@@ -7,10 +7,6 @@ import {
   UpdateActivityInput,
   DeleteActivityInput,
   ModelActivityFilterInput,
-  OnCreateActivitySubscription,
-  SubscriptionResponse,
-  OnUpdateActivitySubscription,
-  OnDeleteActivitySubscription,
 } from './API.service';
 import { AwsActivityService } from './aws-activity.service';
 import * as MockData from './test-data/aws-activity-service-data';
@@ -274,88 +270,174 @@ describe('AwsActivityService', () => {
   describe('getByCategory', () => {
     it('should resolve promise on success (no activities)', async () => {
       apiMock
-        .setup((x) => x.ListActivitys(TypeMoq.It.is((y) => (y as ModelActivityFilterInput) !== null)))
+        .setup((x) =>
+          x.ListActivitys(
+            TypeMoq.It.is((y) => (y as ModelActivityFilterInput) !== null)
+          )
+        )
         .returns(() => Promise.resolve(MockData.activityApiListEmpty));
 
-      await expectAsync(sut.getByCategory(MockData.filterCategroy)).toBeResolvedTo(
-        MockData.activityListEmpty
+      await expectAsync(
+        sut.getByCategory(MockData.filterCategroy)
+      ).toBeResolvedTo(MockData.activityListEmpty);
+      apiMock.verify(
+        (x) =>
+          x.ListActivitys(
+            TypeMoq.It.is((y) => (y as ModelActivityFilterInput) !== null)
+          ),
+        TypeMoq.Times.once()
       );
-      apiMock.verify((x) => x.ListActivitys(TypeMoq.It.is((y) => (y as ModelActivityFilterInput) !== null)), TypeMoq.Times.once());
     });
 
     it('should resolve promise on success (one activity)', async () => {
       apiMock
-        .setup((x) => x.ListActivitys(TypeMoq.It.is((y) => (y as ModelActivityFilterInput) !== null)))
+        .setup((x) =>
+          x.ListActivitys(
+            TypeMoq.It.is((y) => (y as ModelActivityFilterInput) !== null)
+          )
+        )
         .returns(() => Promise.resolve(MockData.activityApiListSingle));
 
-      await expectAsync(sut.getByCategory(MockData.filterCategroy)).toBeResolvedTo(
-        MockData.activityListSingle
+      await expectAsync(
+        sut.getByCategory(MockData.filterCategroy)
+      ).toBeResolvedTo(MockData.activityListSingle);
+      apiMock.verify(
+        (x) =>
+          x.ListActivitys(
+            TypeMoq.It.is((y) => (y as ModelActivityFilterInput) !== null)
+          ),
+        TypeMoq.Times.once()
       );
-      apiMock.verify((x) => x.ListActivitys(TypeMoq.It.is((y) => (y as ModelActivityFilterInput) !== null)), TypeMoq.Times.once());
     });
 
     it('should resolve promise on success (multiple activities)', async () => {
       apiMock
-        .setup((x) => x.ListActivitys(TypeMoq.It.is((y) => (y as ModelActivityFilterInput) !== null)))
+        .setup((x) =>
+          x.ListActivitys(
+            TypeMoq.It.is((y) => (y as ModelActivityFilterInput) !== null)
+          )
+        )
         .returns(() => Promise.resolve(MockData.activityApiListSingle));
 
-      await expectAsync(sut.getByCategory(MockData.filterCategroy)).toBeResolvedTo(
-        MockData.activityListSingle
+      await expectAsync(
+        sut.getByCategory(MockData.filterCategroy)
+      ).toBeResolvedTo(MockData.activityListSingle);
+      apiMock.verify(
+        (x) =>
+          x.ListActivitys(
+            TypeMoq.It.is((y) => (y as ModelActivityFilterInput) !== null)
+          ),
+        TypeMoq.Times.once()
       );
-      apiMock.verify((x) => x.ListActivitys(TypeMoq.It.is((y) => (y as ModelActivityFilterInput) !== null)), TypeMoq.Times.once());
     });
 
     it('should reject promise on fail', async () => {
-      apiMock.setup((x) => x.ListActivitys(TypeMoq.It.is((y) => (y as ModelActivityFilterInput) !== null))).returns(() => Promise.reject());
+      apiMock
+        .setup((x) =>
+          x.ListActivitys(
+            TypeMoq.It.is((y) => (y as ModelActivityFilterInput) !== null)
+          )
+        )
+        .returns(() => Promise.reject());
 
-      await expectAsync(sut.getByCategory(MockData.filterCategroy)).toBeRejectedWith(
-        `Could not query activities for category TestCat.`
+      await expectAsync(
+        sut.getByCategory(MockData.filterCategroy)
+      ).toBeRejectedWith(`Could not query activities for category TestCat.`);
+      apiMock.verify(
+        (x) =>
+          x.ListActivitys(
+            TypeMoq.It.is((y) => (y as ModelActivityFilterInput) !== null)
+          ),
+        TypeMoq.Times.once()
       );
-      apiMock.verify((x) => x.ListActivitys(TypeMoq.It.is((y) => (y as ModelActivityFilterInput) !== null)), TypeMoq.Times.once());
     });
   });
 
   describe('getBetween', () => {
     it('should resolve promise on success (no activities)', async () => {
       apiMock
-        .setup((x) => x.ListActivitys(TypeMoq.It.is((y) => (y as ModelActivityFilterInput) !== null)))
+        .setup((x) =>
+          x.ListActivitys(
+            TypeMoq.It.is((y) => (y as ModelActivityFilterInput) !== null)
+          )
+        )
         .returns(() => Promise.resolve(MockData.activityApiListEmpty));
 
-      await expectAsync(sut.getBetween(MockData.fromDate, MockData.toDate)).toBeResolvedTo(
-        MockData.activityListEmpty
+      await expectAsync(
+        sut.getBetween(MockData.fromDate, MockData.toDate)
+      ).toBeResolvedTo(MockData.activityListEmpty);
+      apiMock.verify(
+        (x) =>
+          x.ListActivitys(
+            TypeMoq.It.is((y) => (y as ModelActivityFilterInput) !== null)
+          ),
+        TypeMoq.Times.once()
       );
-      apiMock.verify((x) => x.ListActivitys(TypeMoq.It.is((y) => (y as ModelActivityFilterInput) !== null)), TypeMoq.Times.once());
     });
 
     it('should resolve promise on success (one activity)', async () => {
       apiMock
-        .setup((x) => x.ListActivitys(TypeMoq.It.is((y) => (y as ModelActivityFilterInput) !== null)))
+        .setup((x) =>
+          x.ListActivitys(
+            TypeMoq.It.is((y) => (y as ModelActivityFilterInput) !== null)
+          )
+        )
         .returns(() => Promise.resolve(MockData.activityApiListSingle));
 
-      await expectAsync(sut.getBetween(MockData.fromDate, MockData.toDate)).toBeResolvedTo(
-        MockData.activityListSingle
+      await expectAsync(
+        sut.getBetween(MockData.fromDate, MockData.toDate)
+      ).toBeResolvedTo(MockData.activityListSingle);
+      apiMock.verify(
+        (x) =>
+          x.ListActivitys(
+            TypeMoq.It.is((y) => (y as ModelActivityFilterInput) !== null)
+          ),
+        TypeMoq.Times.once()
       );
-      apiMock.verify((x) => x.ListActivitys(TypeMoq.It.is((y) => (y as ModelActivityFilterInput) !== null)), TypeMoq.Times.once());
     });
 
     it('should resolve promise on success (multiple activities)', async () => {
       apiMock
-        .setup((x) => x.ListActivitys(TypeMoq.It.is((y) => (y as ModelActivityFilterInput) !== null)))
+        .setup((x) =>
+          x.ListActivitys(
+            TypeMoq.It.is((y) => (y as ModelActivityFilterInput) !== null)
+          )
+        )
         .returns(() => Promise.resolve(MockData.activityApiListMulti));
 
-      await expectAsync(sut.getBetween(MockData.fromDate, MockData.toDate)).toBeResolvedTo(
-        MockData.activityListMulti
+      await expectAsync(
+        sut.getBetween(MockData.fromDate, MockData.toDate)
+      ).toBeResolvedTo(MockData.activityListMulti);
+      apiMock.verify(
+        (x) =>
+          x.ListActivitys(
+            TypeMoq.It.is((y) => (y as ModelActivityFilterInput) !== null)
+          ),
+        TypeMoq.Times.once()
       );
-      apiMock.verify((x) => x.ListActivitys(TypeMoq.It.is((y) => (y as ModelActivityFilterInput) !== null)), TypeMoq.Times.once());
     });
 
     it('should reject promise on fail', async () => {
-      apiMock.setup((x) => x.ListActivitys(TypeMoq.It.is((y) => (y as ModelActivityFilterInput) !== null))).returns(() => Promise.reject());
+      apiMock
+        .setup((x) =>
+          x.ListActivitys(
+            TypeMoq.It.is((y) => (y as ModelActivityFilterInput) !== null)
+          )
+        )
+        .returns(() => Promise.reject());
 
-      await expectAsync(sut.getBetween(MockData.fromDate, MockData.toDate)).toBeRejectedWith(
+      await expectAsync(
+        sut.getBetween(MockData.fromDate, MockData.toDate)
+      ).toBeRejectedWith(
         `Could not query activities between ${MockData.fromDate.toISOString()} and ${MockData.toDate.toISOString()}.`
       );
-      apiMock.verify((x) => x.ListActivitys(TypeMoq.It.is((y) => (y as ModelActivityFilterInput) !== null)), TypeMoq.Times.once());
+      apiMock.verify(
+        (x) =>
+          x.ListActivitys(
+            TypeMoq.It.is((y) => (y as ModelActivityFilterInput) !== null)
+          ),
+        TypeMoq.Times.once()
+      );
     });
   });
 });

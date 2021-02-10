@@ -100,7 +100,8 @@ export const activityApiListMulti: ListActivitysQuery = {
       id: '1',
       owner: null,
       updatedAt: '',
-    },{
+    },
+    {
       __typename: 'Activity',
       _deleted: null,
       _lastChangedAt: 0,
