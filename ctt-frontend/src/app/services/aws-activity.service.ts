@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/member-ordering */
 /* eslint-disable no-underscore-dangle */
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { Activity } from '../interfaces/activity';
 import { Category } from '../interfaces/category';
@@ -25,7 +25,7 @@ export class AwsActivityService implements ActivityService {
   private activitySubjects: DateSubscriber[] = [];
   private changeListener: ChangeListener;
 
-  constructor(private api: APIService, subscribe = true) {
+  constructor(private api: APIService, @Inject(true)subscribe = true) {
     this.changeListener = new ChangeListener();
 
     if (subscribe) {
