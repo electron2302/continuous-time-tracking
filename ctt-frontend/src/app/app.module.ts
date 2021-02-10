@@ -68,6 +68,8 @@ import { ViewCategoriesComponent } from './components/view-categories/view-categ
 import { AccountComponent } from './components/account/account.component';
 import { StatisticsComponent } from './components/statistics/statistics.component';
 import { LoadingComponent } from './components/loading/loading.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 const materialModules = [
   CdkTreeModule,
@@ -128,6 +130,9 @@ Amplify.configure(awsconfig);
     ReactiveFormsModule,
     NgxMatColorPickerModule,
     ...materialModules,
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: environment.production,
+    }),
   ],
   providers: [
     { provide: ActivityService, useClass: AwsActivityService },
