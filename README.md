@@ -57,7 +57,7 @@ Plugins:
 
 ### Build and serve
 
-You can build and serve your local changes localy with:
+You can build and serve your local changes locally by running:
 
 - <code>npm install</code>
 - <code>ng serve</code>
