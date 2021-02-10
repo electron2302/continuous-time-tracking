@@ -2,6 +2,18 @@
 
 [![Build Status](https://drone.dev.sart.solutions/api/badges/electron2302/continuous-time-tracking/status.svg?ref=refs/heads/develop)](https://drone.dev.sart.solutions/electron2302/continuous-time-tracking)
 
+## Content
+
+1. [Content](##Content)
+2. [Usage](##Usage)
+3. [Development Setup](##Development-Setup)  
+   3.1. [Code style](###Code-style)  
+   3.2. [Integration into Visual Studio Code](###Integration-into-Visual-Studio-Code)  
+   3.3. [Build and serve](###Build-and-serve)  
+   3.4. [Run tests](###Run-tests)
+4. [Contributors](##Contributors)
+5. [References](##References)
+
 ## Usage
 
 The app is available at: http://34.202.114.178/.
@@ -29,6 +41,18 @@ At this screen you are promt to start a new activity.
 By clicking on the hamburger menue on the left of the "Continuous Time Tracking" label you can toggle the side navigation bar:
 
 ![SideNavScreen](./docs/SideNavScreen.png)
+
+By clickoing on "Categories" you can edit all categories or create a new one.
+
+![EditCategoriesScreen](./docs/EditCategoriesScreen.png)
+
+On the edit categories screen you can edit a certain category by clicking on the pen-icon:
+
+![EditCategoryScreen](./docs/EditCategoryScreen.png)
+
+On the edit categories screen you can add a category py clicking on the "+":
+
+![AddCategoryScreen](./docs/AddCategoryScreen.png)
 
 ## Development Setup
 
@@ -106,3 +130,13 @@ The following authors have contributed to this project (in alphabetical order):
 - [electron2302](https://github.com/electron2302)
 - [sschoetz](https://github.com/sschoetz)
 - [walli545](https://github.com/walli545)
+
+## References
+
+Useful references and and documantations we used in our project:
+
+- [AWS Amplify](https://aws.amazon.com/de/amplify/)
+- [AWS Amplify Documentation](https://docs.aws.amazon.com/amplify/)
+- [Amplify Framework Documentation](https://docs.amplify.aws/)
+- [Angular](https://angular.io/)
+- [Angular Material](https://material.angular.io/)
