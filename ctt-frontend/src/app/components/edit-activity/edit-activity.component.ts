@@ -20,7 +20,7 @@ import { CategoryService } from '../../services/category.service';
 export class EditActivityComponent implements OnInit {
   public activity: Activity = {
     id: 'new',
-    categoryID: 'a',
+    categoryID: 'new',
     from: new Date(),
   };
 
@@ -83,7 +83,8 @@ export class EditActivityComponent implements OnInit {
   private updateFormControl(): void {
     this.activityForm.setValue({
       from: this.activity.from,
-      category: this.activity.categoryID,
+      category:
+        this.activity.categoryID === 'new' ? null : this.activity.categoryID,
     });
   }
 
