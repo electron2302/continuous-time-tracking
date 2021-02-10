@@ -133,6 +133,7 @@ Amplify.configure(awsconfig);
     { provide: ActivityService, useClass: AwsActivityService },
     { provide: CategoryService, useClass: AwsCategoryService },
     { provide: MAT_COLOR_FORMATS, useValue: NGX_MAT_COLOR_FORMATS },
+    { provide: 'boolean', useValue: true },
     APIService,
     AuthService,
     AuthGuard,
