@@ -11,7 +11,7 @@ export class AwsActivityService extends ActivityService {
   private activitySubject = new Subject<Activity[]>();
   private activites: Activity[] = [];
 
-  create(input: CreateActivityInput): Promise<void> {
+  create(input: CreateActivityInput): Promise<Activity> {
     console.log(input);
     this.activites.push({
       categoryID: input.categoryID,
@@ -19,7 +19,11 @@ export class AwsActivityService extends ActivityService {
       id: 'abcdefg',
     });
     this.activitySubject.next(this.activites);
-    return Promise.resolve();
+    return Promise.resolve({
+      categoryID: '',
+      from: new Date(2021, 1, 4, 0, 0),
+      id: '',
+    });
   }
   insert(insert: CreateActivityInput): Promise<Activity> {
     throw new Error('Method not implemented.');
@@ -34,7 +38,11 @@ export class AwsActivityService extends ActivityService {
     throw new Error('Method not implemented.');
   }
   getById(id: string): Promise<Activity> {
-    throw new Error('Method not implemented.');
+    return Promise.resolve({
+      categoryID: '94e12099-26d5-4b34-95e5-8a5785f75e19',
+      from: new Date(2021, 1, 4, 0, 0),
+      id: 'abc',
+    });
   }
   getByCategory(category: Category): Promise<Activity[]> {
     throw new Error('Method not implemented.');

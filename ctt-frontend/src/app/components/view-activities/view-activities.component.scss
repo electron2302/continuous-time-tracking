@@ -1,4 +1,4 @@
-button {
+.change-day {
   font-size: 25px;
   height: 50px;
 }
@@ -21,4 +21,17 @@ button {
   span {
     font-size: 25px;
   }
+}
+
+.fab {
+  position: absolute;
+  right: 20px;
+}
+
+.fab.edit {
+  bottom: 20px;
+}
+
+.fab.add {
+  bottom: 85px;
 }

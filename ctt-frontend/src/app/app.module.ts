@@ -24,7 +24,12 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatChipsModule } from '@angular/material/chips';
-import { MatRippleModule } from '@angular/material/core';
+import {
+  ErrorStateMatcher,
+  MatRippleModule,
+  MAT_DATE_LOCALE,
+  ShowOnDirtyErrorStateMatcher,
+} from '@angular/material/core';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -54,6 +59,12 @@ import {
   NgxMatColorPickerModule,
   NGX_MAT_COLOR_FORMATS,
 } from '@angular-material-components/color-picker';
+import {
+  NgxMatDateFormats,
+  NgxMatDatetimePickerModule,
+  NgxMatNativeDateModule,
+  NgxMatTimepickerModule,
+} from '@angular-material-components/datetime-picker';
 
 import { EditCategoryComponent } from './components/edit-category/edit-category.component';
 import { AwsCategoryService } from './services/aws-category.service';
@@ -68,6 +79,20 @@ import { ViewCategoriesComponent } from './components/view-categories/view-categ
 import { AccountComponent } from './components/account/account.component';
 import { StatisticsComponent } from './components/statistics/statistics.component';
 import { LoadingComponent } from './components/loading/loading.component';
+import { EditActivityComponent } from './components/edit-activity/edit-activity.component';
+import { EditActivityPreviewComponent } from './components/edit-activity-preview/edit-activity-preview.component';
+
+const CUSTOM_DATE_FORMATS: NgxMatDateFormats = {
+  parse: {
+    dateInput: 'l, LTS',
+  },
+  display: {
+    dateInput: 'YYYY-MM-DD HH:mm:ss',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY',
+  },
+};
 
 const materialModules = [
   CdkTreeModule,
@@ -119,6 +144,8 @@ Amplify.configure(awsconfig);
     AccountComponent,
     StatisticsComponent,
     LoadingComponent,
+    EditActivityComponent,
+    EditActivityPreviewComponent,
   ],
   imports: [
     AmplifyUIAngularModule,
@@ -127,12 +154,16 @@ Amplify.configure(awsconfig);
     BrowserAnimationsModule,
     ReactiveFormsModule,
     NgxMatColorPickerModule,
+    NgxMatDatetimePickerModule,
+    NgxMatTimepickerModule,
+    NgxMatNativeDateModule,
     ...materialModules,
   ],
   providers: [
     { provide: ActivityService, useClass: AwsActivityService },
     { provide: CategoryService, useClass: AwsCategoryService },
     { provide: MAT_COLOR_FORMATS, useValue: NGX_MAT_COLOR_FORMATS },
+    { provide: MAT_DATE_LOCALE, useValue: 'de-DE' },
     APIService,
     AuthService,
     AuthGuard,
