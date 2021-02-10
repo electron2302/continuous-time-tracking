@@ -1,0 +1,19 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title *ngIf="date"
+      >Preview for {{ date | date: 'dd.MM.yyyy' }}</mat-card-title
+    >
+    <mat-card-title *ngIf="!date">Preview</mat-card-title>
+  </mat-card-header>
+  <div *ngIf="!loading && newActivity">
+    <app-element-activity
+      *ngFor="let activity of activities"
+      [viewableActivity]="activity"
+    >
+    </app-element-activity>
+  </div>
+
+  <p *ngIf="!newActivity">Fix errors to show preview!</p>
+
+  <app-loading [active]="loading"></app-loading>
+</mat-card>
