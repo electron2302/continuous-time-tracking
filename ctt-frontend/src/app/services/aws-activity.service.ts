@@ -21,9 +21,9 @@ import {
 export class AwsActivityService implements ActivityService {
   private activitySubjects: DateSubscriber[] = [];
   constructor(private api: APIService) {
-    this.api.OnCreateActivityListener.subscribe(this.activityCreated);
-    this.api.OnUpdateActivityListener.subscribe(this.activityUpdated);
-    this.api.OnDeleteActivityListener.subscribe(this.activityDeleted);
+    //this.api.OnCreateActivityListener.subscribe(this.activityCreated);
+    //this.api.OnUpdateActivityListener.subscribe(this.activityUpdated);
+    //this.api.OnDeleteActivityListener.subscribe(this.activityDeleted);
   }
 
   create(input: CreateActivityInput): Promise<Activity> {
@@ -44,6 +44,7 @@ export class AwsActivityService implements ActivityService {
           id: result.id,
           version: result._version,
         };
+        this.notifyObservers(activity.from);
         return Promise.resolve(activity);
       },
       () =>
@@ -61,7 +62,10 @@ export class AwsActivityService implements ActivityService {
       _version: activity.version,
     };
     return this.api.UpdateActivity(updateActivity).then(
-      () => Promise.resolve(),
+      () => {
+        this.notifyObservers(activity.from);
+        return Promise.resolve();
+      },
       () =>
         Promise.reject(
           `Could not update activity from ${activity.from.toISOString()}`
@@ -75,7 +79,10 @@ export class AwsActivityService implements ActivityService {
       _version: activity.version,
     };
     return this.api.DeleteActivity(deleteActivity).then(
-      () => Promise.resolve(),
+      () => {
+        this.notifyObservers(activity.from);
+        return Promise.resolve();
+      },
       () =>
         Promise.reject(
           `Could not delete activity from ${activity.from.toISOString()}`
@@ -147,9 +154,11 @@ export class AwsActivityService implements ActivityService {
 
   getBetween(from: Date, to: Date, category?: Category): Promise<Activity[]> {
     return this.api
-      .ListActivitys({
-        from: { between: [from.toISOString(), to.toISOString()] },
-        categoryID: { eq: category?.id },
+      .ListActivitys(//{
+        //and: [
+          { from: { between: [from.toISOString(), to.toISOString()] } //},
+          //{ categoryID: { eq: category?.id } },
+        //],
       })
       .then(
         (result) => {
@@ -165,11 +174,11 @@ export class AwsActivityService implements ActivityService {
               version: item._version,
             } as Activity);
           });
-          return list;
+          return list.sort((a, b) => a.from < b.from ? -1 : 1);
         },
-        () =>
+        (res) =>
           Promise.reject(
-            `Could not query activities between ${from.toISOString()} and ${to.toISOString()}.`
+              `Could not query activities between ${from.toISOString()} and ${to.toISOString()}.`
           )
       );
   }
@@ -185,15 +194,7 @@ export class AwsActivityService implements ActivityService {
   ): void {
     if (val.value && val.value.data) {
       const date: Date = new Date(Date.parse(val.value.data.from));
-      this.activitySubjects.forEach((item) => {
-        if (item.from && item.from < date && item.to && item.to > date) {
-          this.getBetween(item.from, item.to).then((result) =>
-            item.subscribeable.next(result)
-          );
-        } else {
-          this.getAll().then((result) => item.subscribeable.next(result));
-        }
-      });
+      this.notifyObservers(date);
     }
   }
   activityUpdated(
@@ -201,15 +202,7 @@ export class AwsActivityService implements ActivityService {
   ): void {
     if (val.value && val.value.data) {
       const date: Date = new Date(Date.parse(val.value.data.from));
-      this.activitySubjects.forEach((item) => {
-        if (item.from && item.from < date && item.to && item.to > date) {
-          this.getBetween(item.from, item.to).then((result) =>
-            item.subscribeable.next(result)
-          );
-        } else {
-          this.getAll().then((result) => item.subscribeable.next(result));
-        }
-      });
+      this.notifyObservers(date);
     }
   }
   activityDeleted(
@@ -217,16 +210,20 @@ export class AwsActivityService implements ActivityService {
   ): void {
     if (val.value && val.value.data) {
       const date: Date = new Date(Date.parse(val.value.data.from));
-      this.activitySubjects.forEach((item) => {
-        if (item.from && item.from < date && item.to && item.to > date) {
-          this.getBetween(item.from, item.to).then((result) =>
-            item.subscribeable.next(result)
-          );
-        } else {
-          this.getAll().then((result) => item.subscribeable.next(result));
-        }
-      });
+      this.notifyObservers(date);
     }
+  }
+
+  notifyObservers(affected: Date): void {
+    this.activitySubjects.forEach((item) => {
+      if (item.from && item.from < affected && item.to && item.to > affected) {
+        this.getBetween(item.from, item.to).then((result) =>
+          item.subscribeable.next(result.sort((a, b) => a.from < b.from ? -1 : 1))
+        );
+      } else {
+        this.getAll().then((result) => item.subscribeable.next(result.sort((a, b) => a.from < b.from ? -1 : 1)));
+      }
+    });
   }
 }
 

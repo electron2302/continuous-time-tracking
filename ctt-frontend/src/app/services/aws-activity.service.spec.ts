@@ -1,3 +1,4 @@
+import { Observable } from 'zen-observable-ts';
 import * as TypeMoq from 'typemoq';
 
 import {
@@ -6,6 +7,10 @@ import {
   UpdateActivityInput,
   DeleteActivityInput,
   ModelActivityFilterInput,
+  OnCreateActivitySubscription,
+  SubscriptionResponse,
+  OnUpdateActivitySubscription,
+  OnDeleteActivitySubscription,
 } from './API.service';
 import { AwsActivityService } from './aws-activity.service';
 import * as MockData from './test-data/aws-activity-service-data';
@@ -15,7 +20,8 @@ describe('AwsActivityService', () => {
   let sut: AwsActivityService;
 
   beforeEach(() => {
-    apiMock = TypeMoq.Mock.ofType(APIService);
+    apiMock = TypeMoq.Mock.ofType(APIService, TypeMoq.MockBehavior.Loose, true);
+
     sut = new AwsActivityService(apiMock.object);
   });
 
