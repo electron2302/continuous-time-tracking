@@ -70,7 +70,7 @@ You can run the tests by running:
 
 - <code>ng test</code>
 
-, in the ./ctt-frontend directory.
+in the ./ctt-frontend directory.
 
 ## Contributors
 
