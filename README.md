@@ -4,6 +4,32 @@
 
 ## Usage
 
+The app is available at: http://34.202.114.178/.
+
+The Entripoint of the CTT is the login screen:
+
+![LoginScreen](./docs/LoginScreen.png)
+
+If you have no account, you can create an account on the create account screen:
+
+![SignupScreen](./docs/SignupScreen.png)
+
+Once you signed up your self, you will receive a verification email.
+
+Type this verification code in the relating input box on the confirmation screen:
+
+![ConfirmationScreen](./docs/ConfirmationScreen.png)
+
+After you signed in, you will land at the home screen:
+
+![HomeScreen](./docs/HomeScreen.png)
+
+At this screen you are promt to start a new activity.
+
+By clicking on the hamburger menue on the left of the "Continuous Time Tracking" label you can toggle the side navigation bar:
+
+![SideNavScreen](./docs/SideNavScreen.png)
+
 ## Development Setup
 
 Prerequisites:
