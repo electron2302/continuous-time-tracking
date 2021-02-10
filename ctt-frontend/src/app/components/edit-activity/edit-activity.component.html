@@ -61,4 +61,17 @@
       </button>
     </mat-card-actions>
   </mat-card>
+
+  <app-edit-activity-preview
+    *ngIf="!loading"
+    [newActivity]="
+      this.activityForm.invalid
+        ? undefined
+        : {
+            categoryID: this.categoryCtl.value,
+            from: this.fromCtl.value,
+            id: 'preview'
+          }
+    "
+  ></app-edit-activity-preview>
 </form>
