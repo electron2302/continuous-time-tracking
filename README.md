@@ -16,7 +16,20 @@ Text
 
 ### Integration into Visual Studio Code
 
-Text
+Plugins:
+
+- Name: ESLint
+  Id: dbaeumer.vscode-eslint
+  Description: Integrates ESLint JavaScript into VS Code.
+  Version: 2.1.14
+  Publisher: Dirk Baeumer
+  VS Marketplace Link: https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint
+- Name: Prettier - Code formatter
+  Id: esbenp.prettier-vscode
+  Description: Code formatter using prettier
+  Version: 5.9.1
+  Publisher: Prettier
+  VS Marketplace Link: https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode
 
 ### Build and serve
 
