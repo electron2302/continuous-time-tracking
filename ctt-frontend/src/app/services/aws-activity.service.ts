@@ -64,7 +64,7 @@ export class AwsActivityService implements ActivityService {
       },
       () =>
         Promise.reject(
-          `Could nor insert Activity at starttime ${insert.from.toISOString()}`
+          `Could not insert Activity at starttime ${insert.from.toISOString()}`
         )
     );
   }
