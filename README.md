@@ -42,7 +42,7 @@ By clicking on the hamburger menue on the left of the "Continuous Time Tracking"
 
 ![SideNavScreen](./docs/SideNavScreen.png)
 
-By clickoing on "Categories" you can edit all categories or create a new one.
+By clicking on "Categories" you can edit all categories or create a new one.
 
 ![EditCategoriesScreen](./docs/EditCategoriesScreen.png)
 
@@ -53,6 +53,14 @@ On the edit categories screen you can edit a certain category by clicking on the
 On the edit categories screen you can add a category py clicking on the "+":
 
 ![AddCategoryScreen](./docs/AddCategoryScreen.png)
+
+By clicking on the "History" you can view the history of the current day and step trugh the days:
+
+![HistoryScreen](./docs/HistoryScreen.png)
+
+By clicking on your account name you can see your account details:
+
+![AccountScreen](./docs/AccountScreen.png)
 
 ## Development Setup
 
