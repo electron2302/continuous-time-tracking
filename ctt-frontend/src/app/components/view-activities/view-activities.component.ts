@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { nextDayMidnight, startOfToday } from '../../helper/time';
 import { Category, toCategoryMap } from '../../interfaces/category';
 import {
@@ -19,10 +20,12 @@ export class ViewActivitiesComponent implements OnInit {
 
   public categoryById = new Map<string, Category>();
   public viewableActivities: ViewableActivity[] = [];
+  public edit = false;
 
   constructor(
     private activityService: ActivityService,
-    private categoryService: CategoryService
+    private categoryService: CategoryService,
+    private router: Router
   ) {}
 
   async ngOnInit(): Promise<void> {
@@ -36,6 +39,14 @@ export class ViewActivitiesComponent implements OnInit {
       this.currentDay.setDate(this.currentDay.getDate() + delta)
     );
     this.getActivities();
+  }
+
+  public navigateToEditActivity(id: string): void {
+    this.router.navigate([`activity/${id}`]);
+  }
+
+  public toggleEdit(): void {
+    this.edit = !this.edit;
   }
 
   private async getCategories(): Promise<void> {
