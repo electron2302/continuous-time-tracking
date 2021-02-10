@@ -1,1 +1,37 @@
-<p>account works!</p>
+<mat-card id="card">
+  <mat-card-header id="mat-card-header">
+    <mat-card-title>Account</mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content id="mat-card-content">
+    <mat-form-field id="username" appearance="outline">
+      <mat-label>Username</mat-label>
+      <input matInput type="text" [value]="username" [readonly]="true" />
+    </mat-form-field>
+
+    <div>
+      <mat-form-field id="email" appearance="outline">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" [value]="email" [readonly]="true" />
+        <mat-icon
+          matSuffix
+          id="is-verified"
+          *ngIf="isVerified"
+          aria-hidden="false"
+          aria-label="Email is verified"
+        >
+          check_circle_outline
+        </mat-icon>
+        <mat-icon
+          matSuffix
+          id="is-not-verified"
+          *ngIf="!isVerified"
+          aria-hidden="false"
+          aria-label="Email is not verified"
+        >
+          error
+        </mat-icon>
+      </mat-form-field>
+    </div>
+  </mat-card-content>
+</mat-card>
