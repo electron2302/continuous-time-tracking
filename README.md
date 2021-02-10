@@ -62,7 +62,7 @@ You can build and serve your local changes locally by running:
 - <code>npm install</code>
 - <code>ng serve</code>
 
-, in the ./ctt-frontend directory.
+in the ./ctt-frontend directory.
 
 ### Run tests
 
