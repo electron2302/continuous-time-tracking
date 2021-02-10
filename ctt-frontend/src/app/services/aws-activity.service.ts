@@ -25,7 +25,7 @@ export class AwsActivityService implements ActivityService {
   private activitySubjects: DateSubscriber[] = [];
   private changeListener: ChangeListener;
 
-  constructor(private api: APIService, subscribe = true) {
+  constructor(private api: APIService, subscribe: boolean = true) {
     this.changeListener = new ChangeListener();
 
     if (subscribe) {
@@ -169,15 +169,9 @@ export class AwsActivityService implements ActivityService {
 
   getBetween(from: Date, to: Date, category?: Category): Promise<Activity[]> {
     return this.api
-      .ListActivitys(
-        //{
-        //and: [
-        {
-          from: { between: [from.toISOString(), to.toISOString()] }, //},
-          //{ categoryID: { eq: category?.id } },
-          //],
-        }
-      )
+      .ListActivitys({
+        from: { between: [from.toISOString(), to.toISOString()] },
+      })
       .then(
         (result) => {
           const list: Activity[] = [];
@@ -194,7 +188,7 @@ export class AwsActivityService implements ActivityService {
           });
           return list.sort((a, b) => (a.from < b.from ? -1 : 1));
         },
-        (res) =>
+        (_) =>
           Promise.reject(
             `Could not query activities between ${from.toISOString()} and ${to.toISOString()}.`
           )
