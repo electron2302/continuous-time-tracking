@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/member-ordering */
 /* eslint-disable no-underscore-dangle */
 import { Injectable } from '@angular/core';
-import { Observable, Subject, Subscriber } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { Activity } from '../interfaces/activity';
 import { Category } from '../interfaces/category';
 import { ActivityService, CreateActivityInput } from './activity.service';
@@ -14,16 +15,30 @@ import {
   OnDeleteActivitySubscription,
   OnUpdateActivitySubscription,
 } from './API.service';
+import { DateSubscriber } from '../helper/DateSubscriber';
+import { ChangeListener } from '../helper/ChangeListener';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AwsActivityService implements ActivityService {
   private activitySubjects: DateSubscriber[] = [];
-  constructor(private api: APIService) {
-    //this.api.OnCreateActivityListener.subscribe(this.activityCreated);
-    //this.api.OnUpdateActivityListener.subscribe(this.activityUpdated);
-    //this.api.OnDeleteActivityListener.subscribe(this.activityDeleted);
+  private changeListener: ChangeListener;
+
+  constructor(private api: APIService, subscribe = true) {
+    this.changeListener = new ChangeListener();
+
+    if (subscribe) {
+      Promise.all([
+        this.changeListener.getCreateActivityListener(),
+        this.changeListener.getUpdateActivityListener(),
+        this.changeListener.getDeleteActivityListener(),
+      ]).then((vals) => {
+        vals[0].subscribe((val, a = this) => this.activityCreated(val, a));
+        vals[1].subscribe((val, a = this) => this.activityUpdated(val, a));
+        vals[2].subscribe((val, a = this) => this.activityDeleted(val, a));
+      });
+    }
   }
 
   create(input: CreateActivityInput): Promise<Activity> {
@@ -193,27 +208,30 @@ export class AwsActivityService implements ActivityService {
   }
 
   activityCreated(
-    val: SubscriptionResponse<OnCreateActivitySubscription>
+    val: SubscriptionResponse<OnCreateActivitySubscription>,
+    owner: AwsActivityService
   ): void {
     if (val.value && val.value.data) {
       const date: Date = new Date(Date.parse(val.value.data.from));
-      this.notifyObservers(date);
+      owner.notifyObservers(date);
     }
   }
   activityUpdated(
-    val: SubscriptionResponse<OnUpdateActivitySubscription>
+    val: SubscriptionResponse<OnUpdateActivitySubscription>,
+    owner: AwsActivityService
   ): void {
     if (val.value && val.value.data) {
       const date: Date = new Date(Date.parse(val.value.data.from));
-      this.notifyObservers(date);
+      owner.notifyObservers(date);
     }
   }
   activityDeleted(
-    val: SubscriptionResponse<OnDeleteActivitySubscription>
+    val: SubscriptionResponse<OnDeleteActivitySubscription>,
+    owner: AwsActivityService
   ): void {
     if (val.value && val.value.data) {
       const date: Date = new Date(Date.parse(val.value.data.from));
-      this.notifyObservers(date);
+      owner.notifyObservers(date);
     }
   }
 
@@ -233,17 +251,5 @@ export class AwsActivityService implements ActivityService {
         );
       }
     });
-  }
-}
-
-class DateSubscriber {
-  from?: Date;
-  to?: Date;
-  subscribeable: Subject<Activity[]>;
-
-  constructor(subscribable: Subject<Activity[]>, from?: Date, to?: Date) {
-    this.from = from;
-    this.to = to;
-    this.subscribeable = subscribable;
   }
 }

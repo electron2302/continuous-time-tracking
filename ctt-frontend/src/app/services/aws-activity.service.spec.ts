@@ -1,4 +1,4 @@
-import { Observable } from 'zen-observable-ts';
+import { Auth } from 'aws-amplify';
 import * as TypeMoq from 'typemoq';
 
 import {
@@ -15,10 +15,9 @@ describe('AwsActivityService', () => {
   let apiMock: TypeMoq.IMock<APIService>;
   let sut: AwsActivityService;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     apiMock = TypeMoq.Mock.ofType(APIService, TypeMoq.MockBehavior.Loose, true);
-
-    sut = new AwsActivityService(apiMock.object);
+    sut = new AwsActivityService(apiMock.object, false);
   });
 
   describe('createActivity', () => {
