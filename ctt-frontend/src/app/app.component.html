@@ -22,6 +22,19 @@
       [opened]="desktopQuery.matches && isSignedIn ? true : undefined"
     >
       <mat-nav-list>
+        <!-- General -->
+        <a
+          *ngFor="let item of items"
+          mat-list-item
+          (click)="closeSideNav()"
+          [routerLink]="[item.route]"
+          routerLinkActive="is-active"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          <mat-icon matListIcon>{{ item.icon }}</mat-icon>
+          {{ item.title }}
+        </a>
+        <mat-divider></mat-divider>
         <!-- Account -->
         <h2 matSubheader>Account</h2>
         <a
@@ -36,19 +49,6 @@
         <a mat-list-item (click)="logout()">
           <mat-icon matListIcon>logout</mat-icon>
           Logout
-        </a>
-        <mat-divider></mat-divider>
-        <!-- General -->
-        <a
-          *ngFor="let item of items"
-          mat-list-item
-          (click)="closeSideNav()"
-          [routerLink]="[item.route]"
-          routerLinkActive="is-active"
-          [routerLinkActiveOptions]="{ exact: true }"
-        >
-          <mat-icon matListIcon>{{ item.icon }}</mat-icon>
-          {{ item.title }}
         </a>
         <mat-divider></mat-divider>
         <!-- Information -->
