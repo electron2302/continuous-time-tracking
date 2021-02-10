@@ -33,9 +33,10 @@ Check your Amplify status with:
 
 - <code>amplify status</code>
 
-### Code Style
+### Code style
 
-ESLint
+We use the default ESLint angular configuration.
+Furthermore we use the default prettier configuration.
 
 ### Integration into Visual Studio Code
 
