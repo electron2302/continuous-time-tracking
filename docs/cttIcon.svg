@@ -18,6 +18,8 @@
    sodipodi:docname="cttIcon.svg">
   <defs
      id="defs2">
+    <inkscape:tag
+       id="Set 1" />
     <marker
        inkscape:stockid="Arrow1Lstart"
        orient="auto"
@@ -142,9 +144,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="16.854768"
-     inkscape:cx="23.078087"
-     inkscape:cy="22.968758"
+     inkscape:zoom="20.48"
+     inkscape:cx="19.92323"
+     inkscape:cy="23.72427"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -153,20 +155,14 @@
      inkscape:snap-bbox="false"
      inkscape:object-paths="true"
      units="px"
-     inkscape:window-width="1244"
+     inkscape:window-width="2488"
      inkscape:window-height="1376"
      inkscape:window-x="72"
      inkscape:window-y="27"
-     inkscape:window-maximized="0"
+     inkscape:window-maximized="1"
      inkscape:pagecheckerboard="true"
      showguides="true"
-     inkscape:guide-bbox="true">
-    <sodipodi:guide
-       position="-3.1395666,11.428022"
-       orientation="1,0"
-       id="guide1543"
-       inkscape:locked="false" />
-  </sodipodi:namedview>
+     inkscape:guide-bbox="true" />
   <metadata
      id="metadata5">
     <rdf:RDF>
@@ -175,7 +171,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -192,48 +188,6 @@
        cy="290.66504"
        rx="6.3499999"
        ry="6.335" />
-    <ellipse
-       cy="128.45064"
-       cx="100.95227"
-       id="circle4557"
-       style="fill:none;fill-rule:nonzero;stroke-width:0.25654975"
-       rx="63"
-       ry="65" />
-    <ellipse
-       style="fill:none;fill-rule:nonzero;stroke-width:0.26458332"
-       id="path4615"
-       cx="44.099472"
-       cy="70.221802"
-       rx="20.847023"
-       ry="29.266012" />
-    <ellipse
-       style="fill:none;fill-rule:nonzero;stroke-width:0.26458332"
-       id="path4620"
-       cx="19.911579"
-       cy="69.286362"
-       rx="65.080124"
-       ry="10.156241" />
-    <ellipse
-       style="fill:none;fill-rule:nonzero;stroke-width:0.26458332"
-       id="path4622"
-       cx="137.37653"
-       cy="144.65637"
-       rx="34.477768"
-       ry="31.270535" />
-    <ellipse
-       style="fill:none;fill-rule:nonzero;stroke-width:0.26458332"
-       id="path4626"
-       cx="96.617928"
-       cy="92.137909"
-       rx="57.863853"
-       ry="46.103992" />
-    <ellipse
-       style="fill:none;fill-rule:nonzero;stroke-width:0.26458332"
-       id="path4630"
-       cx="109.71414"
-       cy="81.714394"
-       rx="17.773424"
-       ry="71.761864" />
     <ellipse
        style="opacity:1;fill:#000000;fill-rule:nonzero;stroke-width:0.02658035"
        id="path4638"
@@ -3298,12 +3252,5 @@
        inkscape:transform-center-y="1.9089179"
        rx="0.27984777"
        ry="0.16533002" />
-    <ellipse
-       style="opacity:0;fill:#00ff00;fill-opacity:1;fill-rule:nonzero;stroke-width:0.26458332"
-       id="path1602"
-       cx="10.089424"
-       cy="266.04688"
-       rx="8.4858074"
-       ry="8.2352428" />
   </g>
 </svg>
