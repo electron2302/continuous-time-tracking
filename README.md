@@ -83,20 +83,20 @@ Plugins:
 
 ### Build and serve
 
-You can build and serve your local changes localy with:
+You can build and serve your local changes locally by running:
 
 - <code>npm install</code>
 - <code>ng serve</code>
 
-, in the ./ctt-frontend directory.
+in the ./ctt-frontend directory.
 
 ### Run tests
 
-You can run the tests with:
+You can run the tests by running:
 
 - <code>ng test</code>
 
-, in the ./ctt-frontend directory.
+in the ./ctt-frontend directory.
 
 ## Contributors
 
