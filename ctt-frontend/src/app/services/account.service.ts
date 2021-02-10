@@ -24,7 +24,7 @@ export class AccountService {
     return this.getAttribute(IS_VERIFIED_KEY, DEFAULT_VERIFIED, setter);
   }
 
-  chagnePassword(oldPassword: string, newPassword: string): Promise<boolean> {
+  changePassword(oldPassword: string, newPassword: string): Promise<boolean> {
     return this.doWithUser((user: any) => {
       user.changePassword(oldPassword, newPassword);
     }).then();

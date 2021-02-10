@@ -76,7 +76,7 @@ export class AwsCategoryService implements CategoryService {
           );
         return list;
       },
-      () => Promise.reject('Failed to query all Categories.')
+      (ret) => Promise.reject('Failed to query all Categories.')
     );
   }
 
