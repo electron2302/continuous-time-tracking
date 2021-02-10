@@ -24,7 +24,12 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatChipsModule } from '@angular/material/chips';
-import { MatRippleModule, MAT_DATE_LOCALE } from '@angular/material/core';
+import {
+  ErrorStateMatcher,
+  MatRippleModule,
+  MAT_DATE_LOCALE,
+  ShowOnDirtyErrorStateMatcher,
+} from '@angular/material/core';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -75,6 +80,7 @@ import { AccountComponent } from './components/account/account.component';
 import { StatisticsComponent } from './components/statistics/statistics.component';
 import { LoadingComponent } from './components/loading/loading.component';
 import { EditActivityComponent } from './components/edit-activity/edit-activity.component';
+import { EditActivityPreviewComponent } from './components/edit-activity-preview/edit-activity-preview.component';
 
 const CUSTOM_DATE_FORMATS: NgxMatDateFormats = {
   parse: {
@@ -139,6 +145,7 @@ Amplify.configure(awsconfig);
     StatisticsComponent,
     LoadingComponent,
     EditActivityComponent,
+    EditActivityPreviewComponent,
   ],
   imports: [
     AmplifyUIAngularModule,
