@@ -1,4 +1,11 @@
-<mat-card [ngStyle]="{ background: viewableActivity?.color }" id="card">
+<mat-card
+  [style.background]="
+    viewableActivity?.isPreview
+      ? linearRepeatingGradient()
+      : viewableActivity?.color
+  "
+  id="card"
+>
   <h1 class="name">
     {{ viewableActivity?.name }}
   </h1>

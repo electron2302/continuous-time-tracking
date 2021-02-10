@@ -28,5 +28,12 @@ export class ElementActivityComponent implements OnInit {
 
   constructor() {}
 
+  public linearRepeatingGradient(): string {
+    return (
+      `repeating-linear-gradient(45deg, ${this.viewableActivity?.color},` +
+      `${this.viewableActivity?.color} 10px, #303030 10px, #303030 20px)`
+    );
+  }
+
   ngOnInit(): void {}
 }
