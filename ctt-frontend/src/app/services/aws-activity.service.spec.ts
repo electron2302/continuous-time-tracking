@@ -52,7 +52,7 @@ describe('AwsActivityService', () => {
         .returns(() => Promise.reject());
 
       await expectAsync(sut.create(MockData.createInput)).toBeRejectedWith(
-        `Could nor insert Activity at starttime ${MockData.activityResult.from.toISOString()}`
+        `Could not insert Activity at starttime ${MockData.activityResult.from.toISOString()}`
       );
       apiMock.verify(
         (x) =>
@@ -96,7 +96,7 @@ describe('AwsActivityService', () => {
         .returns(() => Promise.reject());
 
       await expectAsync(sut.create(MockData.createInput)).toBeRejectedWith(
-        `Could nor insert Activity at starttime ${MockData.activityResult.from.toISOString()}`
+        `Could not insert Activity at starttime ${MockData.activityResult.from.toISOString()}`
       );
       apiMock.verify(
         (x) =>
