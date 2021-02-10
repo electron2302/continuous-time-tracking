@@ -25,7 +25,10 @@ export class AwsActivityService implements ActivityService {
   private activitySubjects: DateSubscriber[] = [];
   private changeListener: ChangeListener;
 
-  constructor(private api: APIService, @Inject('boolean')subscribe: boolean = true) {
+  constructor(
+    private api: APIService,
+    @Inject('boolean') subscribe: boolean = true
+  ) {
     this.changeListener = new ChangeListener();
 
     if (subscribe) {
