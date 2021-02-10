@@ -87,7 +87,7 @@ export class ChangeListener {
     let username = '';
     await Auth.currentUserInfo().then(
       (user: any) => (username = user.username),
-      () => username = ''
+      () => (username = '')
     );
     return Promise.resolve(username);
   }
