@@ -6,6 +6,7 @@ import { ActivityService, CreateActivityInput } from './activity.service';
 import { DateSubscriber } from '../helper/DateSubscriber';
 import { DataStore, Predicates, SortDirection } from 'aws-amplify';
 import { Activity as AwsActivity } from '../../models';
+import * as TimeHelper from '../helper/time';
 
 @Injectable({
   providedIn: 'root',
@@ -19,7 +20,8 @@ export class AwsActivityService implements ActivityService {
     );
   }
 
-  create(input: CreateActivityInput): Promise<Activity> {
+  async create(input: CreateActivityInput): Promise<Activity> {
+    await this.checkForMidnightShift(input);
     return this.insert(input);
   }
 
@@ -136,6 +138,33 @@ export class AwsActivityService implements ActivityService {
     const sub = new DateSubscriber(new Subject<Activity[]>(), from, to);
     this.activitySubjects.push(sub);
     return sub.subscribeable.asObservable();
+  }
+
+  private async checkForMidnightShift(
+    input: CreateActivityInput
+  ): Promise<void> {
+    const todayMidnight = TimeHelper.todayMidnight(input.from);
+    const allActivities = await this.getAll();
+    if (
+      input.from.toISOString() === todayMidnight.toISOString() ||
+      allActivities.length === 0
+    ) {
+      return;
+    }
+    const todayActivities = await this.getBetween(
+      todayMidnight,
+      TimeHelper.nextDayMidnight(input.from)
+    );
+    const a = todayActivities.find(
+      (act) => act.from.toISOString() === todayMidnight.toISOString()
+    );
+    if (a) {
+      return;
+    }
+    const lastActivity = allActivities.reverse().find((act) => act.from < todayMidnight);
+    if (lastActivity) {
+      this.insert({ categoryID: lastActivity.categoryID, from: todayMidnight});
+    }
   }
 
   private activityCreated(val: any, owner: AwsActivityService): void {
