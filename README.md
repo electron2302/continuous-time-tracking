@@ -18,7 +18,7 @@
 
 The app is available at: http://34.202.114.178/.
 
-The Entripoint of the CTT is the login screen:
+The Entrypoint of the CTT is the login screen:
 
 ![LoginScreen](./docs/LoginScreen.png)
 
