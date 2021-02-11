@@ -59,7 +59,6 @@ export class EditCategoryComponent implements OnInit {
     name: '',
     excludeFromStatistics: [],
     reminderInterval: -1,
-    version: 1,
   };
 
   public loading = true;

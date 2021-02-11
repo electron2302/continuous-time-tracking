@@ -8,10 +8,12 @@ import { Activity } from './activity';
 import { Category } from './category';
 
 export interface ViewableActivity {
+  id: string;
   color: string;
   name: string;
   from: Date;
   duration: string;
+  isPreview?: boolean;
 }
 
 export const toViewableActivities = (
@@ -37,6 +39,7 @@ export const toViewableActivities = (
       }
     }
     result.push({
+      id: a.id,
       color: category.color,
       from: a.from,
       name: category.name,

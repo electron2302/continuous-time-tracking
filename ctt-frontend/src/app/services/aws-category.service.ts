@@ -1,117 +1,136 @@
-/* eslint-disable no-underscore-dangle */
 import { Injectable } from '@angular/core';
-import { Category } from '../interfaces/category';
-import { APIService } from './API.service';
 import { CategoryService, CreateCategoryInput } from './category.service';
-import { CreateCategoryInput as APICreateInput } from './API.service';
-import { UpdateCategoryInput as APIUpdateInput } from './API.service';
-import { StatisticType as APIStatisticType } from './API.service';
 import { StatisticType } from '../interfaces/statistics';
+import {
+  Category as AwsCategory,
+  StatisticType as AwsStatisticType,
+} from '../../models';
+import { Category } from '../interfaces/category';
+import { DataStore } from 'aws-amplify';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AwsCategoryService implements CategoryService {
-  constructor(private api: APIService) {}
+  constructor() {}
 
-  create(input: CreateCategoryInput): Promise<Category> {
-    const i: APICreateInput = {
-      name: input.name,
-      color: input.color,
-      reminderInterval: input.reminderInterval,
-      excludeFromStatistics: input.excludeFromStatistics.map((v) =>
-        this.convertStatisticTypeToApiStatisticType(v)
-      ),
-    } as APICreateInput;
-    return this.api.CreateCategory(i).then(
-      (result) =>
-        Promise.resolve({
-          color: result.color,
-          id: result.id,
-          name: result.name,
-          reminderInterval: result.reminderInterval,
-          version: result._version,
-          excludeFromStatistics: result.excludeFromStatistics
-            ?.filter((val) => val !== null)
-            .map((v) => this.convertApiStatisticTypeToStatisticType(v)),
-        } as Category),
-      (_err) => Promise.reject(`Category ${input.name} could not be added.`)
+  async create(input: CreateCategoryInput): Promise<Category> {
+    const result = await DataStore.save(
+      new AwsCategory({
+        color: input.color,
+        name: input.name,
+        reminderInterval: input.reminderInterval,
+        excludeFromStatistics: input.excludeFromStatistics.map((s) =>
+          this.convertStatisticTypeToApiStatisticType(s)
+        ),
+      })
     );
+    return this.awsCategorytoCategory(result);
   }
 
-  getById(id: string): Promise<Category> {
-    return this.api.GetCategory(id).then(
-      (result) =>
-        Promise.resolve({
-          name: result.name,
-          id: result.id,
-          color: result.color,
-          reminderInterval: result.reminderInterval,
-          version: result._version,
-          excludeFromStatistics: result.excludeFromStatistics
-            ?.filter((val) => val !== null)
-            .map((v) => this.convertApiStatisticTypeToStatisticType(v)),
-        } as Category),
-      () => Promise.reject(`Category with id '${id}' does not exist.`)
-    );
+  async getById(id: string): Promise<Category> {
+    const result = await DataStore.query(AwsCategory, id);
+    if (result) {
+      return this.awsCategorytoCategory(result);
+    } else {
+      throw new Error(`Couldn't find category with id ${id}`);
+    }
   }
 
-  getAll(): Promise<Category[]> {
-    return this.api.ListCategorys().then(
-      (result) => {
-        const list: Category[] = [];
-        result.items
-          ?.filter((val) => val !== null)
-          .forEach((item) =>
-            list.push({
-              name: item?.name,
-              id: item?.id,
-              color: item?.color,
-              reminderInterval: item?.reminderInterval,
-              version: item?._version,
-              excludeFromStatistics: item?.excludeFromStatistics
-                ?.filter((val) => val !== null)
-                .map((v) => this.convertApiStatisticTypeToStatisticType(v)),
-            } as Category)
+  async getAll(): Promise<Category[]> {
+    const result = await DataStore.query(AwsCategory);
+    return result.map((c) => this.awsCategorytoCategory(c));
+  }
+
+  async update(category: Category): Promise<void> {
+    const old = await DataStore.query(AwsCategory, category.id);
+    if (old) {
+      await DataStore.save(
+        AwsCategory.copyOf(old, (updated) => {
+          updated.name = category.name;
+          updated.color = category.color;
+          updated.reminderInterval = category.reminderInterval;
+          updated.excludeFromStatistics = this.convertExcludeFromStatisticstoAws(
+            category.excludeFromStatistics
           );
-        return list;
-      },
-      () => Promise.reject('Failed to query all Categories.')
-    );
+        })
+      );
+    } else {
+      throw new Error(`Couldn't find category with id ${category.id}`);
+    }
   }
 
-  update(category: Category): Promise<void> {
-    const i: APIUpdateInput = {
-      id: category.id,
-      name: category.name,
-      color: category.color,
-      reminderInterval: category.reminderInterval,
-      excludeFromStatistics: category.excludeFromStatistics.map((v) =>
-        this.convertStatisticTypeToApiStatisticType(v)
+  public allAsObservable(): Observable<Category[]> {
+    return new Observable((subscribe) => {
+      DataStore.observe(AwsCategory).subscribe(async (next) => {
+        subscribe.next(await this.getAll());
+      });
+    });
+  }
+
+  private awsCategorytoCategory(awsCategory: AwsCategory): Category {
+    return {
+      color: awsCategory.color,
+      id: awsCategory.id,
+      name: awsCategory.name,
+      reminderInterval: awsCategory.reminderInterval,
+      excludeFromStatistics: this.convertAwsExcludeFromStatisitcs(
+        awsCategory.excludeFromStatistics
       ),
-      _version: category.version,
     };
-    return this.api.UpdateCategory(i).then(
-      () => Promise.resolve(),
-      (result) =>
-        Promise.reject(
-          `Category ${category.name} with id ${category.id} could not be updated.`
-        )
-    );
+  }
+
+  private convertExcludeFromStatisticstoAws(
+    excludeFromStatistics: StatisticType[]
+  ): (AwsStatisticType | null)[] {
+    return excludeFromStatistics.map((s) => {
+      switch (s) {
+        case StatisticType.absoluteTime:
+          return AwsStatisticType.ABSOLUTE_TIME;
+        case StatisticType.relativeTime:
+          return AwsStatisticType.RELATIVE_TIME;
+      }
+    });
+  }
+
+  private convertAwsExcludeFromStatisitcs(
+    excludeFromStatistics?:
+      | (AwsStatisticType | null)[]
+      | keyof typeof AwsStatisticType
+  ): StatisticType[] {
+    const result: StatisticType[] = [];
+    if (Array.isArray(excludeFromStatistics)) {
+      excludeFromStatistics.forEach((e) => {
+        if (e) {
+          result.push(this.convertApiStatisticTypeToStatisticType(e));
+        }
+      });
+    } else {
+      switch (excludeFromStatistics) {
+        case 'RELATIVE_TIME':
+          result.push(StatisticType.relativeTime);
+          break;
+        case 'ABSOLUTE_TIME':
+          result.push(StatisticType.absoluteTime);
+          break;
+      }
+    }
+    return result;
   }
 
   private convertStatisticTypeToApiStatisticType(
     value: StatisticType
-  ): APIStatisticType {
+  ): AwsStatisticType | null {
     return value === StatisticType.absoluteTime
-      ? APIStatisticType.AbsoluteTime
-      : APIStatisticType.RelativeTime;
+      ? AwsStatisticType.ABSOLUTE_TIME
+      : AwsStatisticType.RELATIVE_TIME;
   }
 
   private convertApiStatisticTypeToStatisticType(
-    value: APIStatisticType | null
+    value: AwsStatisticType
   ): StatisticType {
-    return value === APIStatisticType.AbsoluteTime
+    return value === AwsStatisticType.ABSOLUTE_TIME
       ? StatisticType.absoluteTime
       : StatisticType.relativeTime;
   }

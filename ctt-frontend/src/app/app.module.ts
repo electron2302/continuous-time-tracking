@@ -58,6 +58,11 @@ import {
   NgxMatColorPickerModule,
   NGX_MAT_COLOR_FORMATS,
 } from '@angular-material-components/color-picker';
+import {
+  NgxMatDatetimePickerModule,
+  NgxMatNativeDateModule,
+  NgxMatTimepickerModule,
+} from '@angular-material-components/datetime-picker';
 
 import { EditCategoryComponent } from './components/edit-category/edit-category.component';
 import { AwsCategoryService } from './services/aws-category.service';
@@ -74,6 +79,10 @@ import { ViewCategoriesComponent } from './components/view-categories/view-categ
 import { AccountComponent } from './components/account/account.component';
 import { StatisticsComponent } from './components/statistics/statistics.component';
 import { LoadingComponent } from './components/loading/loading.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
+import { EditActivityComponent } from './components/edit-activity/edit-activity.component';
+import { EditActivityPreviewComponent } from './components/edit-activity-preview/edit-activity-preview.component';
 
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { PieChartComponent } from './components/charts/pie-chart/pie-chart.component';
@@ -134,6 +143,8 @@ Amplify.configure(awsconfig);
     PieChartComponent,
     BarChartComponent,
     StackedBarChartComponent,
+    EditActivityComponent,
+    EditActivityPreviewComponent,
   ],
   imports: [
     AmplifyUIAngularModule,
@@ -143,13 +154,20 @@ Amplify.configure(awsconfig);
     ReactiveFormsModule,
     NgxMatColorPickerModule,
     NgxChartsModule,
+    NgxMatDatetimePickerModule,
+    NgxMatTimepickerModule,
+    NgxMatNativeDateModule,
     ...materialModules,
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: environment.production,
+    }),
   ],
   providers: [
     { provide: ActivityService, useClass: AwsActivityService },
     { provide: CategoryService, useClass: AwsCategoryService },
     { provide: StatisticsService, useClass: AwsStatisticsService },
     { provide: MAT_COLOR_FORMATS, useValue: NGX_MAT_COLOR_FORMATS },
+    { provide: 'boolean', useValue: true },
     { provide: MAT_DATE_LOCALE, useValue: 'de-DE' },
     APIService,
     AuthService,
