@@ -51,6 +51,9 @@ export class ViewActivitiesComponent implements OnInit {
 
   private async getCategories(): Promise<void> {
     this.categoryById = toCategoryMap(await this.categoryService.getAll());
+    this.categoryService.allAsObservable().subscribe((next) => {
+      this.categoryById = toCategoryMap(next);
+    });
   }
 
   private async getActivities(): Promise<void> {
