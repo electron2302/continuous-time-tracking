@@ -2,6 +2,16 @@
 
 [![Build Status](https://drone.dev.sart.solutions/api/badges/electron2302/continuous-time-tracking/status.svg?ref=refs/heads/develop)](https://drone.dev.sart.solutions/electron2302/continuous-time-tracking)
 
+  > If you can’t measure it, you can’t improve it.
+  
+Peter Drucker
+
+Following this principle we wanted to implement a time tracking app that forces the users to continuously track their activities throughout their day. An activity cannot be ended and therefore switching activities only works by starting a new one. This ensures that the user's activities during a day are measured without breaks which should lead to better coverage and therefore more capabilities to improve time spending.
+
+This project was developed by four students at Munich University of Applied Science during a two weeks time frame in their fifth semester's PBLV (Praxisbegleitende Lehrveranstaltung).
+
+By providing this application as open source, we want to enable others to use this app for themselves in order to improve their time spending. 
+
 ## Content
 
 1. [Content](##Content)
