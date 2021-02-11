@@ -34,7 +34,7 @@ steps:
     image: alpine
     commands:
       - echo -n "c-${DRONE_COMMIT_SHA}," > .tags
-      - if [ "${DRONE_BRANCH}" = "main" ]; then echo -n "latest" >> .tags; else echo -n "${DRONE_BRANCH}" >> .tags; fi;
+      - echo -n "${DRONE_BRANCH}" >> .tags
       - echo -n "tags are "; cat .tags ; echo
     when:
       branch:
@@ -159,16 +159,13 @@ steps:
     depends_on: ["Amplify main"]
 
   - name: "Push main"
-    image: plugins/ecr
+    image: plugins/docker
     settings:
-      access_key:
-        from_secret: aws_access_key_id
-      secret_key:
-        from_secret: aws_secret_access_key
-      repo: ctt
-      registry: 356962203731.dkr.ecr.us-east-1.amazonaws.com
+      repo: electron2302/ctt
+      username: electron2302
+      password:
+        from_secret: dockerhub_secret
       dockerfile: ctt-frontend/Dockerfile
-      tags: ["main"]
     when:
       branch:
         - main
@@ -177,18 +174,17 @@ steps:
     depends_on: ["Build main"]
 
   - name: "Publish main"
-    image: joshdvir/drone-ecs-deploy
-    environment:
-      AWS_ACCESS_KEY_ID:
-        from_secret: aws_access_key_id
-      AWS_SECRET_ACCESS_KEY:
-        from_secret: aws_secret_access_key
+    image: quay.io/honestbee/drone-kubernetes
     settings:
-      cluster: ctt-cluster
-      service: main-service
-      image_name: "356962203731.dkr.ecr.us-east-1.amazonaws.com/ctt:main"
-      aws_region: us-east-1
-      timeout: "1800"
+      namespace: web
+      deployment: ctt-prod-deployment
+      container: ctt-prod
+      repo: electron2302/ctt
+      tag: main
+      kubernetes_server: 
+        from_secret: kubernetes_server
+      kubernetes_token:
+        from_secret: kubernetes_token
     when:
       branch:
         - main
