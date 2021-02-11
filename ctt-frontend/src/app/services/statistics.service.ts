@@ -7,27 +7,29 @@ export enum QueryDuration {
 }
 
 export abstract class StatisticsService {
-  /**
-   * Get the categoryID to the absolute
-   * distribution of it's occurence.
-   *
-   * @param durationTyp, the duration to calculate the distibution.
-   * @param durationValue, the count of the discrete durations to analyze.
-   */
-  abstract getAbsoluteCategoryTime(
-    durationType: QueryDuration,
-    durationValue: number
-  ): Promise<Map<string, number>>;
+  abstract timePerCategoryAccumulative(
+    from: Date,
+    to: Date
+  ): Promise<{
+    data: {
+      name: string;
+      value: number;
+    }[];
+    colors: string[];
+  }>;
 
-  /**
-   * Get the categoryID to the relative
-   * distribution of it's occurence.
-   *
-   * @param durationType, the duration to calculate the distibution.
-   * @param durationValue, the count of the discrete durations to analyze.
-   */
-  abstract getRelativeCategoryTime(
-    durationType: QueryDuration,
-    durationValue: number
-  ): Promise<Map<string, number>>;
+  abstract timePerCategoryPerInterval(
+    from: Date,
+    to: Date,
+    interval: QueryDuration
+  ): Promise<{
+    data: {
+      name: string;
+      series: {
+        name: string;
+        value: number;
+      }[];
+    }[];
+    colors: string[];
+  }>;
 }

@@ -1,1 +1,23 @@
-<p>statistics works!</p>
+<div style="width: 100%; text-align: center">
+  <mat-form-field appearance="outline">
+    <mat-label>Enter a date range</mat-label>
+    <mat-date-range-input [rangePicker]="picker" [formGroup]="range">
+      <input matStartDate formControlName="start" placeholder="Start date" />
+      <input matEndDate formControlName="end" placeholder="End date" />
+    </mat-date-range-input>
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-date-range-picker #picker></mat-date-range-picker>
+  </mat-form-field>
+</div>
+
+<mat-tab-group mat-align-tabs="center" dynamicHeight="true">
+  <mat-tab label="Pie">
+    <app-pie-chart [dateRange]="range.value"></app-pie-chart>
+  </mat-tab>
+  <mat-tab label="Bar">
+    <app-bar-chart [dateRange]="range.value"></app-bar-chart>
+  </mat-tab>
+  <mat-tab label="List">
+    <app-list-chart [dateRange]="range.value"></app-list-chart>
+  </mat-tab>
+</mat-tab-group>

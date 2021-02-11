@@ -24,7 +24,11 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatChipsModule } from '@angular/material/chips';
-import { MatRippleModule, MAT_DATE_LOCALE } from '@angular/material/core';
+import {
+  MatNativeDateModule,
+  MatRippleModule,
+  MAT_DATE_LOCALE,
+} from '@angular/material/core';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -61,8 +65,10 @@ import {
 
 import { EditCategoryComponent } from './components/edit-category/edit-category.component';
 import { AwsCategoryService } from './services/aws-category.service';
-import { ReactiveFormsModule } from '@angular/forms';
 import { CategoryService } from './services/category.service';
+import { AwsStatisticsService } from './services/aws-statistics.service';
+import { StatisticsService } from './services/statistics.service';
+import { ReactiveFormsModule } from '@angular/forms';
 import { ViewActivitiesComponent } from './components/view-activities/view-activities.component';
 import { ElementActivityComponent } from './components/element-activity/element-activity.component';
 import { ActivityService } from './services/activity.service';
@@ -76,6 +82,11 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { EditActivityComponent } from './components/edit-activity/edit-activity.component';
 import { EditActivityPreviewComponent } from './components/edit-activity-preview/edit-activity-preview.component';
+
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { PieChartComponent } from './components/charts/pie-chart/pie-chart.component';
+import { BarChartComponent } from './components/charts/bar-chart/bar-chart.component';
+import { ListChartComponent } from './components/charts/list-chart/list-chart.component';
 
 const materialModules = [
   CdkTreeModule,
@@ -110,6 +121,7 @@ const materialModules = [
   MatGridListModule,
   MatRadioModule,
   MatDatepickerModule,
+  MatNativeDateModule,
   MatTooltipModule,
 ];
 
@@ -127,8 +139,11 @@ Amplify.configure(awsconfig);
     AccountComponent,
     StatisticsComponent,
     LoadingComponent,
+    PieChartComponent,
+    BarChartComponent,
     EditActivityComponent,
     EditActivityPreviewComponent,
+    ListChartComponent,
   ],
   imports: [
     AmplifyUIAngularModule,
@@ -137,6 +152,7 @@ Amplify.configure(awsconfig);
     BrowserAnimationsModule,
     ReactiveFormsModule,
     NgxMatColorPickerModule,
+    NgxChartsModule,
     NgxMatDatetimePickerModule,
     NgxMatTimepickerModule,
     NgxMatNativeDateModule,
@@ -148,6 +164,7 @@ Amplify.configure(awsconfig);
   providers: [
     { provide: ActivityService, useClass: AwsActivityService },
     { provide: CategoryService, useClass: AwsCategoryService },
+    { provide: StatisticsService, useClass: AwsStatisticsService },
     { provide: MAT_COLOR_FORMATS, useValue: NGX_MAT_COLOR_FORMATS },
     { provide: 'boolean', useValue: true },
     { provide: MAT_DATE_LOCALE, useValue: 'de-DE' },
