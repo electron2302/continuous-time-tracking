@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/member-ordering */
-/* eslint-disable no-underscore-dangle */
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { Activity } from '../interfaces/activity';
@@ -140,7 +138,7 @@ export class AwsActivityService implements ActivityService {
     return sub.subscribeable.asObservable();
   }
 
-  activityCreated(val: any, owner: AwsActivityService): void {
+  private activityCreated(val: any, owner: AwsActivityService): void {
     if (val.element) {
       const date: Date = new Date(Date.parse(val.element.from));
       owner.notifyObservers(date);
@@ -155,7 +153,7 @@ export class AwsActivityService implements ActivityService {
     };
   }
 
-  notifyObservers(affected: Date): void {
+  private notifyObservers(affected: Date): void {
     this.activitySubjects.forEach((item) => {
       if (item.from && item.from < affected && item.to && item.to > affected) {
         this.getBetween(item.from, item.to).then((result) =>
