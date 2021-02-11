@@ -1,1 +1,22 @@
-<p>statistics works!</p>
+<mat-form-field appearance="outline">
+  <mat-label>Enter a date range</mat-label>
+  <mat-date-range-input [rangePicker]="picker" [formGroup]="range">
+    <input matStartDate formControlName="start" placeholder="Start date" />
+    <input matEndDate formControlName="end" placeholder="End date" />
+  </mat-date-range-input>
+  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+  <mat-date-range-picker #picker></mat-date-range-picker>
+</mat-form-field>
+
+<mat-tab-group>
+  <mat-tab label="Pie">
+    <app-pie-chart [dateRange]="range"></app-pie-chart>
+  </mat-tab>
+  <mat-tab label="Bar">
+    <app-bar-chart></app-bar-chart>
+  </mat-tab>
+  <mat-tab label="Bar stakt">
+    <app-stacked-bar-chart></app-stacked-bar-chart>
+  </mat-tab>
+  <mat-tab label="over time"> Normalized Area chart </mat-tab>
+</mat-tab-group>

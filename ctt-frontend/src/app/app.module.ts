@@ -24,7 +24,11 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatChipsModule } from '@angular/material/chips';
-import { MatRippleModule } from '@angular/material/core';
+import {
+  MatNativeDateModule,
+  MatRippleModule,
+  MAT_DATE_LOCALE,
+} from '@angular/material/core';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -57,8 +61,10 @@ import {
 
 import { EditCategoryComponent } from './components/edit-category/edit-category.component';
 import { AwsCategoryService } from './services/aws-category.service';
-import { ReactiveFormsModule } from '@angular/forms';
 import { CategoryService } from './services/category.service';
+import { AwsStatisticsService } from './services/aws-statistics.service';
+import { StatisticsService } from './services/statistics.service';
+import { ReactiveFormsModule } from '@angular/forms';
 import { ViewActivitiesComponent } from './components/view-activities/view-activities.component';
 import { ElementActivityComponent } from './components/element-activity/element-activity.component';
 import { ActivityService } from './services/activity.service';
@@ -68,6 +74,11 @@ import { ViewCategoriesComponent } from './components/view-categories/view-categ
 import { AccountComponent } from './components/account/account.component';
 import { StatisticsComponent } from './components/statistics/statistics.component';
 import { LoadingComponent } from './components/loading/loading.component';
+
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { PieChartComponent } from './components/charts/pie-chart/pie-chart.component';
+import { BarChartComponent } from './components/charts/bar-chart/bar-chart.component';
+import { StackedBarChartComponent } from './components/charts/stacked-bar-chart/stacked-bar-chart.component';
 
 const materialModules = [
   CdkTreeModule,
@@ -102,6 +113,7 @@ const materialModules = [
   MatGridListModule,
   MatRadioModule,
   MatDatepickerModule,
+  MatNativeDateModule,
   MatTooltipModule,
 ];
 
@@ -119,6 +131,9 @@ Amplify.configure(awsconfig);
     AccountComponent,
     StatisticsComponent,
     LoadingComponent,
+    PieChartComponent,
+    BarChartComponent,
+    StackedBarChartComponent,
   ],
   imports: [
     AmplifyUIAngularModule,
@@ -127,12 +142,15 @@ Amplify.configure(awsconfig);
     BrowserAnimationsModule,
     ReactiveFormsModule,
     NgxMatColorPickerModule,
+    NgxChartsModule,
     ...materialModules,
   ],
   providers: [
     { provide: ActivityService, useClass: AwsActivityService },
     { provide: CategoryService, useClass: AwsCategoryService },
+    { provide: StatisticsService, useClass: AwsStatisticsService },
     { provide: MAT_COLOR_FORMATS, useValue: NGX_MAT_COLOR_FORMATS },
+    { provide: MAT_DATE_LOCALE, useValue: 'de-DE' },
     APIService,
     AuthService,
     AuthGuard,

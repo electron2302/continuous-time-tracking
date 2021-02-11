@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-statistics',
@@ -6,7 +7,20 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./statistics.component.scss'],
 })
 export class StatisticsComponent implements OnInit {
-  constructor() {}
+  range: FormGroup;
 
+  constructor() {
+    const toDay = new Date(
+      new Date().getFullYear(),
+      new Date().getMonth(),
+      new Date().getDate()
+    );
+    const oneWeekBefor = new Date(toDay.getTime() - 7 * 24 * 60 * 60 * 1000);
+
+    this.range = new FormGroup({
+      start: new FormControl(oneWeekBefor),
+      end: new FormControl(toDay),
+    });
+  }
   ngOnInit(): void {}
 }
