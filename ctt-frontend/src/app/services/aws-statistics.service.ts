@@ -28,8 +28,10 @@ export class AwsStatisticsService implements StatisticsService {
   ): Promise<{ data: { name: string; value: number }[]; colors: string[] }> {
     const data: { name: string; value: number }[] = [];
     const colors: string[] = [];
+
     const categories = await DataStore.query(CategoryModel);
-    categories.forEach(async (category) => {
+
+    for (const category of categories) {
       colors.push(category.color);
       const activities = await DataStore.query(ActivityModel, (criteria) =>
         criteria
@@ -39,7 +41,8 @@ export class AwsStatisticsService implements StatisticsService {
       );
       //console.log(JSON.stringify(activities));
       data.push({ name: category.name, value: activities.length + 1 });
-    });
+    }
+
     return { data, colors };
   }
 }
