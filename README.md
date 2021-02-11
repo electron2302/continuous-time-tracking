@@ -38,7 +38,7 @@ After you signed in, you will land at the home screen:
 
 At this screen you are prompted to start a new activity.
 
-By clicking on the hamburger menue on the left of the "Continuous Time Tracking" label you can toggle the side navigation bar:
+By clicking on the hamburger menu on the left of the "Continuous Time Tracking" label you can toggle the side navigation bar:
 
 ![SideNavScreen](./docs/SideNavScreen.png)
 
