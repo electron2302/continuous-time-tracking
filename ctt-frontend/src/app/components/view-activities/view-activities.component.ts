@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { nextDayMidnight, startOfToday } from '../../helper/time';
 import { Category, toCategoryMap } from '../../interfaces/category';
 import {
@@ -21,6 +22,8 @@ export class ViewActivitiesComponent implements OnInit {
   public categoryById = new Map<string, Category>();
   public viewableActivities: ViewableActivity[] = [];
   public edit = false;
+
+  private currentActivitySubscription?: Subscription;
 
   constructor(
     private activityService: ActivityService,
@@ -51,6 +54,9 @@ export class ViewActivitiesComponent implements OnInit {
 
   private async getCategories(): Promise<void> {
     this.categoryById = toCategoryMap(await this.categoryService.getAll());
+    this.categoryService.allAsObservable().subscribe((next) => {
+      this.categoryById = toCategoryMap(next);
+    });
   }
 
   private async getActivities(): Promise<void> {
@@ -62,6 +68,12 @@ export class ViewActivitiesComponent implements OnInit {
       this.categoryById,
       activities
     );
+    this.currentActivitySubscription?.unsubscribe();
+    this.currentActivitySubscription = this.activityService
+      .subscribeToActivities(from, to)
+      .subscribe((next) => {
+        this.viewableActivities = toViewableActivities(this.categoryById, next);
+      });
     this.loading = false;
   }
 }

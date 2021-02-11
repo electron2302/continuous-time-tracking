@@ -25,10 +25,9 @@ import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatChipsModule } from '@angular/material/chips';
 import {
-  ErrorStateMatcher,
+  MatNativeDateModule,
   MatRippleModule,
   MAT_DATE_LOCALE,
-  ShowOnDirtyErrorStateMatcher,
 } from '@angular/material/core';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -53,14 +52,12 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { APIService } from './services/API.service';
 import {
   MAT_COLOR_FORMATS,
   NgxMatColorPickerModule,
   NGX_MAT_COLOR_FORMATS,
 } from '@angular-material-components/color-picker';
 import {
-  NgxMatDateFormats,
   NgxMatDatetimePickerModule,
   NgxMatNativeDateModule,
   NgxMatTimepickerModule,
@@ -68,8 +65,10 @@ import {
 
 import { EditCategoryComponent } from './components/edit-category/edit-category.component';
 import { AwsCategoryService } from './services/aws-category.service';
-import { ReactiveFormsModule } from '@angular/forms';
 import { CategoryService } from './services/category.service';
+import { AwsStatisticsService } from './services/aws-statistics.service';
+import { StatisticsService } from './services/statistics.service';
+import { ReactiveFormsModule } from '@angular/forms';
 import { ViewActivitiesComponent } from './components/view-activities/view-activities.component';
 import { ElementActivityComponent } from './components/element-activity/element-activity.component';
 import { ActivityService } from './services/activity.service';
@@ -79,21 +78,16 @@ import { ViewCategoriesComponent } from './components/view-categories/view-categ
 import { AccountComponent } from './components/account/account.component';
 import { StatisticsComponent } from './components/statistics/statistics.component';
 import { LoadingComponent } from './components/loading/loading.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 import { EditActivityComponent } from './components/edit-activity/edit-activity.component';
 import { EditActivityPreviewComponent } from './components/edit-activity-preview/edit-activity-preview.component';
 import { ExporterComponent } from './components/exporter/exporter.component';
 
-const CUSTOM_DATE_FORMATS: NgxMatDateFormats = {
-  parse: {
-    dateInput: 'l, LTS',
-  },
-  display: {
-    dateInput: 'YYYY-MM-DD HH:mm:ss',
-    monthYearLabel: 'MMM YYYY',
-    dateA11yLabel: 'LL',
-    monthYearA11yLabel: 'MMMM YYYY',
-  },
-};
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { PieChartComponent } from './components/charts/pie-chart/pie-chart.component';
+import { BarChartComponent } from './components/charts/bar-chart/bar-chart.component';
+import { ListChartComponent } from './components/charts/list-chart/list-chart.component';
 
 const materialModules = [
   CdkTreeModule,
@@ -128,6 +122,7 @@ const materialModules = [
   MatGridListModule,
   MatRadioModule,
   MatDatepickerModule,
+  MatNativeDateModule,
   MatTooltipModule,
 ];
 
@@ -145,9 +140,12 @@ Amplify.configure(awsconfig);
     AccountComponent,
     StatisticsComponent,
     LoadingComponent,
+    PieChartComponent,
+    BarChartComponent,
     EditActivityComponent,
     EditActivityPreviewComponent,
     ExporterComponent,
+    ListChartComponent,
   ],
   imports: [
     AmplifyUIAngularModule,
@@ -156,17 +154,22 @@ Amplify.configure(awsconfig);
     BrowserAnimationsModule,
     ReactiveFormsModule,
     NgxMatColorPickerModule,
+    NgxChartsModule,
     NgxMatDatetimePickerModule,
     NgxMatTimepickerModule,
     NgxMatNativeDateModule,
     ...materialModules,
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: environment.production,
+    }),
   ],
   providers: [
     { provide: ActivityService, useClass: AwsActivityService },
     { provide: CategoryService, useClass: AwsCategoryService },
+    { provide: StatisticsService, useClass: AwsStatisticsService },
     { provide: MAT_COLOR_FORMATS, useValue: NGX_MAT_COLOR_FORMATS },
+    { provide: 'boolean', useValue: true },
     { provide: MAT_DATE_LOCALE, useValue: 'de-DE' },
-    APIService,
     AuthService,
     AuthGuard,
   ],

@@ -19,12 +19,22 @@ export const isToday = (date: Date) => {
   );
 };
 
+export const todayMidnight = (date: Date) => {
+  const today = new Date(date);
+  today.setHours(0);
+  today.setMinutes(0);
+  today.setSeconds(0);
+  today.setMilliseconds(0);
+  return today;
+};
+
 export const nextDayMidnight = (date: Date) => {
   const nextDay = new Date(date);
   nextDay.setDate(nextDay.getDate() + 1);
   nextDay.setHours(0);
   nextDay.setMinutes(0);
   nextDay.setSeconds(0);
+  nextDay.setMilliseconds(0);
   return nextDay;
 };
 
