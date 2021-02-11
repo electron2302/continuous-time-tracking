@@ -2,26 +2,22 @@ import { Component, Input, OnInit, OnChanges } from '@angular/core';
 import { StatisticsService } from 'src/app/services/statistics.service';
 
 @Component({
-  selector: 'app-pie-chart',
-  templateUrl: './pie-chart.component.html',
-  styleUrls: ['./pie-chart.component.scss'],
+  selector: 'app-list-chart',
+  templateUrl: './list-chart.component.html',
+  styleUrls: ['./list-chart.component.scss'],
 })
-export class PieChartComponent implements OnInit, OnChanges {
+export class ListChartComponent implements OnInit, OnChanges {
   @Input()
   dateRange!: any;
 
   public loading = true;
-
-  view: [number, number] = [700, 400];
 
   public data: {
     name: string;
     value: number;
   }[] = [];
 
-  colorScheme: {
-    domain: string[];
-  } = { domain: [] };
+  displayedColumns: string[] = ['name', 'value'];
 
   constructor(private statisticsService: StatisticsService) {}
 
@@ -45,7 +41,6 @@ export class PieChartComponent implements OnInit, OnChanges {
       to
     );
     this.data = stats.data;
-    this.colorScheme.domain = stats.colors;
     this.loading = false;
   }
 }

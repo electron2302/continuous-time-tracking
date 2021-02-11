@@ -15,7 +15,8 @@ export class StatisticsComponent implements OnInit {
       new Date().getMonth(),
       new Date().getDate()
     );
-    const oneWeekBefor = new Date(toDay.getTime() - 7 * 24 * 60 * 60 * 1000);
+    const oneWeekBefor = new Date(toDay);
+    oneWeekBefor.setDate(oneWeekBefor.getDate() - 7);
 
     this.range = new FormGroup({
       start: new FormControl(oneWeekBefor),

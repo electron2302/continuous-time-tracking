@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { StatisticsService } from 'src/app/services/statistics.service';
 
 @Component({
@@ -6,7 +6,7 @@ import { StatisticsService } from 'src/app/services/statistics.service';
   templateUrl: './bar-chart.component.html',
   styleUrls: ['./bar-chart.component.scss'],
 })
-export class BarChartComponent implements OnInit {
+export class BarChartComponent implements OnInit, OnChanges {
   @Input()
   dateRange!: any;
 
@@ -34,15 +34,15 @@ export class BarChartComponent implements OnInit {
 
   ngOnChanges() {
     console.log('cahnge :/');
-    this.UpdateData();
+    this.updateData();
   }
 
   async ngOnInit(): Promise<void> {
     console.log('init :/');
-    this.UpdateData();
+    this.updateData();
   }
 
-  private async UpdateData() {
+  private async updateData() {
     this.loading = true;
     const from: Date = new Date(this.dateRange.start);
     const to: Date = new Date(this.dateRange.end);
