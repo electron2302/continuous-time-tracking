@@ -81,6 +81,7 @@ import { StatisticsComponent } from './components/statistics/statistics.componen
 import { LoadingComponent } from './components/loading/loading.component';
 import { EditActivityComponent } from './components/edit-activity/edit-activity.component';
 import { EditActivityPreviewComponent } from './components/edit-activity-preview/edit-activity-preview.component';
+import { ExporterComponent } from './components/exporter/exporter.component';
 
 const CUSTOM_DATE_FORMATS: NgxMatDateFormats = {
   parse: {
@@ -146,6 +147,7 @@ Amplify.configure(awsconfig);
     LoadingComponent,
     EditActivityComponent,
     EditActivityPreviewComponent,
+    ExporterComponent,
   ],
   imports: [
     AmplifyUIAngularModule,

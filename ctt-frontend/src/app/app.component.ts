@@ -50,6 +50,11 @@ export class AppComponent implements OnDestroy, OnInit {
       title: 'Statistics',
       route: 'statistics',
     },
+    {
+      icon: 'export',
+      title: 'Export',
+      route: 'export',
+    }
   ];
 
   private queryListener: () => void;

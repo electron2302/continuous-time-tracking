@@ -9,6 +9,7 @@ import { ViewCategoriesComponent } from './components/view-categories/view-categ
 import { AccountComponent } from './components/account/account.component';
 import { StatisticsComponent } from './components/statistics/statistics.component';
 import { EditActivityComponent } from './components/edit-activity/edit-activity.component';
+import { ExporterComponent } from './components/exporter/exporter.component';
 
 const routes: Routes = [
   {
@@ -55,6 +56,11 @@ const routes: Routes = [
   {
     path: 'statistics',
     component: StatisticsComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'export',
+    component: ExporterComponent,
     canActivate: [AuthGuard],
   },
   {
