@@ -30,20 +30,18 @@ export class AwsStatisticsService implements StatisticsService {
     const data: { name: string; value: number }[] = [];
     const colors: string[] = [];
 
-    const maps = await this.CategoriesOverTime(from, to);
-
-    maps.nameMap.forEach((Name: string, ID: string) => {
-      const time = maps.timeMap.get(ID) || 0;
-      data.push({ name: Name, value: time });
-      const color = maps.colorMap.get(ID) || '#000000';
+    const maps = await this.categoriesOverTime(from, to);
+    maps.nameMap.forEach((name: string, id: string) => {
+      const time = maps.timeMap.get(id) || 0;
+      data.push({ name, value: time });
+      const color = maps.colorMap.get(id) || '#000000';
       colors.push(color);
     });
 
-    console.log(JSON.stringify({ data, colors }));
     return { data, colors };
   }
 
-  private async CategoriesOverTime(
+  private async categoriesOverTime(
     from: Date,
     to: Date
   ): Promise<{
@@ -66,7 +64,6 @@ export class AwsStatisticsService implements StatisticsService {
         criteria.from('ge', from.toISOString()).from('le', to.toISOString()),
       { sort: (s) => s.from(SortDirection.ASCENDING) }
     );
-    console.log(activities);
     for (let i = 0; i < activities.length - 1; i++) {
       let time = timeMap.get(activities[i].categoryID) || 0;
       time +=
@@ -74,11 +71,40 @@ export class AwsStatisticsService implements StatisticsService {
           new Date(activities[i].from).getTime()) /
         (1000 * 60);
       timeMap.set(activities[i].categoryID, time);
-      console.log(time);
     }
-    // TODO: last element till mitnight ?
-    // TODO last element till now ?
+
+    //duration of last Activity
+    const lastActivity = activities[activities.length - 1];
+    let time = timeMap.get(lastActivity.categoryID) || 0;
+    if (this.isToday(new Date(lastActivity.from))) {
+      time +=
+        (new Date().getTime() - new Date(lastActivity.from).getTime()) /
+        (1000 * 60);
+    } else {
+      const date = new Date(lastActivity.from);
+      time +=
+        (this.sameDayMidNight(date).getTime() - date.getTime()) / (1000 * 60);
+    }
+    timeMap.set(lastActivity.categoryID, time);
 
     return { nameMap, colorMap, timeMap };
+  }
+
+  private isToday(day: Date): boolean {
+    const today = new Date();
+    return (
+      day.getDate() === today.getDate() &&
+      day.getMonth() === today.getMonth() &&
+      day.getFullYear() === today.getFullYear()
+    );
+  }
+
+  private sameDayMidNight(day: Date): Date {
+    const midNight = new Date(day);
+    midNight.setHours(23);
+    midNight.setMinutes(59);
+    midNight.setSeconds(59);
+    midNight.setMilliseconds(999);
+    return midNight;
   }
 }

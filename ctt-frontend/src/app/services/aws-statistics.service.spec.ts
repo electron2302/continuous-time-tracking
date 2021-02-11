@@ -1,16 +1,16 @@
-import { TestBed } from '@angular/core/testing';
+// import { TestBed } from '@angular/core/testing';
 
-import { AwsStatisticsService } from './aws-statistics.service';
+// import { AwsStatisticsService } from './aws-statistics.service';
 
-describe('AwsStatisticsService', () => {
-  let service: AwsStatisticsService;
+// describe('AwsStatisticsService', () => {
+//   let service: AwsStatisticsService;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(AwsStatisticsService);
-  });
+//   beforeEach(() => {
+//     TestBed.configureTestingModule({});
+//     service = TestBed.inject(AwsStatisticsService);
+//   });
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
-  });
-});
+//   it('should be created', () => {
+//     expect(service).toBeTruthy();
+//   });
+// });
