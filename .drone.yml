@@ -40,7 +40,6 @@ steps:
       branch:
         - main
         - develop
-        - 68-change-deployment
       event:
         - push
     depends_on: ["Test & Coverage", "Lint"]
@@ -69,7 +68,6 @@ steps:
     when:
       branch:
         - develop
-        - 68-change-deployment
       event:
         - push
     depends_on: ["Test & Coverage", "Lint"]
@@ -82,7 +80,6 @@ steps:
     when:
       branch:
         - develop
-        - 68-change-deployment
       event:
         - push
     depends_on: ["Amplify develop"]
@@ -98,24 +95,22 @@ steps:
     when:
       branch:
         - develop
-        - 68-change-deployment
       event:
         - push
     depends_on: ["Build develop"]
 
   - name: "Publish develop"
-    image: joshdvir/drone-ecs-deploy
-    environment:
-      AWS_ACCESS_KEY_ID:
-        from_secret: aws_access_key_id
-      AWS_SECRET_ACCESS_KEY:
-        from_secret: aws_secret_access_key
+    image: quay.io/honestbee/drone-kubernetes
     settings:
-      cluster: ctt-cluster
-      service: developen-service
-      image_name: "356962203731.dkr.ecr.us-east-1.amazonaws.com/ctt:develop"
-      aws_region: us-east-1
-      timeout: "1800"
+      namespace: web
+      deployment: ctt-dev-deployment
+      container: ctt-dev
+      repo: electron2302/ctt
+      tag: develop
+      kubernetes_server: 
+        from_secret: kubernetes_server
+      kubernetes_token:
+        from_secret: kubernetes_token
     when:
       branch:
         - develop
