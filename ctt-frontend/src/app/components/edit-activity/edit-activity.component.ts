@@ -22,6 +22,7 @@ export class EditActivityComponent implements OnInit {
     id: 'new',
     categoryID: 'new',
     from: new Date(),
+    version: 1,
   };
 
   public categories: Category[] = [];
