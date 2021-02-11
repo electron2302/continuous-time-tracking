@@ -30,6 +30,21 @@ steps:
       - "npx ng test --browsers ChromeHeadlessNoSandbox --watch false --progress false --codeCoverage"
     depends_on: ["Install dependencies"]
 
+  - name: "Docker tags"
+    image: alpine
+    commands:
+      - echo -n "c-${DRONE_COMMIT_SHA}," > .tags
+      - if [ "${DRONE_BRANCH}" = "main" ]; then echo -n "latest" >> .tags; else echo -n "${DRONE_BRANCH}" >> .tags; fi;
+      - echo -n "tags are "; cat .tags ; echo
+    when:
+      branch:
+        - main
+        - develop
+        - 68-change-deployment
+      event:
+        - push
+    depends_on: ["Test & Coverage", "Lint"]
+
   ######
   # CD for develop branch
   #####
@@ -54,6 +69,7 @@ steps:
     when:
       branch:
         - develop
+        - 68-change-deployment
       event:
         - push
     depends_on: ["Test & Coverage", "Lint"]
@@ -66,24 +82,23 @@ steps:
     when:
       branch:
         - develop
+        - 68-change-deployment
       event:
         - push
     depends_on: ["Amplify develop"]
 
   - name: "Push develop"
-    image: plugins/ecr
+    image: plugins/docker
     settings:
-      access_key:
-        from_secret: aws_access_key_id
-      secret_key:
-        from_secret: aws_secret_access_key
-      repo: ctt
-      registry: 356962203731.dkr.ecr.us-east-1.amazonaws.com
+      repo: electron2302/ctt
+      username: electron2302
+      password:
+        from_secret: dockerhub_secret
       dockerfile: ctt-frontend/Dockerfile
-      tags: ["develop"]
     when:
       branch:
         - develop
+        - 68-change-deployment
       event:
         - push
     depends_on: ["Build develop"]
