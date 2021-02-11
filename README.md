@@ -36,7 +36,7 @@ After you signed in, you will land at the home screen:
 
 ![HomeScreen](./docs/HomeScreen.png)
 
-At this screen you are promt to start a new activity.
+At this screen you are prompted to start a new activity.
 
 By clicking on the hamburger menue on the left of the "Continuous Time Tracking" label you can toggle the side navigation bar:
 
