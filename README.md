@@ -104,7 +104,7 @@ Check your Amplify status with:
 ### Code style
 
 We use the default ESLint angular configuration for static code analysis.
-Furthermore we use the default prettier configuration.
+Furthermore we use the default prettier configuration to ensure a consistent code formatting within the project.
 
 ### Integration into Visual Studio Code
 
