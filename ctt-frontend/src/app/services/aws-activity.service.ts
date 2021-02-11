@@ -16,7 +16,9 @@ export class AwsActivityService implements ActivityService {
   private activitySubjects: DateSubscriber[] = [];
 
   constructor() {
-    DataStore.observe(AwsActivity).subscribe((msg, owner = this) => this.activityCreated(msg, owner));
+    DataStore.observe(AwsActivity).subscribe((msg, owner = this) =>
+      this.activityCreated(msg, owner)
+    );
   }
 
   create(input: CreateActivityInput): Promise<Activity> {
@@ -30,15 +32,7 @@ export class AwsActivityService implements ActivityService {
         from: insert.from.toISOString(),
       })
     ).then(
-      (act) => {
-        const activity = {
-          categoryID: act.categoryID,
-          from: new Date(Date.parse(act.from)),
-          id: act.id,
-        } as Activity;
-        this.notifyObservers(activity.from);
-        return Promise.resolve(activity);
-      },
+      (act) => Promise.resolve(this.awsActivityToActivity(act)),
       () =>
         Promise.reject(
           `Could not insert Activity at starttime ${insert.from.toISOString()}`
@@ -87,17 +81,7 @@ export class AwsActivityService implements ActivityService {
     return DataStore.query(AwsActivity, Predicates.ALL, {
       sort: (q) => q.from(SortDirection.ASCENDING),
     }).then(
-      (acts) => {
-        const activities: Activity[] = [];
-        acts.forEach((item) =>
-          activities.push({
-            categoryID: item.categoryID,
-            from: new Date(Date.parse(item.from)),
-            id: item.id,
-          })
-        );
-        return activities;
-      },
+      (acts) => acts.map(act => this.awsActivityToActivity(act)),
       () => Promise.reject('Could not query activities.')
     );
   }
@@ -108,11 +92,7 @@ export class AwsActivityService implements ActivityService {
         if (!act || !act.from) {
           return Promise.reject(`Could not get activity with id ${id}`);
         }
-        return Promise.resolve({
-          categoryID: act?.categoryID,
-          from: new Date(Date.parse(act?.from)),
-          id: act?.id,
-        } as Activity);
+        return Promise.resolve(this.awsActivityToActivity(act));
       },
       () => Promise.reject(`Could not get activity with id ${id}`)
     );
@@ -124,17 +104,7 @@ export class AwsActivityService implements ActivityService {
       (q) => q.categoryID('eq', category.id),
       { sort: (q) => q.from(SortDirection.ASCENDING) }
     ).then(
-      (acts) => {
-        const activities: Activity[] = [];
-        acts.forEach((item) =>
-          activities.push({
-            categoryID: item.categoryID,
-            from: new Date(Date.parse(item.from)),
-            id: item.id,
-          })
-        );
-        return activities;
-      },
+      (acts) => acts.map((act) => this.awsActivityToActivity(act)),
       () =>
         Promise.reject(
           `Could not query activities for category ${category.name}.`
@@ -143,17 +113,14 @@ export class AwsActivityService implements ActivityService {
   }
 
   getBetween(from: Date, to: Date, category?: Category): Promise<Activity[]> {
-    return DataStore.query(AwsActivity, (q) =>
-      q.from('ge', from.toISOString()).from('lt', to.toISOString())
+    return DataStore.query(
+      AwsActivity,
+      (q) => q.from('ge', from.toISOString()).from('lt', to.toISOString()),
+      { sort: (q) => q.from(SortDirection.ASCENDING) }
     ).then(
       (acts) => {
-        let activities: Activity[] = [];
-        acts.forEach((item) =>
-          activities.push({
-            categoryID: item.categoryID,
-            from: new Date(Date.parse(item.from)),
-            id: item.id,
-          })
+        let activities = acts.map((act) =>
+          this.awsActivityToActivity(act)
         );
         if (category) {
           activities = activities.filter(
@@ -175,30 +142,29 @@ export class AwsActivityService implements ActivityService {
     return sub.subscribeable.asObservable();
   }
 
-  activityCreated(
-    val: any,
-    owner: AwsActivityService
-  ): void {
+  activityCreated(val: any, owner: AwsActivityService): void {
     if (val.element) {
       const date: Date = new Date(Date.parse(val.element.from));
       owner.notifyObservers(date);
     }
   }
 
+  private awsActivityToActivity(act: AwsActivity): Activity {
+    return {
+      categoryID: act.categoryID,
+      from: new Date(Date.parse(act.from)),
+      id: act.id,
+    };
+  }
+
   notifyObservers(affected: Date): void {
     this.activitySubjects.forEach((item) => {
       if (item.from && item.from < affected && item.to && item.to > affected) {
         this.getBetween(item.from, item.to).then((result) =>
-          item.subscribeable.next(
-            result.sort((a, b) => a.from.getTime() - b.from.getTime())
-          )
+          item.subscribeable.next(result)
         );
       } else if (!item.from && !item.to) {
-        this.getAll().then((result) =>
-          item.subscribeable.next(
-            result.sort((a, b) => a.from.getTime() - b.from.getTime())
-          )
-        );
+        this.getAll().then((result) => item.subscribeable.next(result));
       }
     });
   }
