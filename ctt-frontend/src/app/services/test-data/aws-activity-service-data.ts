@@ -138,7 +138,6 @@ export const filterCategroy: Category = {
   id: '0',
   name: 'TestCat',
   reminderInterval: -1,
-  version: 1,
 };
 
 export const fromDate: Date = new Date(2021, 2, 1, 1, 0);
