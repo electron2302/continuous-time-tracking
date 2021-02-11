@@ -24,12 +24,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatChipsModule } from '@angular/material/chips';
-import {
-  ErrorStateMatcher,
-  MatRippleModule,
-  MAT_DATE_LOCALE,
-  ShowOnDirtyErrorStateMatcher,
-} from '@angular/material/core';
+import { MatRippleModule, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -59,7 +54,6 @@ import {
   NGX_MAT_COLOR_FORMATS,
 } from '@angular-material-components/color-picker';
 import {
-  NgxMatDateFormats,
   NgxMatDatetimePickerModule,
   NgxMatNativeDateModule,
   NgxMatTimepickerModule,
@@ -78,20 +72,10 @@ import { ViewCategoriesComponent } from './components/view-categories/view-categ
 import { AccountComponent } from './components/account/account.component';
 import { StatisticsComponent } from './components/statistics/statistics.component';
 import { LoadingComponent } from './components/loading/loading.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 import { EditActivityComponent } from './components/edit-activity/edit-activity.component';
 import { EditActivityPreviewComponent } from './components/edit-activity-preview/edit-activity-preview.component';
-
-const CUSTOM_DATE_FORMATS: NgxMatDateFormats = {
-  parse: {
-    dateInput: 'l, LTS',
-  },
-  display: {
-    dateInput: 'YYYY-MM-DD HH:mm:ss',
-    monthYearLabel: 'MMM YYYY',
-    dateA11yLabel: 'LL',
-    monthYearA11yLabel: 'MMMM YYYY',
-  },
-};
 
 const materialModules = [
   CdkTreeModule,
@@ -157,6 +141,9 @@ Amplify.configure(awsconfig);
     NgxMatTimepickerModule,
     NgxMatNativeDateModule,
     ...materialModules,
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: environment.production,
+    }),
   ],
   providers: [
     { provide: ActivityService, useClass: AwsActivityService },

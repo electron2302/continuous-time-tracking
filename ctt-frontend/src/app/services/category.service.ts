@@ -1,3 +1,4 @@
+import { Observable } from 'rxjs';
 import { Category } from '../interfaces/category';
 import { StatisticType } from '../interfaces/statistics';
 
@@ -34,4 +35,10 @@ export abstract class CategoryService {
    * @param category, the category to update.
    */
   abstract update(category: Category): Promise<void>;
+
+  /**
+   * Provides all categories as an observable that emits an array
+   * of all categories when a change happens.
+   */
+  abstract allAsObservable(): Observable<Category[]>;
 }

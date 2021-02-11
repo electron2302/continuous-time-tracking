@@ -62,7 +62,7 @@ steps:
     image: node:14
     commands:
       - cd ctt-frontend
-      - npm run build
+      - npm run build:prod
     when:
       branch:
         - develop
@@ -140,7 +140,7 @@ steps:
     image: node:14
     commands:
       - cd ctt-frontend
-      - npm run build
+      - npm run build:prod
     when:
       branch:
         - main
