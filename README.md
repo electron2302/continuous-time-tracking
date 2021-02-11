@@ -141,7 +141,7 @@ The following authors have contributed to this project (in alphabetical order):
 
 ## References
 
-Useful references and and documantations we used in our project:
+Useful references and and documentations we used in our project:
 
 - [AWS Amplify](https://aws.amazon.com/de/amplify/)
 - [AWS Amplify Documentation](https://docs.aws.amazon.com/amplify/)
