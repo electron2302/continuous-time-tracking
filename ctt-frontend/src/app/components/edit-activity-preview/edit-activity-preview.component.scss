@@ -5,3 +5,19 @@ mat-card {
 mat-card-title {
   margin-bottom: 15px;
 }
+
+.info-card {
+  flex-direction: row;
+  display: flex;
+  margin-left: 10px;
+  margin-right: 10px;
+
+  div {
+    margin-left: 10px;
+  }
+  mat-icon {
+    vertical-align: middle;
+    font-size: 30px;
+    height: 25px;
+  }
+}

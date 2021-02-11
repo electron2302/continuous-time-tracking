@@ -13,7 +13,10 @@
     </app-element-activity>
   </div>
 
-  <p *ngIf="!newActivity">Fix errors to show preview!</p>
+  <mat-card *ngIf="!newActivity" class="bg-accent info-card">
+    <mat-icon inline="true">info</mat-icon>
+    <div>Fix validation errors to enable preview!</div>
+  </mat-card>
 
   <app-loading [active]="loading"></app-loading>
 </mat-card>
