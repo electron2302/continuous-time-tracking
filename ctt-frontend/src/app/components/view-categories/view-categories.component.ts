@@ -20,6 +20,9 @@ export class ViewCategoriesComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.categories = await this.categoryService.getAll();
+    this.categoryService.allAsObservable().subscribe((next) => {
+      this.categories = next;
+    });
     this.loading = false;
   }
 

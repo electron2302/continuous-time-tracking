@@ -54,6 +54,10 @@ export class ChangeActivityComponent implements OnInit {
 
   private async getCategories(): Promise<void> {
     this.categories = await this.categoryService.getAll();
+    this.categoryService.allAsObservable().subscribe((next) => {
+      this.categories = next;
+      this.categoryById = toCategoryMap(this.categories);
+    });
     this.categoryById = toCategoryMap(this.categories);
   }
 

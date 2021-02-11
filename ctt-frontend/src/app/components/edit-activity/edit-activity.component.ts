@@ -44,6 +44,9 @@ export class EditActivityComponent implements OnInit {
 
   public async ngOnInit(): Promise<void> {
     this.categories = await this.categoryService.getAll();
+    this.categoryService
+      .allAsObservable()
+      .subscribe((next) => (this.categories = next));
     this.route.paramMap.subscribe(async (params: ParamMap) => {
       const id = params.get('id');
       if (id) {
