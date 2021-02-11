@@ -161,9 +161,11 @@ export class AwsActivityService implements ActivityService {
     if (a) {
       return;
     }
-    const lastActivity = allActivities.reverse().find((act) => act.from < todayMidnight);
+    const lastActivity = allActivities
+      .reverse()
+      .find((act) => act.from < todayMidnight);
     if (lastActivity) {
-      this.insert({ categoryID: lastActivity.categoryID, from: todayMidnight});
+      this.insert({ categoryID: lastActivity.categoryID, from: todayMidnight });
     }
   }
 
