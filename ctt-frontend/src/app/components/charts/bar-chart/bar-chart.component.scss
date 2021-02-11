@@ -1,0 +1,21 @@
+::ng-deep span.legend-label-text {
+  color: white;
+}
+
+::ng-deep span.legend-label-text:hover,
+::ng-deep span.legend-label-text.active {
+  color: #14bc8f !important;
+}
+
+::ng-deep span.legend-title-text {
+  color: #14bc8f;
+}
+
+::ng-deep .chart-legend,
+::ng-deep .legend-labels {
+  background-color: #424242 !important;
+}
+
+::ng-deep text {
+  fill: white;
+}

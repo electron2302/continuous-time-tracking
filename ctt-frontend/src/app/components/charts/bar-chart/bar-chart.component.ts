@@ -1,4 +1,12 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  Input,
+  OnChanges,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { StatisticsService } from 'src/app/services/statistics.service';
 
 @Component({
@@ -6,7 +14,9 @@ import { StatisticsService } from 'src/app/services/statistics.service';
   templateUrl: './bar-chart.component.html',
   styleUrls: ['./bar-chart.component.scss'],
 })
-export class BarChartComponent implements OnInit {
+export class BarChartComponent implements OnInit, OnChanges {
+  @ViewChild('container') container?: ElementRef;
+
   @Input()
   dateRange!: any;
 
@@ -17,32 +27,33 @@ export class BarChartComponent implements OnInit {
     value: number;
   }[] = [];
 
-  view: [number, number] = [700, 400];
+  public view: [number, number] = [-1, -1];
 
-  // options
-  showXAxisLabel = true;
-  xAxisLabel = 'Country';
-
-  showYAxisLabel = true;
-  yAxisLabel = 'Population';
-
-  colorScheme: {
+  public colorScheme: {
     domain: string[];
   } = { domain: [] };
 
-  constructor(private statisticsService: StatisticsService) {}
+  constructor(
+    private statisticsService: StatisticsService,
+    private changeDetector: ChangeDetectorRef
+  ) {}
 
-  ngOnChanges() {
-    console.log('cahnge :/');
-    this.UpdateData();
+  public ngOnChanges(): void {
+    this.updateData();
   }
 
-  async ngOnInit(): Promise<void> {
-    console.log('init :/');
-    this.UpdateData();
+  public ngOnInit(): void {
+    this.updateData();
   }
 
-  private async UpdateData() {
+  public onResize(): void {
+    this.view = [
+      this.container?.nativeElement.offsetWidth,
+      this.container?.nativeElement.offsetHeight,
+    ];
+  }
+
+  private async updateData() {
     this.loading = true;
     const from: Date = new Date(this.dateRange.start);
     const to: Date = new Date(this.dateRange.end);
@@ -54,5 +65,7 @@ export class BarChartComponent implements OnInit {
     this.data = stats.data;
     this.colorScheme.domain = stats.colors;
     this.loading = false;
+    this.changeDetector.detectChanges();
+    this.onResize();
   }
 }
