@@ -14,15 +14,15 @@ By providing this application as open source, we want to enable others to use th
 
 ## Content
 
-1. [Content](##-Content)
-2. [Usage](##-Usage)
-3. [Development Setup](##-Development-Setup)  
-   3.1. [Code style](###-Code-style)  
-   3.2. [Integration into Visual Studio Code](###-Integration-into-Visual-Studio-Code)  
-   3.3. [Build and serve](###-Build-and-serve)  
-   3.4. [Run tests](###-Run-tests)
-4. [Contributors](##-Contributors)
-5. [References](##-References)
+1. [Content](#Content)
+2. [Usage](#Usage)
+3. [Development Setup](#Development-Setup)  
+   3.1. [Code style](#Code-style)  
+   3.2. [Integration into Visual Studio Code](#Integration-into-Visual-Studio-Code)  
+   3.3. [Build and serve](#Build-and-serve)  
+   3.4. [Run tests](#Run-tests)
+4. [Contributors](#Contributors)
+5. [References](#References)
 
 ## Usage
 
