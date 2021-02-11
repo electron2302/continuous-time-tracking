@@ -22,6 +22,8 @@ export class EditActivityPreviewComponent implements OnChanges {
   public activities: ViewableActivity[] = [];
   public loading = false;
 
+  public readonly newId = 'new';
+
   constructor(
     private categoryService: CategoryService,
     private activityService: ActivityService
@@ -32,11 +34,11 @@ export class EditActivityPreviewComponent implements OnChanges {
       const value = changes.newActivity.currentValue;
       this.loading = true;
       let existingActivities = await this.getExistingActivities(value.from);
-      if (value.id !== 'new') {
+      if (value.id !== this.newId) {
         existingActivities = existingActivities.filter(
           (a) => a.id !== value.id
         );
-        value.id = 'new';
+        value.id = this.newId;
       }
       existingActivities.push(value);
       existingActivities.sort((a, b) => a.from.getTime() - b.from.getTime());
@@ -46,7 +48,7 @@ export class EditActivityPreviewComponent implements OnChanges {
         existingActivities
       );
       viewableActivities.forEach((a) => {
-        if (a.id === 'new') {
+        if (a.id === this.newId) {
           a.isPreview = true;
         }
       });
