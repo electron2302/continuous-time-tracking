@@ -31,9 +31,13 @@ export class EditActivityPreviewComponent implements OnChanges {
     if (changes?.newActivity?.currentValue) {
       const value = changes.newActivity.currentValue;
       this.loading = true;
-      const existingActivities = await this.getExistingActivities(
-        (value as ViewableActivity).from
-      );
+      let existingActivities = await this.getExistingActivities(value.from);
+      if (value.id !== 'new') {
+        existingActivities = existingActivities.filter(
+          (a) => a.id !== value.id
+        );
+        value.id = 'new';
+      }
       existingActivities.push(value);
       existingActivities.sort((a, b) => a.from.getTime() - b.from.getTime());
 
@@ -42,7 +46,7 @@ export class EditActivityPreviewComponent implements OnChanges {
         existingActivities
       );
       viewableActivities.forEach((a) => {
-        if (a.id === 'preview') {
+        if (a.id === 'new') {
           a.isPreview = true;
         }
       });
