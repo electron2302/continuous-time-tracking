@@ -93,7 +93,7 @@ Check your Amplify status with:
 
 ### Code style
 
-We use the default ESLint angular configuration.
+We use the default ESLint angular configuration for static code analysis.
 Furthermore we use the default prettier configuration.
 
 ### Integration into Visual Studio Code
