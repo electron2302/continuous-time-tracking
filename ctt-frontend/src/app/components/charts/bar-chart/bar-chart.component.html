@@ -1,12 +1,15 @@
+<app-loading [active]="loading"></app-loading>
 <ngx-charts-bar-vertical
+  *ngIf="!loading"
   [view]="view"
   [scheme]="colorScheme"
   [results]="data"
-  [gradient]="gradient"
-  [xAxis]="showXAxis"
-  [yAxis]="showYAxis"
-  [legend]="showLegend"
+  [xAxis]="true"
+  [yAxis]="true"
+  [legend]="true"
   [showXAxisLabel]="false"
-  [showYAxisLabel]="false"
+  [showYAxisLabel]="true"
+  [xAxisLabel]="xAxisLabel"
+  yAxisLabel="Minutes"
 >
 </ngx-charts-bar-vertical>

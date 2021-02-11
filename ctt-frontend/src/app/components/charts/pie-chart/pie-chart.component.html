@@ -1,15 +1,12 @@
 <app-loading [active]="loading"></app-loading>
-<mat-card id="card" *ngIf="!loading">
-  <ngx-charts-pie-chart
-    [view]="view"
-    [scheme]="colorScheme"
-    [results]="data"
-    [animations]="false"
-    [legend]="false"
-    [labels]="true"
-    [doughnut]="false"
-  >
-  </ngx-charts-pie-chart>
-  <p>{{ dateRange.value | json }}</p>
-  <p>{{ data | json }}</p>
-</mat-card>
+<ngx-charts-pie-chart
+  *ngIf="!loading"
+  [view]="view"
+  [scheme]="colorScheme"
+  [results]="data"
+  [animations]="false"
+  [legend]="false"
+  [labels]="true"
+  [doughnut]="false"
+>
+</ngx-charts-pie-chart>

@@ -87,7 +87,6 @@ import { EditActivityPreviewComponent } from './components/edit-activity-preview
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { PieChartComponent } from './components/charts/pie-chart/pie-chart.component';
 import { BarChartComponent } from './components/charts/bar-chart/bar-chart.component';
-import { StackedBarChartComponent } from './components/charts/stacked-bar-chart/stacked-bar-chart.component';
 
 const materialModules = [
   CdkTreeModule,
@@ -142,7 +141,6 @@ Amplify.configure(awsconfig);
     LoadingComponent,
     PieChartComponent,
     BarChartComponent,
-    StackedBarChartComponent,
     EditActivityComponent,
     EditActivityPreviewComponent,
   ],

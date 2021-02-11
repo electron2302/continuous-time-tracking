@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';
-import { StatisticsService } from '../../../services/statistics.service';
+import { StatisticsService } from 'src/app/services/statistics.service';
 
 @Component({
   selector: 'app-pie-chart',
@@ -9,7 +8,7 @@ import { StatisticsService } from '../../../services/statistics.service';
 })
 export class PieChartComponent implements OnInit {
   @Input()
-  dateRange!: FormGroup;
+  dateRange!: any;
 
   public loading = true;
 
@@ -20,25 +19,33 @@ export class PieChartComponent implements OnInit {
     value: number;
   }[] = [];
 
-  colorScheme = {
-    domain: ['#5AA454', '#A10A28', '#C7B42C'],
-  };
+  colorScheme: {
+    domain: string[];
+  } = { domain: [] };
 
   constructor(private statisticsService: StatisticsService) {}
 
+  ngOnChanges() {
+    console.log('cahnge :/');
+    this.UpdateData();
+  }
+
   async ngOnInit(): Promise<void> {
+    console.log('init :/');
+    this.UpdateData();
+  }
+
+  private async UpdateData() {
+    this.loading = true;
+    const from: Date = new Date(this.dateRange.start);
+    const to: Date = new Date(this.dateRange.end);
+    to.setDate(to.getDate() + 1);
     const stats = await this.statisticsService.timePerCategoryAccumulative(
-      this.dateRange.value.start,
-      this.dateRange.value.end
+      from,
+      to
     );
-    let shit: {
-      name: string;
-      value: number;
-    }[] = [];
-    shit = shit.concat(stats.data);
-    this.data = shit;
-    console.log(shit);
-    console.log(this.data);
+    this.data = stats.data;
+    this.colorScheme.domain = stats.colors;
     this.loading = false;
   }
 }

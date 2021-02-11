@@ -10,13 +10,9 @@
 
 <mat-tab-group>
   <mat-tab label="Pie">
-    <app-pie-chart [dateRange]="range"></app-pie-chart>
+    <app-pie-chart [dateRange]="range.value"></app-pie-chart>
   </mat-tab>
   <mat-tab label="Bar">
-    <app-bar-chart></app-bar-chart>
+    <app-bar-chart [dateRange]="range.value"></app-bar-chart>
   </mat-tab>
-  <mat-tab label="Bar stakt">
-    <app-stacked-bar-chart></app-stacked-bar-chart>
-  </mat-tab>
-  <mat-tab label="over time"> Normalized Area chart </mat-tab>
 </mat-tab-group>
