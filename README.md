@@ -54,7 +54,7 @@ On the edit categories screen you can add a category py clicking on the "+":
 
 ![AddCategoryScreen](./docs/AddCategoryScreen.png)
 
-By clicking on the "History" you can view the history of the current day and step trugh the days:
+By switching to the "History"-Tab you can view the history of the current day and step trough the days:
 
 ![HistoryScreen](./docs/HistoryScreen.png)
 
