@@ -26,7 +26,7 @@ If you have no account, you can create an account on the create account screen:
 
 ![SignupScreen](./docs/SignupScreen.png)
 
-Once you signed up your self, you will receive a verification email.
+Once you signed up, you will receive a verification email.
 
 Type this verification code in the relating input box on the confirmation screen:
 
