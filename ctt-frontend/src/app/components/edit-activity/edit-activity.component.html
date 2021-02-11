@@ -68,9 +68,10 @@
       this.activityForm.invalid
         ? undefined
         : {
+            id: isNew() ? 'preview' : activity.id,
+            version: 1,
             categoryID: this.categoryCtl.value,
-            from: this.fromCtl.value,
-            id: 'preview'
+            from: this.fromCtl.value
           }
     "
   ></app-edit-activity-preview>
