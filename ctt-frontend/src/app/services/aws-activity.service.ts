@@ -81,7 +81,7 @@ export class AwsActivityService implements ActivityService {
     return DataStore.query(AwsActivity, Predicates.ALL, {
       sort: (q) => q.from(SortDirection.ASCENDING),
     }).then(
-      (acts) => acts.map(act => this.awsActivityToActivity(act)),
+      (acts) => acts.map((act) => this.awsActivityToActivity(act)),
       () => Promise.reject('Could not query activities.')
     );
   }
@@ -119,9 +119,7 @@ export class AwsActivityService implements ActivityService {
       { sort: (q) => q.from(SortDirection.ASCENDING) }
     ).then(
       (acts) => {
-        let activities = acts.map((act) =>
-          this.awsActivityToActivity(act)
-        );
+        let activities = acts.map((act) => this.awsActivityToActivity(act));
         if (category) {
           activities = activities.filter(
             (act) => act.categoryID === category.id
