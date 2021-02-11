@@ -24,7 +24,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatChipsModule } from '@angular/material/chips';
-import { MatRippleModule } from '@angular/material/core';
+import { MatRippleModule, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -54,6 +54,11 @@ import {
   NgxMatColorPickerModule,
   NGX_MAT_COLOR_FORMATS,
 } from '@angular-material-components/color-picker';
+import {
+  NgxMatDatetimePickerModule,
+  NgxMatNativeDateModule,
+  NgxMatTimepickerModule,
+} from '@angular-material-components/datetime-picker';
 
 import { EditCategoryComponent } from './components/edit-category/edit-category.component';
 import { AwsCategoryService } from './services/aws-category.service';
@@ -70,6 +75,8 @@ import { StatisticsComponent } from './components/statistics/statistics.componen
 import { LoadingComponent } from './components/loading/loading.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import { EditActivityComponent } from './components/edit-activity/edit-activity.component';
+import { EditActivityPreviewComponent } from './components/edit-activity-preview/edit-activity-preview.component';
 
 const materialModules = [
   CdkTreeModule,
@@ -121,6 +128,8 @@ Amplify.configure(awsconfig);
     AccountComponent,
     StatisticsComponent,
     LoadingComponent,
+    EditActivityComponent,
+    EditActivityPreviewComponent,
   ],
   imports: [
     AmplifyUIAngularModule,
@@ -129,6 +138,9 @@ Amplify.configure(awsconfig);
     BrowserAnimationsModule,
     ReactiveFormsModule,
     NgxMatColorPickerModule,
+    NgxMatDatetimePickerModule,
+    NgxMatTimepickerModule,
+    NgxMatNativeDateModule,
     ...materialModules,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
@@ -138,6 +150,8 @@ Amplify.configure(awsconfig);
     { provide: ActivityService, useClass: AwsActivityService },
     { provide: CategoryService, useClass: AwsCategoryService },
     { provide: MAT_COLOR_FORMATS, useValue: NGX_MAT_COLOR_FORMATS },
+    { provide: 'boolean', useValue: true },
+    { provide: MAT_DATE_LOCALE, useValue: 'de-DE' },
     APIService,
     AuthService,
     AuthGuard,

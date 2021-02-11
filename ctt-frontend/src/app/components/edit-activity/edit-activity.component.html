@@ -1,0 +1,78 @@
+<form
+  [formGroup]="activityForm"
+  (ngSubmit)="onSave()"
+  *ngIf="activity || isNew"
+>
+  <app-loading [active]="loading"></app-loading>
+
+  <mat-card id="card" *ngIf="!loading">
+    <mat-card-header>
+      <mat-card-title>{{
+        isNew() ? 'New activity' : 'Activity'
+      }}</mat-card-title>
+      <mat-card-subtitle *ngIf="!isNew()"
+        >Id: {{ activity.id }}</mat-card-subtitle
+      >
+    </mat-card-header>
+
+    <mat-card-content>
+      <mat-form-field appearance="outline">
+        <mat-label>Category</mat-label>
+        <mat-select formControlName="category" required>
+          <mat-option *ngFor="let category of categories" [value]="category.id">
+            {{ category.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>From</mat-label>
+        <input
+          matInput
+          [ngxMatDatetimePicker]="picker"
+          placeholder="Choose a date"
+          formControlName="from"
+        />
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="$any(picker)"
+        ></mat-datepicker-toggle>
+        <ngx-mat-datetime-picker
+          #picker
+          [showSpinners]="true"
+          [showSeconds]="true"
+          [touchUi]="false"
+        >
+        </ngx-mat-datetime-picker>
+      </mat-form-field>
+    </mat-card-content>
+
+    <mat-card-actions>
+      <button
+        id="btn-save"
+        type="submit"
+        mat-button
+        mat-raised-button
+        color="primary"
+        [disabled]="activityForm.invalid"
+      >
+        <mat-icon inline="true">save</mat-icon>
+        SAVE
+      </button>
+    </mat-card-actions>
+  </mat-card>
+
+  <app-edit-activity-preview
+    *ngIf="!loading"
+    [newActivity]="
+      this.activityForm.invalid
+        ? undefined
+        : {
+            id: isNew() ? 'preview' : activity.id,
+            version: 1,
+            categoryID: this.categoryCtl.value,
+            from: this.fromCtl.value
+          }
+    "
+  ></app-edit-activity-preview>
+</form>
