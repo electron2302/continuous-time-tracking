@@ -1,0 +1,13 @@
+<div style="height: 100%">
+  <app-loading [active]="loading"></app-loading>
+  <ngx-charts-pie-chart
+    *ngIf="!loading"
+    [scheme]="colorScheme"
+    [results]="data"
+    [animations]="true"
+    [legend]="false"
+    [labels]="true"
+    [doughnut]="false"
+  >
+  </ngx-charts-pie-chart>
+</div>
