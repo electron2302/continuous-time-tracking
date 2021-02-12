@@ -26,7 +26,7 @@ By providing this application as open source, we want to enable others to use th
 
 ## Usage
 
-The app is available at: http://34.202.114.178/.
+The app is available at: [https://ctt.sart.solutions/](https://ctt.sart.solutions/).
 
 The Entrypoint of the CTT is the login screen:
 
