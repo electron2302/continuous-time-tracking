@@ -1,0 +1,16 @@
+{
+  "files.exclude": {
+    "ctt-frontend/amplify/.config": true,
+    "ctt-frontend/amplify/**/*-parameters.json": true,
+    "ctt-frontend/amplify/**/amplify.state": true,
+    "ctt-frontend/amplify/**/transform.conf.json": true,
+    "ctt-frontend/amplify/#current-cloud-backend": true,
+    "ctt-frontend/amplify/backend/amplify-meta.json": true,
+    "ctt-frontend/amplify/backend/awscloudformation": true
+  },
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "editor.formatOnSaveMode": "file",
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "eslint.workingDirectories": ["ctt-frontend"]
+}

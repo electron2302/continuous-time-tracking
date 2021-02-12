@@ -1,0 +1,52 @@
+<div class="header">
+  <button
+    class="change-day"
+    mat-button
+    mat-raised-button
+    (click)="changeDay(-1)"
+  >
+    <mat-icon inline="true">keyboard_arrow_left</mat-icon>
+  </button>
+
+  <span class="current-day">
+    {{ currentDay | date: 'dd.MM.yyyy' }}
+  </span>
+
+  <button
+    class="change-day"
+    mat-button
+    mat-raised-button
+    (click)="changeDay(+1)"
+  >
+    <mat-icon inline="true">keyboard_arrow_right</mat-icon>
+  </button>
+</div>
+
+<app-loading [active]="loading" text="Loading activites..."></app-loading>
+
+<div style="margin: 10px" *ngIf="!loading && viewableActivities.length > 0">
+  <app-element-activity
+    *ngFor="let activity of viewableActivities"
+    [viewableActivity]="activity"
+    [edit]="edit"
+  >
+  </app-element-activity>
+</div>
+
+<div *ngIf="!loading && viewableActivities.length == 0" class="no-activities">
+  <span>No activites on this day</span>
+</div>
+
+<button class="fab edit" mat-fab color="accent" (click)="toggleEdit()">
+  <mat-icon *ngIf="!edit">edit</mat-icon>
+  <mat-icon *ngIf="edit">clear</mat-icon>
+</button>
+
+<button
+  class="fab add"
+  mat-fab
+  color="primary"
+  (click)="navigateToEditActivity('new')"
+>
+  <mat-icon>add</mat-icon>
+</button>

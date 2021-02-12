@@ -1,0 +1,34 @@
+@import '~@angular/material/theming';
+@include mat-core();
+
+mat-card-actions {
+  display: flex;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+mat-icon {
+  font-size: 1.3em !important;
+}
+
+mat-slide-toggle {
+  padding-bottom: 20px;
+}
+
+::ng-deep .ngx-mat-colorpicker-content {
+  background-color: mat-color($mat-grey, 700) !important;
+}
+
+::ng-deep .ngx-mat-colorpicker-content .mat-input-element {
+  color: white !important;
+}
+
+::ng-deep
+  .ngx-mat-color-canvas
+  .color-canvas-row:nth-of-type(2)
+  .mat-form-field:first-of-type
+  .symbol {
+  color: white !important;
+}

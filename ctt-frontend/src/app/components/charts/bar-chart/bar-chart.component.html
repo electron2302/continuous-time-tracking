@@ -1,0 +1,18 @@
+<app-loading [active]="loading"></app-loading>
+<div style="height: 100%" *ngIf="!loading" #container>
+  <ngx-charts-bar-vertical
+    [scheme]="colorScheme"
+    [view]="view"
+    [results]="data"
+    [xAxis]="true"
+    [yAxis]="true"
+    [legend]="true"
+    [showXAxisLabel]="false"
+    [showYAxisLabel]="true"
+    xAxisLabel="Category"
+    yAxisLabel="Minutes"
+    [animations]="true"
+    (window:resize)="onResize()"
+  >
+  </ngx-charts-bar-vertical>
+</div>

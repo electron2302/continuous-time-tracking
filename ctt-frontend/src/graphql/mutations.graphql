@@ -23,6 +23,7 @@ mutation CreateCategory(
       nextToken
       startedAt
     }
+    excludeFromStatistics
     _version
     _deleted
     _lastChangedAt
@@ -55,6 +56,7 @@ mutation UpdateCategory(
       nextToken
       startedAt
     }
+    excludeFromStatistics
     _version
     _deleted
     _lastChangedAt
@@ -87,6 +89,7 @@ mutation DeleteCategory(
       nextToken
       startedAt
     }
+    excludeFromStatistics
     _version
     _deleted
     _lastChangedAt

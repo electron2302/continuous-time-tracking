@@ -1,0 +1,88 @@
+<form
+  [formGroup]="categoryForm"
+  (ngSubmit)="onSave()"
+  *ngIf="category || isNew"
+>
+  <app-loading [active]="loading"></app-loading>
+
+  <mat-card id="card" *ngIf="!loading">
+    <mat-card-header>
+      <mat-card-title>{{
+        isNew() ? 'New category' : category.name
+      }}</mat-card-title>
+      <mat-card-subtitle *ngIf="!isNew()"
+        >Id: {{ category.id }}</mat-card-subtitle
+      >
+    </mat-card-header>
+
+    <mat-card-content>
+      <mat-form-field appearance="outline">
+        <mat-label>Name</mat-label>
+        <input matInput formControlName="name" required id="input-name" />
+        <mat-error *ngIf="nameCtl.errors?.required" id="error-name-required"
+          >Name is required</mat-error
+        >
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Color</mat-label>
+        <input
+          matInput
+          [ngxMatColorPicker]="picker"
+          formControlName="color"
+          [ngStyle]="{ color: colorCtl.value }"
+        />
+        <ngx-mat-color-toggle matSuffix [for]="picker"></ngx-mat-color-toggle>
+        <ngx-mat-color-picker
+          #picker
+          [color]="colorCtl.value"
+        ></ngx-mat-color-picker>
+      </mat-form-field>
+
+      <mat-slide-toggle formControlName="reminderEnabled"
+        >Enable reminders</mat-slide-toggle
+      >
+
+      <mat-form-field appearance="outline" *ngIf="reminderEnabledCtl.value">
+        <mat-label>Interval in minutes</mat-label>
+        <input
+          matInput
+          formControlName="reminderInterval"
+          required
+          id="input-name"
+          type="number"
+          min="1"
+          step="1"
+        />
+        <mat-error
+          *ngIf="categoryForm.errors?.intervalNoInt"
+          id="error-name-required"
+          >Must be a positive integer</mat-error
+        >
+      </mat-form-field>
+
+      <p>Include in statistics</p>
+      <div *ngFor="let statisticTypeSelect of statisticTypeSelectEntries">
+        <mat-checkbox
+          [formControlName]="'statisticsInclude' + statisticTypeSelect.id"
+        >
+          {{ statisticTypeSelect.name }}
+        </mat-checkbox>
+      </div>
+    </mat-card-content>
+
+    <mat-card-actions>
+      <button
+        id="btn-save"
+        type="submit"
+        mat-button
+        mat-raised-button
+        color="primary"
+        [disabled]="categoryForm.invalid"
+      >
+        <mat-icon inline="true">save</mat-icon>
+        SAVE
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</form>
